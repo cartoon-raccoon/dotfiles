@@ -33,6 +33,7 @@ function pkgcount
 	pacman -Q | wc -l
 end
 
+alias ls="exa -l"
 
 alias fishreload="source ~/.config/fish/config.fish"
 
