@@ -75,7 +75,7 @@ Config {
                              , "--high"     , "darkred"
                              ] 10
 	-- disk usage
-	, Run DiskU          [("/home","<fc=#0a81f5>/home</fc>: <used> (<usedp>%)")] ["-L", "20", "-H", "75"] 100
+	, Run DiskU          [("/home","<fc=#0a81f5>/ </fc>: <used> (<usedp>%)")] ["-L", "20", "-H", "75"] 100
 
         -- battery monitor
         , Run Battery        [ "--template" , "<fc=#4bffdc>  </fc>  <acstatus>"
