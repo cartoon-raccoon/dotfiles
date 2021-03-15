@@ -4,6 +4,8 @@
 
 pacman -Qqet > fullpackagelist
 
+git add fullpackagelist
+
 case $1 in
 	-m)
 		git commit -m "$2"
