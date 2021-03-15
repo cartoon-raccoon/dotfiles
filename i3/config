@@ -13,22 +13,22 @@ font pango:FiraCode Nerd Font 10
 # exec --no-startup-id nm-applet
 
 # set background wallpaper using feh
-exec feh --bg-scale /home/sammy/Pictures/minimalistwp.png
+exec --no-startup-id feh --bg-scale /home/sammy/Pictures/minimalistwp.png
 
 # set screen locker
-exec xautolock -time 5 -locker "/home/sammy/.config/i3/i3lock" &
+exec --no-startup-id xautolock -time 5 -locker "/home/sammy/.config/i3/i3lock" &
 
 # start picom compositor
-exec picom &
+exec --no-startup-id picom &
 
 # start polybar
-exec_always $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # start udevil automount
 #exec devmon &
 
 # start mpd notify monitoring script after killing all instances
-exec_always pkill mpd_notify.sh; ~/.config/mpd/mpd_notify.sh
+exec_always --no-startup-id pkill mpd_notify.sh; ~/.config/mpd/mpd_notify.sh
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
