@@ -1,5 +1,33 @@
 #!/bin/bash
 
+## Start!
+
+start() {
+    echo '
+          _                              _
+     ___ | |_  _ __  __ _  _ __     ___ | |__
+    / __|| __||  __|/ _` ||  _ \   / __||  _ \
+    \__ \| |_ | |  | (_| || |_) |_ \__ \| | | |
+    |___/ \__||_|   \__,_|| .__/(_)|___/|_| |_|
+                          |_|
+    '
+    echo "./strap.sh v0.1.0"
+    echo "(C) 2021 cartoon-raccoon"
+    echo ""
+
+    # Check whether OS is Arch
+    if ! [[ -e /etc/os-release ]]; then
+        echo "Cannot find os-release file, aborting!"
+        exit 1
+    fi
+
+    if ! cat /etc/os-release | grep 'Arch Linux' > /dev/null; then
+        echo "Unsupported OS, aborting!"
+        exit 1
+    fi
+}
+# setting defaults
+
 #############################
 ##### Core Applications #####
 #############################
@@ -160,6 +188,7 @@ parse_args() {
     done
 }
 
+start
 parse_args $@
 
 echo "interactive: $interactive"
