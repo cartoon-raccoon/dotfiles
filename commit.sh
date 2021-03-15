@@ -11,4 +11,6 @@ case $1 in
 	--amend)
 		git commit --amend
 		;;
+	*)
+		git commit $@
 esac
