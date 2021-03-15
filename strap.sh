@@ -1,57 +1,27 @@
 #!/bin/bash
 
-## Start!
 
-start() {
+# Start!
+init() {
     echo '
-          _                              _
-     ___ | |_  _ __  __ _  _ __     ___ | |__
-    / __|| __||  __|/ _` ||  _ \   / __||  _ \
-    \__ \| |_ | |  | (_| || |_) |_ \__ \| | | |
-    |___/ \__||_|   \__,_|| .__/(_)|___/|_| |_|
-                          |_|
-    '
+      _                              _
+ ___ | |_  _ __  __ _  _ __     ___ | |__
+/ __|| __||  __|/ _` ||  _ \   / __||  _ \
+\__ \| |_ | |  | (_| || |_) |_ \__ \| | | |
+|___/ \__||_|   \__,_|| .__/(_)|___/|_| |_|
+                      |_|
+'
     echo "./strap.sh v0.1.0"
     echo "(C) 2021 cartoon-raccoon"
     echo ""
 
     # Check whether OS is Arch
-    if ! [[ -e /etc/os-release ]]; then
-        echo "Cannot find os-release file, aborting!"
-        exit 1
-    fi
+    [[ -e /etc/os-release ]] \
+        || fail "[!] Cannot find os-release file, aborting!" 1
 
-    if ! cat /etc/os-release | grep 'Arch Linux' > /dev/null; then
-        echo "Unsupported OS, aborting!"
-        exit 1
-    fi
+    cat /etc/os-release | grep 'Arch Linux' > /dev/null \
+        || fail "[!] Unsupported OS, aborting!" 2
 }
-# setting defaults
-
-#############################
-##### Core Applications #####
-#############################
-helper="paru"
-displaym="lightdm"
-windowm="all"
-
-###########################
-##### Behaviour Flags #####
-###########################
-
-# setting some default values
-
-# toggle flags
-interactive=false
-reinstall=false
-sysctl=true
-link=true
-essential=false
-verbose=false
-
-# valued flags
-action="link"
-
 
 ##### Short Argument Parsing #####
 
@@ -96,13 +66,13 @@ link() {
 
 essential() {
     if [[ $1 = *e* ]]; then
-        essential=false
+        essential=true
     fi
 }
 
 verbose() {
     if [[ $1 = *v* ]]; then
-        verbose=false
+        verbose=true
     fi
 }
 
@@ -123,8 +93,7 @@ parse_valued_args() {
         action="$2"
         ;;
     *)
-        echo "Unknown parameter: $1"
-        exit 1
+        fail "strap.sh: unknown perimeter $1" 2
         ;;
     esac
 }
@@ -188,17 +157,103 @@ parse_args() {
     done
 }
 
-start
-parse_args $@
+confirm() {
+    echo "Behaviour:"
+    echo "interactive mode:   $interactive"
+    echo "do reinstallation:  $reinstall"
+    echo "enable services:    $sysctl"
+    echo "link dotfiles:      $link"
+    echo "install essentials: $essential"
+    echo "verbose mode:       $verbose"
+    echo "dotfile action:     $action"
+    echo ""
 
-echo "interactive: $interactive"
-echo "reinstall: $reinstall"
-echo "sysctl: $sysctl"
-echo "link: $link"
-echo "essential: $essential"
-echo "verbose: $verbose"
-echo "action: $action"
-echo ""
-echo "display: $displaym"
-echo "window: $windowm"
-echo "helper: $helper"
+    echo "Your chosen core apps:"
+    echo "Display Manager: $displaym"
+    echo "Window Manager : $windowm"
+    echo "AUR helper:      $helper"
+    echo ""
+    
+    echo -n "Do you want to continue? [Y/n] "
+    read choice
+    
+    case $choice in
+    y|yes|Y|Yes)
+        echo "Proceeding with bootstrap."
+        echo ""
+        ;;
+    n|no|N|No)
+        exit
+        ;;
+    *)
+        fail "Unknown option: $choice" 2
+        ;;
+    esac
+}
+
+install_all() {
+    echo '----------| Installation |----------'
+    echo '[*] Running full system upgrade:'
+    echo ''
+
+    echo 'y' | sudo pacman -Syu
+    echo ""
+
+    if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
+        echo "[!] Cannot find package list required for install - Aborting!"
+        exit 1
+    fi
+
+    echo "[*] Installing packages from package list:"
+    echo ""
+
+    if $essential; then
+        packagelist=$(cat esspackagelist)
+    else
+        packagelist=$(cat fullpackagelist)
+    fi
+
+    for package in $packagelist; do
+        echo "Installing '$package'..."
+    done
+}
+
+install_helper() {
+    case $helper in
+    paru)
+        ;;
+    esac
+}
+
+##### Helper functions #####
+fail() {
+    echo $1 >&2
+    exit $2
+}
+
+# setting defaults
+
+##### Core Applications #####
+
+helper="paru"
+displaym="lightdm"
+windowm="all"
+
+##### Behaviour Flags #####
+
+# toggle flags
+interactive=false
+reinstall=false
+sysctl=true
+link=true
+essential=false
+verbose=false
+
+# valued flags
+action="link"
+
+##### The magic happens here. #####
+parse_args $@
+init
+confirm
+install_all
