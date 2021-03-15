@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Start!
 init() {
     echo '
@@ -90,7 +89,20 @@ parse_valued_args() {
         helper="$2"
         ;;
     action)
-        action="$2"
+        case $2 in
+        ln|link)
+            action="link"
+            ;;
+        cp|copy)
+            action="copy"
+            ;;
+        mv|move)
+            action="move"
+            ;;
+        *)
+            fail "strap.sh: unsupported dotfile action: $2" 2
+            ;;
+        esac
         ;;
     *)
         fail "strap.sh: unknown perimeter $1" 2
@@ -155,6 +167,46 @@ parse_args() {
         idx=$(( idx + 1 ))
 
     done
+
+    check_values
+}
+
+check_values() {
+
+    # checking helper
+    case $helper in
+    paru|yay|pacaur)
+        ;;
+    *)
+        fail "strap.sh: unrecognized AUR helper: $helper" 2
+        ;;
+    esac
+
+    # checking display manager
+    case $displaym in
+    lightdm|sddm)
+        ;;
+    *)
+        fail "strap.sh: unsupported display manager: $displaym" 2
+        ;;
+    esac
+
+    # checking window manager
+    case $windowm in
+    xmonad|i3-gaps|spectrwm|all)
+        ;;
+    *)
+        fail "strap.sh: unsupported window manager: $windowm" 2
+        ;;
+    esac
+
+    case $action in
+    link|copy|move|ln|cp|mv)
+        ;;
+    *)
+        fail "strap.sh: unrecognized dotfile action: $action" 2
+        ;;
+    esac
 }
 
 confirm() {
@@ -200,8 +252,7 @@ install_all() {
     echo ""
 
     if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
-        echo "[!] Cannot find package list required for install - Aborting!"
-        exit 1
+        fail "[!] Cannot find package list required for install - Aborting!" 1
     fi
 
     echo "[*] Installing packages from package list:"
