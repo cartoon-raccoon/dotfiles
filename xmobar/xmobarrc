@@ -2,11 +2,11 @@ Config {
 
    -- appearance
      font =         "xft:FiraCode Nerd Font:size=11:antialias=true,Source Han Sans JP:size=11"
-   , bgColor =      "black"
-   , fgColor =      "#949494"
+   , bgColor =      "#3c3836"
+   , fgColor =      "#f9f5d7"
    , position =     Static { xpos = 0, ypos = 0, width = 1920, height = 36 }
    , border =       BottomB
-   , borderColor =  "#646464"
+   , borderColor =  "#ebdbb2"
 
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
@@ -40,50 +40,50 @@ Config {
         [ 	
 
         -- network activity monitor (dynamic interface resolution)
-        Run DynNetwork     [ "--template" , "<fc=#9f78e1> </fc>: <tx>kB/s <rx>kB/s "
+        Run DynNetwork     [ "--template" , "<fc=#d3869b> </fc>: <tx>kB/s <rx>kB/s "
                              , "--Low"      , "1000"       -- units: B/s
                              , "--High"     , "5000"       -- units: B/s
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#79740e"
+                             , "--normal"   , "#d65d0e"
+                             , "--high"     , "#cc241d"
                              ] 10
 
         -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "<fc=#ffb52a> </fc>: <total0>%/<total1>%"
+        , Run MultiCpu       [ "--template" , "<fc=#fabd2f> </fc>: <total0>%/<total1>%"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#79740e"
+                             , "--normal"   , "#d65d0e"
+                             , "--high"     , "#cc241d"
                              ] 10
 
         -- cpu core temperature monitor
-        , Run CoreTemp       [ "--template" , "<fc=#f90000></fc>: <core0>°C/<core1>°C"
+        , Run CoreTemp       [ "--template" , "<fc=#fb4934></fc>: <core0>°C/<core1>°C"
                              , "--Low"      , "70"        -- units: °C
                              , "--High"     , "80"        -- units: °C
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#79740e"
+                             , "--normal"   , "#d65d0e"
+                             , "--high"     , "#cc241d"
                              ] 50
                           
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"<fc=#d611d6> </fc>: <used> (<usedratio>%)"
+        , Run Memory         [ "--template" ,"<fc=#b16286> </fc>: <used> (<usedratio>%)"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "90"        -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
+                             , "--low"      , "#79740e"
+                             , "--normal"   , "#d65d0e"
+                             , "--high"     , "#cc241d"
                              ] 10
 	-- disk usage
-	, Run DiskU          [("/home","<fc=#0a81f5>/ </fc>: <used> (<usedp>%)")] ["-L", "20", "-H", "75"] 100
+	, Run DiskU          [("/home","<fc=#83a598>/ </fc>: <used> (<usedp>%)")] ["-L", "20", "-H", "75"] 100
 
         -- battery monitor
-        , Run Battery        [ "--template" , "<fc=#4bffdc>  </fc>  <acstatus>"
+        , Run Battery        [ "--template" , "<fc=#8ec07c>   </fc><acstatus>"
                              , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
-                             , "--low"      , "darkred"
-                             , "--normal"   , "darkorane"
-                             , "--high"     , "darkgreen"
+                             , "--low"      , "#cc241d"
+                             , "--normal"   , "#d65d0e"
+                             , "--high"     , "#79740e"
 
                              , "--" -- battery specific options
                                        -- discharging status
@@ -94,11 +94,11 @@ Config {
                                        , "-i"	, "<fc=#006000>Charged</fc>"
                              ] 50
 	, Run Volume "default" "Master"
-		     [ "-t", "<fc=#55aa55>墳 <volumebar> <volume></fc>", "--"
+		     [ "-t", "<fc=#b8bb26>墳 <volumebar> <volume></fc>", "--"
 	             , "--highd", "-5.0", "--lowd", "-30.0"
 		     , "-L", "20.0", "-H", "80.0"] 10
 	-- Mpd
-	, Run MPD ["-t", "<fc=#f78425><state></fc>: <artist> - <title>"] 10
+	, Run MPD ["-t", "<fc=#fe8019><state></fc>: <artist> - <title>"] 10
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#CBCBCB>%F (%a) %T</fc>" "date" 10

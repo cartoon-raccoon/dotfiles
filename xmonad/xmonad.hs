@@ -61,8 +61,8 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#222222"
-myFocusedBorderColor = "#ffffff"
+myNormalBorderColor  = "#282828"
+myFocusedBorderColor = "#ebdbb2"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -306,7 +306,7 @@ myLogHook = fadeInactiveLogHook fadeAmount
 
 myStartupHook = do
 	-- Set desktop wallpaper
-	spawnOnce "feh --bg-scale ~/Pictures/minimalistwp.png"
+	spawnOnce "feh --bg-scale ~/Pictures/gruvboxminimal.png"
 	-- Launch compositor
 	spawnOnce "picom &"
 	-- Launch mpd notify script
