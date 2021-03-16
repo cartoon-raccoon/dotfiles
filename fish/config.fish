@@ -37,13 +37,18 @@ alias ls="exa -l"
 
 alias fishreload="source ~/.config/fish/config.fish"
 
+alias cavaconf="$EDITOR ~/.config/cava/config"
+alias picomconf="$EDITOR ~/.config/picom/picom.conf"
+
 alias alacconf="$EDITOR ~/.config/alacritty/alacritty.yml"
 alias fishconf="$EDITOR ~/.config/fish/config.fish"
 alias i3config="$EDITOR ~/.config/i3/config"
 alias polyconf="$EDITOR ~/.config/polybar/config"
+
 alias xmonadconf="$EDITOR ~/.xmonad/xmonad.hs"
 alias xmobarconf="$EDITOR ~/.config/xmobar/xmobarrc"
+
 alias spectrconf="$EDITOR ~/.spectrwm.conf"
 alias baraction="$EDITOR ~/.config/bar_action.sh"
-alias cavaconf="$EDITOR ~/.config/cava/config"
-alias picomconf="$EDITOR ~/.config/picom/picom.conf"
+
+alias qtileconf="$EDITOR ~/.config/qtile/config.py"
