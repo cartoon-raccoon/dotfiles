@@ -1,7 +1,6 @@
 adobe-source-han-sans-jp-fonts
 adobe-source-han-serif-jp-fonts
 alacritty
-alsa-utils
 autoconf
 automake
 base
@@ -9,6 +8,7 @@ bind
 bison
 blackarch-keyring
 brightnessctl
+bspwm
 cava
 discord
 dunst
@@ -51,6 +51,7 @@ pfetch
 picom
 polybar
 python-pyalsa
+qtile
 ranger
 rpi-imager
 rustup
