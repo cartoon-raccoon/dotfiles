@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# strap.sh: A kinda cool Arch Linux bootstrap script.
+# This software is licensed under The Unlicense.
+# Copyright (c) 2021 cartoon-raccoon
 
 # Start!
 init() {
@@ -79,14 +82,16 @@ OPTIONS:
 
     The display manager to install. Can be LightDM (default), or SDDM.
 
-    --window-manager/-wm [all|xmonad|spectrwm|i3]:
+    --window-manager/-wm [all|xmonad|qtile|spectrwm|i3]:
 
-    The window manager to install. Can be all three (default), or xmonad, spectrwm, 
-    or i3-gaps.
+    The window manager to install. Can be all four (default), or xmonad, spectrwm, 
+    qtile or i3-gaps only.
     
     --aur-helper/-ah [paru|yay|pacaur]:
 
-    The AUR helper to install. Can be paru (default), yay or pacaur.
+    The AUR helper to install. Can be paru (default), yay or pacaur. By default,
+    install installs the bin version of the helper, so as to avoid downloading more
+    dependencies and compilation times (paru requires cargo, yay requires go).
 "
 }
 
@@ -310,7 +315,7 @@ _check_values() {
 
     # checking window manager
     case ${params[windowm]} in
-    xmonad|i3-gaps|spectrwm|all)
+    xmonad|i3-gaps|spectrwm|qtile|all)
         ;;
     *)
         fail "strap.sh: unsupported window manager: ${params[windowm]}" 2
