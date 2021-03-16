@@ -306,7 +306,7 @@ myLogHook = fadeInactiveLogHook fadeAmount
 
 myStartupHook = do
 	-- Set desktop wallpaper
-	spawnOnce "feh --bg-scale ~/Pictures/gruvboxminimal.png"
+	spawnOnce "feh --bg-scale ~/Pictures/steampunkwp.png"
 	-- Launch compositor
 	spawnOnce "picom &"
 	-- Launch mpd notify script
