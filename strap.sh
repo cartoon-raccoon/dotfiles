@@ -21,6 +21,9 @@ init() {
 
     cat /etc/os-release | grep 'Arch Linux' > /dev/null \
         || fail "[!] Unsupported OS, aborting!" 2
+    
+    pacman -Q git > /dev/null \
+        || fail "[!] Git not installed, aborting!"
 }
 
 print_help() {
@@ -87,13 +90,13 @@ OPTIONS:
 "
 }
 
-# oo.ooooo.   .oooo.   oooo d8b  .oooo.   ooo. .oo.  .oo.    .oooo.o 
-#  888' `88b `P  )88b  `888""8P `P  )88b  `888P"Y88bP"Y88b  d88(  "8 
-#  888   888  .oP"888   888      .oP"888   888   888   888  `"Y88b.  
-#  888   888 d8(  888   888     d8(  888   888   888   888  o.  )88b 
-#  888bod8P' `Y888""8o d888b    `Y888""8o o888o o888o o888o 8""888P' 
-#  888                                                               
-# o888o    
+#* oo.ooooo.   .oooo.   oooo d8b  .oooo.   ooo. .oo.  .oo.    .oooo.o 
+#*  888' `88b `P  )88b  `888""8P `P  )88b  `888P"Y88bP"Y88b  d88(  "8 
+#*  888   888  .oP"888   888      .oP"888   888   888   888  `"Y88b.  
+#*  888   888 d8(  888   888     d8(  888   888   888   888  o.  )88b 
+#*  888bod8P' `Y888""8o d888b    `Y888""8o o888o o888o o888o 8""888P' 
+#*  888                                                               
+#* o888o    
 
 ##### Default parameters #####
 
@@ -110,11 +113,15 @@ declare -A params=(
     [helper]="paru"
 )
 
+# aur urls of aur helpers
 declare -Ar helper_urls=(
-    [paru]=""
-    [yay]=""
-    [pacaur]=""
+    [paru]="https://aur.archlinux.org/packages/paru-bin.git"
+    [yay]="https://aur.archlinux.org/packages/yay-bin.git"
+    [pacaur]="https://aur.archlinux.org/packages/pacaur.git"
 )
+
+# dotfile repo directory
+declare -r REPO_DIR=$PWD
 
 ##### Short Argument Parsing #####
 
@@ -361,13 +368,13 @@ and assumes that you already have them installed."
     esac
 }
 
-#  o8o                           .             oooo  oooo  
-#  `"'                         .o8             `888  `888  
-# oooo  ooo. .oo.    .oooo.o .o888oo  .oooo.    888   888  
-# `888  `888P"Y88b  d88(  "8   888   `P  )88b   888   888  
-#  888   888   888  `"Y88b.    888    .oP"888   888   888  
-#  888   888   888  o.  )88b   888 . d8(  888   888   888  
-# o888o o888o o888o 8""888P'   "888" `Y888""8o o888o o888o 
+#*  o8o                           .             oooo  oooo  
+#*  `"'                         .o8             `888  `888  
+#* oooo  ooo. .oo.    .oooo.o .o888oo  .oooo.    888   888  
+#* `888  `888P"Y88b  d88(  "8   888   `P  )88b   888   888  
+#*  888   888   888  `"Y88b.    888    .oP"888   888   888  
+#*  888   888   888  o.  )88b   888 . d8(  888   888   888  
+#* o888o o888o o888o 8""888P'   "888" `Y888""8o o888o o888o 
 
 # The main install function.
 install_all() {
@@ -378,6 +385,9 @@ install_all() {
     echo 'y' | sudo pacman -Syu
     echo ""
 
+    echo "[*] Installing AUR helper ${params[helper]}:"
+    install_helper
+
     if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
         fail "[!] Cannot find package list required for install - Aborting!" 1
     fi
@@ -385,7 +395,7 @@ install_all() {
     echo "[*] Installing packages from package list:"
     echo ""
 
-    if $essential; then
+    if ${params[essential]}; then
         packagelist=$(cat esspackagelist)
     else
         packagelist=$(cat fullpackagelist)
@@ -397,10 +407,21 @@ install_all() {
 }
 
 install_helper() {
-    case $helper in
-    paru)
-        ;;
-    esac
+    local url=${helper_urls[${params[helper]}]}
+    local helper=${params[helper]}
+
+    cd ..
+
+    echo "Cloning into $helper..."
+    # git clone $url
+    echo "cd'ed into $helper-bin..."
+    echo "running makepkg..."
+
+    # makepkg -si
+
+    echo $url
+
+    cd $REPO_DIR
 }
 
 #                 .    o8o  oooo  
