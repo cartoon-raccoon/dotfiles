@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Start!
 init() {
     echo '
@@ -86,6 +87,35 @@ OPTIONS:
 "
 }
 
+# oo.ooooo.   .oooo.   oooo d8b  .oooo.   ooo. .oo.  .oo.    .oooo.o 
+#  888' `88b `P  )88b  `888""8P `P  )88b  `888P"Y88bP"Y88b  d88(  "8 
+#  888   888  .oP"888   888      .oP"888   888   888   888  `"Y88b.  
+#  888   888 d8(  888   888     d8(  888   888   888   888  o.  )88b 
+#  888bod8P' `Y888""8o d888b    `Y888""8o o888o o888o o888o 8""888P' 
+#  888                                                               
+# o888o    
+
+##### Default parameters #####
+
+declare -A params=(
+    [interactive]=false
+    [reinstall]=false
+    [sysctl]=true
+    [link]=true
+    [essential]=false
+    [verbose]=false
+    [action]="link"
+    [displaym]="lightdm"
+    [windowm]="all"
+    [helper]="paru"
+)
+
+declare -Ar helper_urls=(
+    [paru]=""
+    [yay]=""
+    [pacaur]=""
+)
+
 ##### Short Argument Parsing #####
 
 # bug: this cannot account for unknown flags
@@ -105,37 +135,37 @@ parse_short_toggle_args() {
 
 interactive() {
     if [[ $1 = *i* ]]; then
-        interactive=true
+        params[interactive]=true
     fi
 }
 
 reinstall() {
     if [[ $1 = *r* ]]; then
-        reinstall=true
+        params[reinstall]=true
     fi
 }
 
 sysctl() {
     if [[ $1 = *s* ]]; then
-        sysctl=false
+        params[sysctl]=false
     fi
 }
 
 link() {
     if [[ $1 = *l* ]]; then
-        link=false
+        params[link]=false
     fi
 }
 
 essential() {
     if [[ $1 = *e* ]]; then
-        essential=true
+        params[essential]=true
     fi
 }
 
 verbose() {
     if [[ $1 = *v* ]]; then
-        verbose=true
+        params[verbose]=true
     fi
 }
 
@@ -143,26 +173,26 @@ verbose() {
 
 parse_valued_args() {
     case $1 in
-    winman)
-        windowm="$2"
+    window-manager)
+        params[windowm]="$2"
         ;;
-    disman)
-        displaym="$2"
+    display-manager)
+        params[displaym]="$2"
         ;;
-    aurhelp)
-        helper="$2"
+    aur-helper)
+        params[helper]="$2"
         ;;
     action)
         case $2 in
         ln|link)
-            action="link"
+            params[action]="link"
             ;;
         cp|copy)
-            action="copy"
+            params[action]="copy"
             ;;
         mv|move)
-            action="move"
-            ;;
+            params[action]="move"
+           ;;
         *)
             fail "strap.sh: unsupported dotfile action: $2" 2
             ;;
@@ -180,7 +210,7 @@ parse_args() {
     # when it encounters a valued flag
     state=""
     # index in the argument vector
-    idx=1
+    local idx=1
 
     for arg in $@; do
         case $arg in
@@ -189,40 +219,51 @@ parse_args() {
             exit
             ;;
         -wm|--window-manager)
-            state="winman"
+            check_missing_value $state
+            state="window-manager"
             continue
             ;;
         -dm|--display-manager)
-            state="disman"
+            check_missing_value $state
+            state="display-manager"
             continue
             ;;
         -ah|--aur-helper)
-            state="aurhelp"
+            check_missing_value $state
+            state="aur-helper"
             continue
             ;;
         -a|--action)
+            check_missing_value $state
             state="action"
             continue
             ;;
         --interactive)
+            check_missing_value $state
             interactive=true
             ;;
         --reinstall)
+            check_missing_value $state
             reinstall=true
             ;;
         --no-sysctl)
+            check_missing_value $state
             sysctl=false
             ;;
         --no-link)
+            check_missing_value $state
             link=false
             ;;
         --essential)
+            check_missing_value $state
             essential=true
             ;;
         --verbose)
+            check_missing_value $state
             verbose=true
             ;;
         -*)
+            check_missing_value $state
             parse_short_toggle_args $arg
             ;;
         *)
@@ -236,65 +277,66 @@ parse_args() {
 
     done
 
-    check_values
+    check_missing_value $state
+    _check_values
 }
 
-check_values() {
+_check_values() {
 
     # checking helper
-    case $helper in
+    case ${params[helper]} in
     paru|yay|pacaur)
         ;;
     *)
-        fail "strap.sh: unrecognized AUR helper: $helper" 2
+        fail "strap.sh: unrecognized AUR helper: ${params[helper]}" 2
         ;;
     esac
 
     # checking display manager
-    case $displaym in
+    case ${params[displaym]} in
     lightdm|sddm)
         ;;
     *)
-        fail "strap.sh: unsupported display manager: $displaym" 2
+        fail "strap.sh: unsupported display manager: ${params[displaym]}" 2
         ;;
     esac
 
     # checking window manager
-    case $windowm in
+    case ${params[windowm]} in
     xmonad|i3-gaps|spectrwm|all)
         ;;
     *)
-        fail "strap.sh: unsupported window manager: $windowm" 2
+        fail "strap.sh: unsupported window manager: ${params[windowm]}" 2
         ;;
     esac
 
-    case $action in
+    case ${params[action]} in
     link|copy|move|ln|cp|mv)
         ;;
     *)
-        fail "strap.sh: unrecognized dotfile action: $action" 2
+        fail "strap.sh: unrecognized dotfile action: ${params[action]}" 2
         ;;
     esac
 }
 
 confirm() {
     echo "Behaviour:"
-    echo "interactive mode:   $interactive"
-    echo "do reinstallation:  $reinstall"
-    echo "enable services:    $sysctl"
-    echo "link dotfiles:      $link"
-    echo "install essentials: $essential"
-    echo "verbose mode:       $verbose"
-    echo "dotfile action:     $action"
+    echo "interactive mode:   ${params[interactive]}"
+    echo "do reinstallation:  ${params[reinstall]}"
+    echo "enable services:    ${params[sysctl]}"
+    echo "link dotfiles:      ${params[link]}"
+    echo "install essentials: ${params[essential]}"
+    echo "verbose mode:       ${params[verbose]}"
+    echo "dotfile action:     ${params[action]}"
     echo ""
 
     echo "Your chosen core apps:"
-    echo "Display Manager:   $displaym"
-    echo "Window Manager(s): $windowm"
-    echo "AUR helper:        $helper"
+    echo "Display Manager:   ${params[displaym]}"
+    echo "Window Manager(s): ${params[windowm]}"
+    echo "AUR helper:        ${params[helper]}"
     echo ""
 
-    if $essential; then
+    if ${params[essential]}; then
         echo "WARNING: essential mode only installs APPLICATIONS.
 It does not install base dependencies like the 
 X server, pulseaudio, ALSA, graphics drivers, etc.
@@ -319,6 +361,15 @@ and assumes that you already have them installed."
     esac
 }
 
+#  o8o                           .             oooo  oooo  
+#  `"'                         .o8             `888  `888  
+# oooo  ooo. .oo.    .oooo.o .o888oo  .oooo.    888   888  
+# `888  `888P"Y88b  d88(  "8   888   `P  )88b   888   888  
+#  888   888   888  `"Y88b.    888    .oP"888   888   888  
+#  888   888   888  o.  )88b   888 . d8(  888   888   888  
+# o888o o888o o888o 8""888P'   "888" `Y888""8o o888o o888o 
+
+# The main install function.
 install_all() {
     echo '----------| Installation |----------'
     echo '[*] Running full system upgrade:'
@@ -352,32 +403,23 @@ install_helper() {
     esac
 }
 
+#                 .    o8o  oooo  
+#               .o8    `"'  `888  
+# oooo  oooo  .o888oo oooo   888  
+# `888  `888    888   `888   888  
+#  888   888    888    888   888  
+#  888   888    888 .  888   888  
+#  `V88V"V8P'   "888" o888o o888o 
+
 ##### Helper functions #####
 fail() {
     echo $1 >&2
     exit $2
 }
 
-# setting defaults
-
-##### Core Applications #####
-
-helper="paru"
-displaym="lightdm"
-windowm="all"
-
-##### Behaviour Flags #####
-
-# toggle flags
-interactive=false
-reinstall=false
-sysctl=true
-link=true
-essential=false
-verbose=false
-
-# valued flags
-action="link"
+check_missing_value() {
+    [[ -n "$1" ]] && fail "strap.sh: missing value for parameter $1" 2
+}
 
 ##### The magic happens here. #####
 parse_args $@
