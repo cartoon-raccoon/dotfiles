@@ -1,25 +1,9 @@
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+##### cartoon-raccoon's qtile config file #####
 
 from typing import List  # noqa: F401
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
+from libqtile.config import Click, Drag, Group, ScratchPad, DropDown, Key, KeyChord, Match, Screen, Rule
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
@@ -29,6 +13,8 @@ import subprocess
 
 mod = "mod4"
 terminal = guess_terminal()
+
+#####! KEYBINDS !#####
 
 keys = [
     # Switch between windows
@@ -70,7 +56,7 @@ keys = [
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     
     # Toggle fullscreen and floating
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
@@ -81,6 +67,10 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
+
+    # dropdown commands
+    #Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term')),
+    #Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell')),
 
     # music control keys
     Key([mod], "grave", lazy.spawn("mpc toggle")),
@@ -98,6 +88,10 @@ keys = [
 
     Key([], 'XF86MonBrightnessUp', lazy.spawn("brightnessctl set +10%")),
     Key([], 'XF86MonBrightnessDown', lazy.spawn("brightnessctl set 10%-")),
+
+    # screenshot keys
+    Key([mod],"Print", lazy.spawn("/home/sammy/.config/scrot/run.sh")),
+    Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u")),
     
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
@@ -111,7 +105,32 @@ keys = [
     ], mode = "launch")
 ]
 
-groups = [Group(' '), Group(' '), Group(' '), Group(' '), Group('ﳁ ')]
+# Drag floating layouts.
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front())
+]
+
+groups = [
+    # main
+    Group(' '), 
+    # dev
+    Group(' '), 
+    # files
+    Group(' '), 
+    # social
+    Group(' '), 
+    # misc
+    Group('ﳁ '),
+    # dropdowns
+    # ScratchPad("dropdowns",
+    #     DropDown("term", "alacritty", opacity = 0.9),
+    #     DropDown("qshell", "alacritty -e qtile shell", opacity = 0.9)
+    # )
+]
 
 # Bind group to its index in the group list and define mappings for window management.
 for i in range(1, len(groups) + 1):
@@ -130,7 +149,15 @@ for i in range(1, len(groups) + 1):
             desc="Move focused window to group {}".format(group.name)),
     ])
 
+#####! LAYOUTS !#####
+
 layouts = [
+    layout.MonadTall(
+        border_focus = "#efefef",
+        border_normal = "#5f676a",
+        margin = 4,
+        name = "monadt "
+    ),
     layout.Tile(
         border_focus = "#efefef",
         border_normal = "#5f676a",
@@ -160,14 +187,20 @@ layouts = [
         margin = 4,
         name = "  bsp  "
     ),
+    layout.MonadWide(
+        border_focus = "#efefef",
+        border_normal = "#5f676a",
+        margin = 4,
+        name = "monadw "
+    ),
     # layout.Matrix(),
-    # layout.MonadTall(),
-    # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
+
+#####! SCREENS AND WIDGETS !#####
 
 widget_defaults = dict(
     font='FiraCode Nerd Font',
@@ -183,16 +216,16 @@ screens = [
                 widget.CurrentLayout(),
                 widget.GroupBox(
                     highlight_method = 'line',
-                    highlight_color = ['202020', '343434'],
-                    this_current_screen_border = 'fabd2f',
-                    this_screen_border = 'fabd2f',
+                    highlight_color = ['#202020', '#343434'],
+                    this_current_screen_border = '#fabd2f',
+                    this_screen_border = '#fabd2f',
                 ),
                 widget.Spacer(length = 10),
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
                     chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
+                        'launch': ("#fabd2f", "#282828"),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
@@ -213,17 +246,31 @@ screens = [
     ),
 ]
 
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
-]
+#####! ADDITIONAL VARIABLES !#####
 
 dgroups_key_binder = None
-dgroups_app_rules = []  # type: List
+dgroups_app_rules = [
+    Rule(
+        Match(wm_type = [
+            "confirm",
+            "download",
+            "notification",
+            "toolbar",
+            "splash",
+            "dialog",
+            "error",
+        ]),
+        float = True
+    ),
+    Rule(
+        Match(wm_class = [
+            "Pavucontrol",
+            "Oomox",
+        ]),
+        float = True,
+        break_on_match = False
+    )
+] 
 main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
 bring_front_click = False
@@ -245,18 +292,21 @@ floating_layout = layout.Floating(
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
+#####! WINDOW HOOKS !#####
+
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([home])
 
+@hook.subscribe.client_new
+def floating_dialogs(window):
+    dialog = window.window.get_wm_type() == 'dialog'
+    transient = window.window.get_wm_transient_for()
+    bubble = window.window.get_wm_window_role() == 'bubble'
+    if dialog or bubble or transient:
+        window.floating = True
 
-# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
-# string besides java UI toolkits; you can see several discussions on the
-# mailing lists, GitHub issues, and other WM documentation that suggest setting
-# this string if your java app doesn't work correctly. We may as well just lie
-# and say that we're a working one by default.
-#
-# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
-# java that happens to be on java's whitelist.
+
+# Needed by some Java programs
 wmname = "LG3D"
