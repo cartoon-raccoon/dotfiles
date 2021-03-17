@@ -357,20 +357,11 @@ and assumes that you already have them installed."
     fi
     
     echo -n "Do you want to continue? [Y/n] "
-    read choice
     
-    case $choice in
-    y|yes|Y|Yes)
-        echo "Proceeding with bootstrap."
-        echo ""
-        ;;
-    n|no|N|No)
-        exit
-        ;;
-    *)
-        fail "Unknown option: $choice" 2
-        ;;
-    esac
+    get_user_choice || exit 0
+
+    echo "Proceeding with bootstrap."
+    echo ""
 }
 
 #*  o8o                           .             oooo  oooo  
@@ -387,10 +378,11 @@ install_all() {
     echo '[*] Running full system upgrade:'
     echo ''
 
-    echo 'y' | sudo pacman -Syu
+    echo 'y' | sudo pacman -Syu || fail "[!] Error on system upgrade, aborting." 1
     echo ""
 
     echo "[*] Installing AUR helper ${params[helper]}:"
+    echo "=========================================="
     install_helper
 
     if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
@@ -398,7 +390,7 @@ install_all() {
     fi
 
     echo "[*] Installing packages from package list:"
-    echo ""
+    echo "=========================================="
 
     if ${params[essential]}; then
         packagelist=$(cat esspackagelist)
@@ -406,9 +398,7 @@ install_all() {
         packagelist=$(cat fullpackagelist)
     fi
 
-    for package in $packagelist; do
-        echo "Installing '$package'..."
-    done
+    install_driver
 }
 
 install_helper() {
@@ -425,8 +415,68 @@ install_helper() {
     # makepkg -si
 
     echo $url
+    echo ""
 
     cd $REPO_DIR
+}
+
+# drives the entire install process
+install_driver() {
+    for package in $packagelist; do
+        install_check $package
+    done
+}
+
+# check if a package is already installed
+# and take action according to whether reinstall is enabled
+install_check() {
+    if pacman -Q $package > /dev/null 2>&1; then
+        echo -n "$package is already installed."
+        if ${params[reinstall]}; then
+            install_pkg $package true
+        else
+            echo " Skipping..."
+            return 0
+        fi
+    else
+        install_pkg $package false
+    fi
+}
+
+# ask the user if they would like to reinstall
+install_pkg() {
+    # is reinstall
+    if $2; then
+        if ${params[interactive]}; then
+            echo -n " Would you like to reinstall? [Y/n] "
+            get_user_choice || return 0
+            echo "Reinstalling package $1..."
+            _install $1
+        else
+            echo "Reinstalling package $1..."
+            _install $1
+        fi
+    else
+        if ${params[interactive]}; then
+            echo -n "Install $1? [Y/n] "
+            get_user_choice || return 0
+        fi
+        echo "Installing package $1..."
+        _install $1
+    fi
+}
+
+# actually handles the install
+_install() {
+    local pkg=$1
+    local helper=${params[helper]}
+
+    # always interactive
+    #todo: implement check for why it failed
+    if ! echo "y" | sudo pacman -S $pkg; then
+        $helper -S $pkg
+    fi
+    return 0
 }
 
 #                 .    o8o  oooo  
@@ -447,8 +497,35 @@ check_missing_value() {
     [[ -n "$1" ]] && fail "strap.sh: missing value for parameter $1" 2
 }
 
+get_user_choice() {
+    read choice
+
+    case $choice in
+    y|yes|Y|Yes)
+        return 0;
+        ;;
+    n|no|N|No)
+        return 1;
+        ;;
+    *)
+        fail "Unknown option: $choice" 2
+        ;;
+    esac
+}
+
+cleanup() {
+    echo ""
+    echo "Cleaning up..."
+    echo "y" | sudo pacman -Rs $(pacman -Qqtd) \
+        || fail "[!] Failed to clean orphaned packages."
+    echo ""
+    echo "[*] All done, enjoy your new system!"
+}
+
 ##### The magic happens here. #####
 parse_args $@
 init
 confirm
 install_all
+# link_all
+cleanup

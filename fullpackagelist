@@ -3,6 +3,7 @@ adobe-source-han-serif-jp-fonts
 alacritty
 autoconf
 automake
+awesome
 base
 bind
 bison
@@ -10,6 +11,7 @@ blackarch-keyring
 brightnessctl
 bspwm
 cava
+dijo-bin
 discord
 dunst
 exa
@@ -44,7 +46,7 @@ nerd-fonts-fira-code
 nerd-fonts-jetbrains-mono
 oomox
 pacgraph
-paru
+paru-bin
 patch
 pavucontrol
 pfetch
@@ -107,3 +109,4 @@ xorg-xwud
 xpdf
 xss-lock
 xterm
+yay-bin

@@ -1,7 +1,11 @@
+lightdm
 xmonad
 xmonad-contrib
 spectrwm
 i3-gaps
+bspwm
+sxhkd
+awesome
 xmobar
 polybar
 picom
@@ -9,6 +13,7 @@ dunst
 fish
 alacritty
 ncmpcpp
+mpd
 neovim
 vim
 nano
