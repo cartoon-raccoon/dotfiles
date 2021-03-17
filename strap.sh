@@ -383,7 +383,20 @@ install_all() {
 
     echo "[*] Installing AUR helper ${params[helper]}:"
     echo "=========================================="
-    install_helper
+    local helper_bin=""
+    if [[ "${params[helper]}" = "pacaur" ]]; then
+        local helper_bin="pacaur"
+    else
+        local helper_bin="${params[helper]}-bin"
+    fi
+    
+    if ! pacman -Q ${params[helper]} > /dev/null 2>&1 \
+    || ! pacman -Q $helper_bin > /dev/null 2>&1; then
+        install_helper
+    else 
+        echo "Helper $helper_bin is already installed."
+        echo ""
+    fi
 
     if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
         fail "[!] Cannot find package list required for install - Aborting!" 1
@@ -474,6 +487,8 @@ _install() {
     # always interactive
     #todo: implement check for why it failed
     if ! echo "y" | sudo pacman -S $pkg; then
+        echo ""
+        echo "$pkg not found with pacman, using $helper instead."
         $helper -S $pkg
     fi
     return 0
@@ -516,8 +531,13 @@ get_user_choice() {
 cleanup() {
     echo ""
     echo "Cleaning up..."
-    echo "y" | sudo pacman -Rs $(pacman -Qqtd) \
-        || fail "[!] Failed to clean orphaned packages."
+
+    local orphans=$(pacman -Qqtd)
+    if [[ -n $orphans ]]; then
+        echo "y" | sudo pacman -Rs $(pacman -Qqtd) \
+            || fail "[!] Failed to clean orphaned packages."
+    fi
+
     echo ""
     echo "[*] All done, enjoy your new system!"
 }

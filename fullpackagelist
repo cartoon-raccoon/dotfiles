@@ -8,6 +8,7 @@ base
 bind
 bison
 blackarch-keyring
+bootiso
 brightnessctl
 bspwm
 cava
