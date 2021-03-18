@@ -3,6 +3,8 @@ xmonad
 xmonad-contrib
 spectrwm
 i3-gaps
+i3lock
+xautolock
 bspwm
 sxhkd
 awesome
