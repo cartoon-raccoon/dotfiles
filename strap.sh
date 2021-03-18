@@ -25,6 +25,7 @@ init() {
     cat /etc/os-release | grep 'Arch Linux' > /dev/null \
         || fail "[!] Unsupported OS, aborting!" 2
     
+    # Check whether git is installed
     pacman -Q git > /dev/null \
         || fail "[!] Git not installed, aborting!"
 }
@@ -43,7 +44,18 @@ the user's home directory, by symlinking, copying or moving the file.
 
 strap.sh is heavily tailored to my own Arch Linux setup. Use at your own risk!
 
-USAGE: ./strap.sh [-irslev] [OPTIONS]
+USAGE: ./strap.sh [SUBCOMMAND] [-irsev] [OPTIONS]
+
+SUBCOMMANDS:
+
+    full:    Does everything. Installs all the required packages, and then links
+             the dotfiles with the specified action.
+             Defaults to this if no subcommand is specified.
+
+    install: Only installs packages. Does not do dotfile linking. Useful if you
+             want to configure the system yourself.
+
+    link:    Only links the dotfiles. Nothing is installed.
 
 FLAGS:
 
@@ -58,6 +70,7 @@ FLAGS:
     --no-sysctl/-s:   After the installation phase, do not enable system services.
     
     --no-link/-l:     After installation, do not link dotfiles.
+                      (Deprecated, use the install subcommand to prevent linking.)
 
     --essential/-e:   Only install essential apps that the dotfiles rely on.
                       This does NOT install base dependencies like the X server,
@@ -86,6 +99,8 @@ OPTIONS:
 
     The window manager to install. Can be all four (default), or xmonad, spectrwm, 
     qtile or i3-gaps only.
+    Note: this will only prevent installation of the WM itself. Any packages associated
+    with the WM (e.g. xmobar + xmonad-contrib with xmonad) will still be installed.
     
     --aur-helper/-ah [paru|yay|pacaur]:
 
@@ -106,10 +121,10 @@ OPTIONS:
 ##### Default parameters #####
 
 declare -A params=(
+    [subcommand]="full"
     [interactive]=false
     [reinstall]=false
     [sysctl]=true
-    [link]=true
     [essential]=false
     [verbose]=false
     [action]="link"
@@ -135,7 +150,7 @@ parse_short_toggle_args() {
     interactive $1
     reinstall $1
     sysctl $1
-    link $1
+    #link $1
     essential $1
     verbose $1
 
@@ -163,11 +178,11 @@ sysctl() {
     fi
 }
 
-link() {
-    if [[ $1 = *l* ]]; then
-        params[link]=false
-    fi
-}
+# link() {
+#     if [[ $1 = *l* ]]; then
+#         params[link]=false
+#     fi
+# }
 
 essential() {
     if [[ $1 = *e* ]]; then
@@ -219,6 +234,29 @@ parse_valued_args() {
 ##### Parsing Driver Function #####
 
 parse_args() {
+
+    # parsing subcommand
+    case $1 in
+    full)
+        params[subcommand]="full"
+        shift
+        ;;
+    install)
+        params[subcommand]="install"
+        shift
+        ;;
+    link)
+        params[subcommand]="link"
+        shift
+        ;;
+    -?)
+        params[subcommand]="full"
+        ;;
+    ?)
+        fail "strap.sh: Unknown subcommand '$1'" 2
+        ;;
+    esac
+
     # when it encounters a valued flag
     state=""
     # index in the argument vector
@@ -262,10 +300,10 @@ parse_args() {
             check_missing_value $state
             sysctl=false
             ;;
-        --no-link)
-            check_missing_value $state
-            link=false
-            ;;
+        # --no-link)
+        #     check_missing_value $state
+        #     link=false
+        #     ;;
         --essential)
             check_missing_value $state
             essential=true
@@ -273,6 +311,9 @@ parse_args() {
         --verbose)
             check_missing_value $state
             verbose=true
+            ;;
+        --*)
+            fail "strap.sh: unknown parameter '$arg'" 1
             ;;
         -*)
             check_missing_value $state
@@ -332,11 +373,12 @@ _check_values() {
 }
 
 confirm() {
+    echo "Subcommand: ${params[subcommand]}"
+    echo ""
     echo "Behaviour:"
     echo "interactive mode:   ${params[interactive]}"
     echo "do reinstallation:  ${params[reinstall]}"
     echo "enable services:    ${params[sysctl]}"
-    echo "link dotfiles:      ${params[link]}"
     echo "install essentials: ${params[essential]}"
     echo "verbose mode:       ${params[verbose]}"
     echo "dotfile action:     ${params[action]}"
@@ -358,7 +400,10 @@ and assumes that you already have them installed."
     
     echo -n "Do you want to continue? [Y/n] "
     
-    get_user_choice || exit 0
+    if ! get_user_choice; then
+        echo "Exiting!"
+        exit 0
+    fi
 
     echo "Proceeding with bootstrap."
     echo ""
@@ -435,7 +480,26 @@ install_helper() {
 
 # drives the entire install process
 install_driver() {
+    local wm="${params[windowm]}"
+    local dm="${params[displaym]}"
+
+    if [[ "$wm" != "all" ]]; then
+        install_check $wm
+    fi
+
+    install_check $dm
+
     for package in $packagelist; do
+        if [[ "$package" = "xmonad" ]]\
+        || [[ "$package" = "i3-gaps" ]]\
+        || [[ "$package" = "qtile" ]]\
+        || [[ "$package" = "spectrwm" ]]\
+        || [[ "$package" = "lightdm" ]]\
+        || [[ "$package" = "sddm" ]]; then
+            if [[ "$wm" != "all" ]]; then
+                continue
+            fi
+        fi
         install_check $package
     done
 }
@@ -443,16 +507,16 @@ install_driver() {
 # check if a package is already installed
 # and take action according to whether reinstall is enabled
 install_check() {
-    if pacman -Q $package > /dev/null 2>&1; then
-        echo -n "$package is already installed."
+    if pacman -Q $1 > /dev/null 2>&1; then
+        echo -n "$1 is already installed."
         if ${params[reinstall]}; then
-            install_pkg $package true
+            install_pkg $1 true
         else
             echo " Skipping..."
             return 0
         fi
     else
-        install_pkg $package false
+        install_pkg $1 false
     fi
 }
 
@@ -494,13 +558,13 @@ _install() {
     return 0
 }
 
-#                 .    o8o  oooo  
-#               .o8    `"'  `888  
-# oooo  oooo  .o888oo oooo   888  
-# `888  `888    888   `888   888  
-#  888   888    888    888   888  
-#  888   888    888 .  888   888  
-#  `V88V"V8P'   "888" o888o o888o 
+#*                 .    o8o  oooo  
+#*               .o8    `"'  `888  
+#* oooo  oooo  .o888oo oooo   888  
+#* `888  `888    888   `888   888  
+#*  888   888    888    888   888  
+#*  888   888    888 .  888   888  
+#*  `V88V"V8P'   "888" o888o o888o 
 
 ##### Helper functions #####
 fail() {
@@ -546,6 +610,18 @@ cleanup() {
 parse_args $@
 init
 confirm
-install_all
-# link_all
+
+if [[ "${params[subcommand]}" != "link" ]]; then
+    install_all
+else    
+    echo "Skipping install."
+fi
+
+if [[ "${params[subcommand]}" != "install" ]]; then
+    #link_all
+    echo "linking..."
+else 
+    echo "Skipping linking."
+fi
+
 cleanup
