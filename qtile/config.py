@@ -37,15 +37,16 @@ keys = [
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(),
+    Key([mod, "control"], "h", lazy.layout.decrease_ratio(),
         desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(),
+    Key([mod, "control"], "l", lazy.layout.increase_ratio(),
         desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(),
         desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-
+    Key([mod], "Left", lazy.screen.prev_group()),
+    Key([mod], "Right", lazy.screen.next_group()),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
@@ -152,17 +153,34 @@ for i in range(1, len(groups) + 1):
 #####! LAYOUTS !#####
 
 layouts = [
+    layout.Tile(
+        border_focus = "#efefef",
+        border_normal = "#5f676a",
+        margin = 4,
+        ratio = 0.55,
+        ratio_increment = 0.03,
+        name = " tile  "
+    ),
     layout.MonadTall(
         border_focus = "#efefef",
         border_normal = "#5f676a",
         margin = 4,
         name = "monadt "
     ),
-    layout.Tile(
-        border_focus = "#efefef",
-        border_normal = "#5f676a",
-        margin = 4,
-        name = " tile  "
+    layout.TreeTab(
+        active_bg = "#efefef",
+        active_fg = "#222222",
+        bg_color  = "#202020",
+        border_width = 2,
+        font = "FiraCode Nerd Font",
+        fontsize = 12,
+        inactive_bg = "#5f676a",
+        inactive_fg = "#efefef",
+        sections = ['Tabs'],
+        name = "tabbed "
+    ),
+    layout.Max(
+        name = "  max  "
     ),
     layout.Columns(
         border_focus_stack='#efefef',
@@ -171,9 +189,6 @@ layouts = [
         margin = 4,
         name = "columns"
     ),
-    layout.Max(
-        name = "  max  "
-    ),
     layout.Stack(
         border_focus = "#efefef",
         border_normal = "#5f676a",
@@ -181,21 +196,20 @@ layouts = [
         margin = 4,
         name = " stack "
     ),
-    layout.Bsp(
-        border_focus = "#efefef",
-        border_normal = "#5f676a",
-        margin = 4,
-        name = "  bsp  "
-    ),
-    layout.MonadWide(
-        border_focus = "#efefef",
-        border_normal = "#5f676a",
-        margin = 4,
-        name = "monadw "
-    ),
+    #layout.Bsp(
+    #    border_focus = "#efefef",
+    #    border_normal = "#5f676a",
+    #    margin = 4,
+    #    name = "  bsp  "
+    #),
+    #layout.MonadWide(
+    #    border_focus = "#efefef",
+    #    border_normal = "#5f676a",
+    #    margin = 4,
+    #    name = "monadw "
+    #),
     # layout.Matrix(),
     # layout.RatioTile(),
-    # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
