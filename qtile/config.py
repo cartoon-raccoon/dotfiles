@@ -10,6 +10,8 @@ from libqtile import hook
 
 import os
 import subprocess
+import datetime
+import cgi
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -62,6 +64,8 @@ keys = [
     # Toggle fullscreen and floating
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating,"),
+    Key([mod], "m", lazy.group.setlayout("  max  ")),
+    Key([mod], "w", lazy.group.setlayout("tabbed ")),
 
     # Basic QTile commands
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
@@ -182,20 +186,20 @@ layouts = [
     layout.Max(
         name = "  max  "
     ),
-    layout.Columns(
-        border_focus_stack='#efefef',
-        border_focus='#efefef',
-        border_normal='#5f676a',
-        margin = 4,
-        name = "columns"
-    ),
-    layout.Stack(
-        border_focus = "#efefef",
-        border_normal = "#5f676a",
-        num_stacks=2,
-        margin = 4,
-        name = " stack "
-    ),
+    #layout.Columns(
+    #    border_focus_stack='#efefef',
+    #    border_focus='#efefef',
+    #    border_normal='#5f676a',
+    #    margin = 4,
+    #    name = "columns"
+    #),
+    #layout.Stack(
+    #    border_focus = "#efefef",
+    #    border_normal = "#5f676a",
+    #    num_stacks=2,
+    #    margin = 4,
+    #    name = " stack "
+    #),
     #layout.Bsp(
     #    border_focus = "#efefef",
     #    border_normal = "#5f676a",
@@ -223,40 +227,84 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+# Used in the MPD widget to truncate titles if they get too long
+def truncate(s):
+    if len(s) > 20:
+        return f"{s[:20]}..."
+    else:
+        return s
+
+# the top bar. not currently in use.
+top_bar = bar.Bar(
+    [
+        widget.Mpd2(
+            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [{repeat}{random}{single}{consume}{updating_db}]",
+            idle_format = " {idle_message} ",
+            idle_message = "Nothing playing",
+            format_fns = dict(
+                #all=lambda s: cgi.escape(s),
+                title=truncate,
+                elapsed=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
+                duration=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
+            ),
+            padding = 10,
+
+        ),
+        widget.Volume(fmt = '墳 {}'),
+        widget.Spacer(length = bar.STRETCH),
+        widget.Memory(
+            fmt = "  {}",
+            format = '{MemUsed}M ({MemPercent}%)'
+        ),
+        widget.CPU(
+            fmt = " {}",
+            format = "{freq_current}GHz ({load_percent}%)"
+        )
+    ],
+    30,
+    background = "#202020",
+)
+
+# the bottom bar.
+bottom_bar = bar.Bar(
+    [
+        widget.CurrentLayout(),
+        widget.GroupBox(
+            highlight_method = 'line',
+            highlight_color = ['#202020', '#343434'],
+            this_current_screen_border = '#fabd2f',
+            this_screen_border = '#fabd2f',
+        ),
+        widget.Spacer(length = 15),
+        widget.Prompt(),
+        widget.WindowName(),
+        widget.Chord(
+            chords_colors={
+                'launch': ("#fabd2f", "#282828"),
+            },
+            name_transform=lambda name: name.upper(),
+        ),
+        widget.Systray(),
+        widget.Spacer(length = 8),
+        widget.Clock(format='%A, %d %b %Y %I:%M%p'),
+        widget.Spacer(length = 8),
+        widget.QuickExit(
+            padding = 1,
+            foreground = 'fb4934',
+            default_text = '[  ]',
+            countdown_format = '[ {} ]'
+        ),
+    ],
+    30,
+    background = '202020'
+)
+
 screens = [
     Screen(
-        bottom=bar.Bar(
-            [
-                widget.CurrentLayout(),
-                widget.GroupBox(
-                    highlight_method = 'line',
-                    highlight_color = ['#202020', '#343434'],
-                    this_current_screen_border = '#fabd2f',
-                    this_screen_border = '#fabd2f',
-                ),
-                widget.Spacer(length = 10),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#fabd2f", "#282828"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Systray(),
-                widget.Spacer(length = 8),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-                widget.Spacer(length = 8),
-                widget.QuickExit(
-                    padding = 1,
-                    foreground = 'fb4934',
-                    default_text = '[  ]',
-                    countdown_format = '[ {} ]'
-                ),
-            ],
-            30,
-            background = '202020'
-        ),
+        #top=top_bar,
+        bottom=bottom_bar,
+        left = bar.Gap(size = 8),
+        right = bar.Gap(size = 8),
     ),
 ]
 
