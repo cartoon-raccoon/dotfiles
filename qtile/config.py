@@ -224,6 +224,7 @@ widget_defaults = dict(
     font='FiraCode Nerd Font',
     fontsize=14,
     padding=3,
+    foreground="#efefef",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -314,7 +315,7 @@ top_bar = bar.Bar(
         ),
         widget.TextBox(text = '',
             background = '#4a314d',
-            foreground = '#d4ac0c',
+            foreground = '#d79921',
             fontsize = 60,
             padding = -9,
         ),
@@ -325,11 +326,11 @@ top_bar = bar.Bar(
             discharge_char = 'D',
             empty_char = 'E',
             fontsize = 13,
-            background = '#d4ac0c',
+            background = '#d79921',
             padding = 5,
         ),
         widget.TextBox(text = '',
-            background = '#d4ac0c',
+            background = '#d79921',
             foreground = '#d16014',
             fontsize = 60,
             padding = -9,
