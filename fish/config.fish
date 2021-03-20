@@ -52,3 +52,6 @@ alias spectrconf="$EDITOR ~/.spectrwm.conf"
 alias baraction="$EDITOR ~/.config/bar_action.sh"
 
 alias qtileconf="$EDITOR ~/.config/qtile/config.py"
+
+alias raccoonpi="ssh alarm@192.168.1.12"
+alias raccoonpi-out="ssh alarm@cartoonraccoon.ddnsgeek.com -p 42169"
