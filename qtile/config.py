@@ -158,6 +158,8 @@ for i in range(1, len(groups) + 1):
 
 layouts = [
     layout.Tile(
+        add_after_last = True,
+        add_on_top = False,
         border_focus = "#efefef",
         border_normal = "#5f676a",
         margin = 4,
@@ -169,6 +171,7 @@ layouts = [
         border_focus = "#efefef",
         border_normal = "#5f676a",
         margin = 4,
+        ratio = 0.55,
         name = "monadt "
     ),
     layout.TreeTab(
@@ -250,7 +253,7 @@ top_bar = bar.Bar(
             ),
             padding = 10,
             fontsize = 13,
-            play_states = {'pause': ' ', 'play': ' ', 'stop' : ' '},
+            play_states = {'play': ' ', 'pause': ' ', 'stop' : ' '},
             update_interval = 0.5,
 
         ),
@@ -321,7 +324,7 @@ top_bar = bar.Bar(
         ),
         widget.Battery(
             fmt = "{}",
-            format = "{char} {percent:2.0%} {hour:d}:{min:02d} ",
+            format = "[{char}] {percent:2.0%} {hour:d}:{min:02d} ",
             charge_char = 'C',
             discharge_char = 'D',
             empty_char = 'E',
@@ -360,6 +363,10 @@ bottom_bar = bar.Bar(
         widget.Spacer(length = 15),
         widget.Prompt(),
         widget.WindowName(),
+        widget.CapsNumLockIndicator(
+            
+        ),
+        widget.TextBox(text = '|'),
         widget.Chord(
             chords_colors={
                 'launch': ("#fabd2f", "#282828"),

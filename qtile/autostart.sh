@@ -2,7 +2,7 @@
 
 xautolock -time 5 -locker "/home/sammy/.config/i3/i3lock" &
 picom &
-feh --bg-scale /home/sammy/Pictures/minimalistwp.png
+feh --bg-scale /home/sammy/Pictures/Wallpaper/streets.jpg
 
 #$HOME/.config/polybar/launch.sh &
 
