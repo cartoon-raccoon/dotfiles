@@ -550,7 +550,7 @@ _install() {
 
     # always interactive
     #todo: implement check for why it failed
-    if ! echo "y" | sudo pacman -S $pkg; then
+    if ! sudo pacman -S --noconfirm $pkg; then
         echo ""
         echo "$pkg not found with pacman, using $helper instead."
         $helper -S $pkg
