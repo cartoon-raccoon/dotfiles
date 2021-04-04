@@ -33,6 +33,10 @@ function pkgcount
 	pacman -Q | wc -l
 end
 
+function xephyr
+	Xephyr -br -ac -noreset -screen $argv
+end
+
 alias ls="exa -l"
 
 alias fishreload="source ~/.config/fish/config.fish"
@@ -55,3 +59,12 @@ alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
 alias raccoonpi="ssh alarm@192.168.1.12"
 alias raccoonpi-out="ssh alarm@cartoonraccoon.ddnsgeek.com -p 42169"
+
+alias up="cd .."
+alias up2="cd ../../"
+alias up3="cd ../../../"
+alias up4="cd ../../../../"
+alias up5="cd ../../../../../"
+
+# opam configuration
+source /home/sammy/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
