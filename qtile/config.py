@@ -107,7 +107,9 @@ keys = [
         Key([], "r", lazy.spawn("alacritty -e ranger")),
         Key([], "t", lazy.spawn("thunar")),
         Key([], "m", lazy.spawn("multimc"))
-    ], mode = "launch")
+    ], mode = "launch"),
+
+    Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"))
 ]
 
 # Drag floating layouts.
@@ -255,7 +257,7 @@ top_bar = bar.Bar(
             fontsize = 13,
             play_states = {'play': ' ', 'pause': ' ', 'stop' : ' '},
             update_interval = 0.5,
-
+            markup = False,
         ),
         widget.Volume(
             fmt = '墳 {}',
