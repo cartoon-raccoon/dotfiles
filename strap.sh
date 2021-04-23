@@ -598,7 +598,7 @@ cleanup() {
 
     local orphans=$(pacman -Qqtd)
     if [[ -n $orphans ]]; then
-        echo "y" | sudo pacman -Rs $(pacman -Qqtd) \
+        sudo pacman -Rs --noconfirm $(pacman -Qqtd) \
             || fail "[!] Failed to clean orphaned packages."
     fi
 
