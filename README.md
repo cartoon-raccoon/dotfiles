@@ -1,6 +1,8 @@
 # dotfiles
 
-Currently juggling the dotfiles of 3 WMs: XMonad, Spectrwm, and i3-gaps. More coming soon.
+Currently juggling the dotfiles of 4 WMs: Qtile, XMonad, Spectrwm, and i3-gaps. More coming soon.
+
+_Shameless self-plug: I'm working on my own window manager [here](https://github.com/cartoon-raccoon/rcwm)._
 
 Each directory contains the dotfiles and other scripts used for running the apps on my system.
 
@@ -10,13 +12,14 @@ Each directory contains the dotfiles and other scripts used for running the apps
   - XMonad (xmobar)
   - Spectrwm (bar_action.sh)
   - i3-gaps (polybar)
+  - Qtile (builtin bar)
 - Compositor: `picom`
 - Notifications: `dunst`
 - Shell: `fish`
 - Terminal: `alacritty`
 - Music: `ncmpcpp`
 - Editor: `Neovim`
-- Other apps: `cava`, `scrot`, `spotify`, `feh`, `i3lock`
+- Other apps: `cava`, `scrot`, `spotify`, `feh`, `i3lock`, etc.
 
 ## Other scripts
 
@@ -26,3 +29,4 @@ Each directory contains the dotfiles and other scripts used for running the apps
 ## Bootstrap script
 
 - strap.sh: a script to setup an entire system from a base install.
+  Currently only the installation phase is implemented, linking not yet.
