@@ -236,9 +236,17 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 # Used in the MPD widget to truncate titles if they get too long
-def truncate(s):
+def title_truncate(s):
     if len(s) > 20:
         return f"{s[:20]}..."
+    else:
+        return s
+
+# Used in the MPD widget to truncate artist lists
+def artist_truncate(s):
+    splits = s.split(",")
+    if len(splits) > 2:
+        return ",".join(splits[:2]) + ", Various"
     else:
         return s
 
@@ -246,12 +254,13 @@ def truncate(s):
 top_bar = bar.Bar(
     [
         widget.Mpd2(
-            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [{repeat}{random}{single}{consume}{updating_db}]",
+            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [{repeat}{random}{single}{consume}]",
             idle_format = " {idle_message} ",
             idle_message = "Nothing playing",
             format_fns = dict(
                 #all=lambda s: cgi.escape(s),
-                title=truncate,
+                artist=artist_truncate,
+                title=title_truncate,
                 elapsed=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
                 duration=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
             ),
