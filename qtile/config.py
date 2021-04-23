@@ -131,7 +131,9 @@ groups = [
     # social
     Group(' '), 
     # misc
-    Group('ﳁ '),
+    Group(' '),
+    # reading
+    Group(' '),
     # dropdowns
     # ScratchPad("dropdowns",
     #     DropDown("term", "alacritty", opacity = 0.9),
@@ -166,7 +168,7 @@ layouts = [
         border_normal = "#5f676a",
         margin = 4,
         ratio = 0.55,
-        ratio_increment = 0.03,
+        ratio_increment = 0.05,
         name = " tile  "
     ),
     layout.MonadTall(
