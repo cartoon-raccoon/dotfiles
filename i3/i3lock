@@ -1,0 +1,21 @@
+#!/bin/bash
+
+dunstctl set-paused true
+
+i3lock \
+-i ~/Pictures/rsz_fantasytree.png \
+--indicator \
+--time-pos="ix-150:iy+2" \
+--date-pos="tx:ty+25" \
+--time-size=42 --date-size=20 \
+--force-clock --date-str "Hello, $(whoami)" \
+--inside-color=00000000 \
+--ring-color=ffffffff --line-uses-inside \
+--keyhl-color=3a77b5ff --bshl-color=3a77b5ff \
+--separator-color=00000000 \
+--insidever-color=fecf4dff --insidewrong-color=d23c3dff \
+--ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos="x+330:h-120" \
+--radius=31 --ring-width=6 --verif-text="" --wrong-text="" \
+--greeter-color="ffffffff" --time-color="ffffffff" --date-color="ffffffff"
+
+dunstctl set-paused false
