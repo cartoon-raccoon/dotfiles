@@ -82,7 +82,7 @@ keys = [
     Key([mod], "period", lazy.spawn("mpc next")),
     Key([mod], "comma", lazy.spawn("mpc prev")),
 
-    Key([mod, "shift"], "grave", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
+    Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
     Key([mod, "shift"], "period", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
     Key([mod, "shift"], "comma", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
 
@@ -237,8 +237,8 @@ extension_defaults = widget_defaults.copy()
 
 # Used in the MPD widget to truncate titles if they get too long
 def title_truncate(s):
-    if len(s) > 20:
-        return f"{s[:20]}..."
+    if len(s) > 30:
+        return f"{s[:30]}..."
     else:
         return s
 
@@ -376,6 +376,12 @@ bottom_bar = bar.Bar(
         widget.Spacer(length = 15),
         widget.Prompt(),
         widget.WindowName(),
+        #widget.Mpris2(
+        #    fmt = '{title}',
+        #    name = 'spotify',
+        #    objname = 'org.mpris.MediaPlayer2.spotify'
+        #),
+        widget.TextBox(text = '|'),
         widget.CapsNumLockIndicator(
             
         ),
