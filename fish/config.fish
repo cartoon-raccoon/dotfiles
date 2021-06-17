@@ -12,6 +12,13 @@ function mpcplay
 	mpc play
 end
 
+function mpcsave
+	mpc rm $argv[1]
+	mpc save $argv[1]
+end
+
+alias mpcls="mpc lsplaylists"
+
 # package management functions
 function addpkg
 	sudo pacman -S $argv
@@ -57,7 +64,7 @@ alias baraction="$EDITOR ~/.config/bar_action.sh"
 
 alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
-alias raccoonpi="ssh alarm@192.168.1.12"
+alias raccoonpi="ssh alarm@192.168.79.2"
 alias raccoonpi-out="ssh alarm@cartoonraccoon.ddnsgeek.com -p 42169"
 
 alias up="cd .."
@@ -66,5 +73,6 @@ alias up3="cd ../../../"
 alias up4="cd ../../../../"
 alias up5="cd ../../../../../"
 
+alias icccm="curl www.call-with-current-continuation.org/rants/icccm.txt"
 # opam configuration
 source /home/sammy/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
