@@ -45,6 +45,8 @@ function xephyr
 end
 
 alias ls="exa -l"
+#alias fucking="sudo"
+#alias pls="sudo"
 
 alias fishreload="source ~/.config/fish/config.fish"
 
