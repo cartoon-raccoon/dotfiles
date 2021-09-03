@@ -123,13 +123,15 @@ mouse = [
 
 groups = [
     # main
-    Group(' '), 
+    Group(' ', spawn = ["firefox"], layout = "  max  "), 
     # dev
-    Group(' '), 
+    Group(' ', spawn = ["code"], layout = "  max  "), 
     # files
-    Group(' '), 
+    Group(' ', spawn = ["thunar"]), 
     # social
-    Group(' '), 
+    Group(' '),
+    # music
+    Group(' ', spawn = ["spotify"]),
     # misc
     Group(' '),
     # reading
@@ -297,7 +299,7 @@ top_bar = bar.Bar(
         ),
         widget.Memory(
             fmt = "  {}",
-            format = '{MemUsed}M ({MemPercent}%)',
+            format = '{MemUsed: .0f}M ({MemPercent: .1f}%)',
             fontsize = 13,
             background = '#659157',
             padding = 5,
