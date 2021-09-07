@@ -256,7 +256,7 @@ def artist_truncate(s):
 top_bar = bar.Bar(
     [
         widget.Mpd2(
-            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [{repeat}{random}{single}{consume}]",
+            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [ {repeat}{random}{single}{consume}]",
             idle_format = " {idle_message} ",
             idle_message = "Nothing playing",
             format_fns = dict(
@@ -269,6 +269,14 @@ top_bar = bar.Bar(
             padding = 10,
             fontsize = 13,
             play_states = {'play': ' ', 'pause': ' ', 'stop' : ' '},
+            prepare_status = {
+                'consume': ' ', 
+                'random' : '咽 ', 
+                'repeat' : '凌 ',
+                'single' : '綾 ',
+                'updating_db': 'ﮮ ',
+            },
+            space = '- ',
             update_interval = 0.5,
             markup = False,
         ),
