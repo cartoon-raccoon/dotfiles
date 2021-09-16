@@ -22,8 +22,8 @@ init() {
     [[ -e /etc/os-release ]] \
         || fail "[!] Cannot find os-release file, aborting!" 1
 
-    cat /etc/os-release | grep 'Arch Linux' > /dev/null \
-        || fail "[!] Unsupported OS, aborting!" 2
+    grep "Arch Linux" < /etc/os-release > /dev/null \
+    	|| fail "[!] Unsupported OS, aborting!" 2
     
     # Check whether git is installed
     pacman -Q git > /dev/null \
@@ -147,12 +147,12 @@ declare -r REPO_DIR=$PWD
 
 # bug: this cannot account for unknown flags
 parse_short_toggle_args() {
-    interactive $1
-    reinstall $1
-    sysctl $1
-    #link $1
-    essential $1
-    verbose $1
+    interactive "$1"
+    reinstall "$1"
+    sysctl "$1"
+    #link "$1"
+    essential "$1"
+    verbose "$1"
 
     # if [[ $1 = (^-irslev) ]]; then
     #     echo "Unknown flag"
@@ -262,42 +262,42 @@ parse_args() {
     # index in the argument vector
     local idx=1
 
-    for arg in $@; do
+    for arg in "$@"; do
         case $arg in
         -h|--help)
             print_help
             exit
             ;;
         -wm|--window-manager)
-            check_missing_value $state
+            check_missing_value "$state"
             state="window-manager"
             continue
             ;;
         -dm|--display-manager)
-            check_missing_value $state
+            check_missing_value "$state"
             state="display-manager"
             continue
             ;;
         -ah|--aur-helper)
-            check_missing_value $state
+            check_missing_value "$state"
             state="aur-helper"
             continue
             ;;
         -a|--action)
-            check_missing_value $state
+            check_missing_value "$state"
             state="action"
             continue
             ;;
         --interactive)
-            check_missing_value $state
+            check_missing_value "$state"
             interactive=true
             ;;
         --reinstall)
-            check_missing_value $state
+            check_missing_value "$state"
             reinstall=true
             ;;
         --no-sysctl)
-            check_missing_value $state
+            check_missing_value "$state"
             sysctl=false
             ;;
         # --no-link)
@@ -305,22 +305,22 @@ parse_args() {
         #     link=false
         #     ;;
         --essential)
-            check_missing_value $state
+            check_missing_value "$state"
             essential=true
             ;;
         --verbose)
-            check_missing_value $state
+            check_missing_value "$state"
             verbose=true
             ;;
         --*)
             fail "strap.sh: unknown parameter '$arg'" 1
             ;;
         -*)
-            check_missing_value $state
-            parse_short_toggle_args $arg
+            check_missing_value "$state"
+            parse_short_toggle_args "$arg"
             ;;
         *)
-            parse_valued_args $state $arg
+            parse_valued_args "$state" "$arg"
             ;;
         esac
 
@@ -330,7 +330,7 @@ parse_args() {
 
     done
 
-    check_missing_value $state
+    check_missing_value "$state"
     _check_values
 }
 
@@ -423,7 +423,7 @@ install_all() {
     echo '[*] Running full system upgrade:'
     echo ''
 
-    echo 'y' | sudo pacman -Syu || fail "[!] Error on system upgrade, aborting." 1
+    sudo pacman -Syu --noconfirm || fail "[!] Error on system upgrade, aborting." 1
     echo ""
 
     echo "[*] Installing AUR helper ${params[helper]}:"
@@ -472,10 +472,10 @@ install_helper() {
 
     # makepkg -si
 
-    echo $url
+    echo "$url"
     echo ""
 
-    cd $REPO_DIR
+    cd $REPO_DIR || fail "Directory $REPO_DIR does not exist." 1
 }
 
 # drives the entire install process
@@ -500,23 +500,23 @@ install_driver() {
                 continue
             fi
         fi
-        install_check $package
+        install_check "$package"
     done
 }
 
 # check if a package is already installed
 # and take action according to whether reinstall is enabled
 install_check() {
-    if pacman -Q $1 > /dev/null 2>&1; then
+    if pacman -Q "$1" > /dev/null 2>&1; then
         echo -n "$1 is already installed."
         if ${params[reinstall]}; then
-            install_pkg $1 true
+            install_pkg "$1" true
         else
             echo " Skipping..."
             return 0
         fi
     else
-        install_pkg $1 false
+        install_pkg "$1" false
     fi
 }
 
@@ -528,10 +528,10 @@ install_pkg() {
             echo -n " Would you like to reinstall? [Y/n] "
             get_user_choice || return 0
             echo "Reinstalling package $1..."
-            _install $1
+            _install "$1"
         else
             echo "Reinstalling package $1..."
-            _install $1
+            _install "$1"
         fi
     else
         if ${params[interactive]}; then
@@ -550,10 +550,10 @@ _install() {
 
     # always interactive
     #todo: implement check for why it failed
-    if ! sudo pacman -S --noconfirm $pkg; then
+    if ! sudo pacman -S --noconfirm "$pkg"; then
         echo ""
         echo "$pkg not found with pacman, using $helper instead."
-        $helper -S $pkg
+        $helper -S "$pkg"
     fi
     return 0
 }
@@ -568,8 +568,8 @@ _install() {
 
 ##### Helper functions #####
 fail() {
-    echo $1 >&2
-    exit $2
+    echo "$1" >&2
+    exit "$2"
 }
 
 check_missing_value() {
@@ -577,7 +577,7 @@ check_missing_value() {
 }
 
 get_user_choice() {
-    read choice
+    read -r choice
 
     case $choice in
     y|yes|Y|Yes)
