@@ -424,7 +424,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (20)[white]{b|f:Album} (50)
 #
 #cyclic_scrolling = no
 #
-lyrics_fetchers = genius, azlyrics, musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
+lyrics_fetchers = azlyrics, genius, musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
 #
 #follow_now_playing_lyrics = no
 #
