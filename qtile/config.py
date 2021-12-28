@@ -97,7 +97,7 @@ keys = [
     # screenshot keys
     Key([mod],"Print", lazy.spawn("/home/sammy/.config/scrot/run.sh")),
     Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u")),
-    
+    Key([mod, "shift"], "f", lazy.spawn("flameshot")),    
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
         Key([], "f", lazy.spawn("firefox")),
