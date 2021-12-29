@@ -1,5 +1,5 @@
 set -x EDITOR (which nvim)
-set -x PATH "$HOME/.cargo/bin/:$PATH"
+set -x PATH "$HOME/.cargo/bin/:$HOME/.local/bin/cross/bin:$PATH"
 
 # mpc functions
 function mpcload
@@ -42,6 +42,10 @@ end
 
 function xephyr
 	Xephyr -br -ac -noreset -screen $argv
+end
+
+function cheat
+	curl cheat.sh/$argv[1]
 end
 
 alias ls="exa -l"
