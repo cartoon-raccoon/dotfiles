@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# strap.sh: An extremely over-engineered Arch Linux bootstrap script.
-# This software is licensed under The Unlicense.
+# strap.sh: A ridiculously over-engineered Arch Linux bootstrap script.
+# This software is dual-licensed under the Unlicense and the WTFPL.
 # Copyright (c) 2021 cartoon-raccoon
 
 # todo:
@@ -36,7 +36,7 @@ function init() {
 }
 
 function print_help() {
-    echo "./strap.sh - a program for bootstrapping an Arch Linux system
+    echo "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
 
 strap.sh is a bash script for bootstrapping my (cartoon-raccoon's) Arch Linux
 system. It is designed to be run from inside my dotfiles git repo, and sets up
@@ -578,6 +578,8 @@ declare -r CONFIG_DIR="$HOME/.config"
 # list of dest and source files
 # key: dest file
 # value: src file
+
+# Add directories as needed.
 declare -Ar linkdirs=(
     ["$CONFIG_DIR/alacritty/alacritty.yml"]="alacritty/alacritty.yml"
     ["$CONFIG_DIR/cava/config"]="cava/config"
@@ -585,12 +587,39 @@ declare -Ar linkdirs=(
     ["$CONFIG_DIR/fish/config.fish"]="fish.config.fish"
     ["$CONFIG_DIR/i3/config"]="i3/config"
     ["$CONFIG_DIR/i3/i3lock"]="i3/i3lock"
-    # ["$CONFIG_DIR/mpd/mpd.conf"]="mpd/mpd.conf"
-    ["$CONFIG_DIR/mpd/mpd_notify.sh"]
+    ["$CONFIG_DIR/mpd/mpd.conf"]="mpd/mpd.conf"
+    ["$CONFIG_DIR/mpd/mpd_notify.sh"]="mpd/mpd_notify.sh"
+    ["$CONFIG_DIR/ncmpcpp/config"]="ncmpcpp/config"
+    ["$CONFIG_DIR/nvim/init.vim"]="nvim/init.vim"
+    ["$CONFIG_DIR/picom/picom.conf"]="picom/picom.conf"
+    ["$CONFIG_DIR/polybar/config"]="polybar/config"
 )
 
-function link_all() {
+declare link_action=""
 
+# handles the linking process
+function link_all() {
+    set_link_action
+
+    for $src in ${linkdirs[@]}; do
+        local dest=${!linkdirs[$src]}
+        mkdir -p $(dirname $dest)
+        $link_action $src $dest
+    done
+}
+
+function set_link_action {
+    case ${params[action]} in
+    link)
+        link_action="ln -s"
+        ;;
+    copy)
+        link_action="cp"
+        ;;
+    move)
+        link_action="mv"
+        ;;
+    esac
 }
 
 #*                 .    o8o  oooo  
@@ -674,4 +703,4 @@ function main() {
 }
 
 # call main
-main
+main $@
