@@ -651,21 +651,27 @@ cleanup() {
                                               
 
 ##### The magic happens here. #####
-parse_args $@
-init
-confirm
 
-if [[ "${params[subcommand]}" != "link" ]]; then
-    install_all
-else    
-    echo "Skipping install."
-fi
+function main() {
+    parse_args $@
+    init
+    confirm
 
-if [[ "${params[subcommand]}" != "install" ]]; then
-    #link_all
-    echo "linking..."
-else 
-    echo "Skipping linking."
-fi
+    if [[ "${params[subcommand]}" != "link" ]]; then
+        install_all
+    else    
+        echo "Skipping install."
+    fi
 
-cleanup
+    if [[ "${params[subcommand]}" != "install" ]]; then
+        #link_all
+        echo "linking..."
+    else 
+        echo "Skipping linking."
+    fi
+
+    cleanup
+}
+
+# call main
+main
