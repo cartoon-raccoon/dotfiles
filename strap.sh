@@ -558,6 +558,36 @@ _install() {
     return 0
 }
 
+#* oooo   o8o              oooo         o8o                         
+#* `888   `"'              `888         `"'                         
+#*  888  oooo  ooo. .oo.    888  oooo  oooo  ooo. .oo.    .oooooooo 
+#*  888  `888  `888P"Y88b   888 .8P'   `888  `888P"Y88b  888' `88b  
+#*  888   888   888   888   888888.     888   888   888  888   888  
+#*  888   888   888   888   888 `88b.   888   888   888  `88bod8P'  
+#* o888o o888o o888o o888o o888o o888o o888o o888o o888o `8oooooo.  
+#*                                                       d"     YD  
+#*                                                       "Y88888P'  
+
+declare -r CONFIG_DIR="$HOME/.config"
+
+# list of dest and source files
+# key: dest file
+# value: src file
+declare -Ar linkdirs=(
+    ["$CONFIG_DIR/alacritty/alacritty.yml"]="alacritty/alacritty.yml"
+    ["$CONFIG_DIR/cava/config"]="cava/config"
+    ["$CONFIG_DIR/dunst/dunstrc"]="dunst/dunstrc"
+    ["$CONFIG_DIR/fish/config.fish"]="fish.config.fish"
+    ["$CONFIG_DIR/i3/config"]="i3/config"
+    ["$CONFIG_DIR/i3/i3lock"]="i3/i3lock"
+    # ["$CONFIG_DIR/mpd/mpd.conf"]="mpd/mpd.conf"
+    ["$CONFIG_DIR/mpd/mpd_notify.sh"]
+)
+
+function link_all() {
+    
+}
+
 #*                 .    o8o  oooo  
 #*               .o8    `"'  `888  
 #* oooo  oooo  .o888oo oooo   888  
