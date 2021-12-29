@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# strap.sh: A kinda cool Arch Linux bootstrap script.
+# strap.sh: An extremely over-engineered Arch Linux bootstrap script.
 # This software is licensed under The Unlicense.
 # Copyright (c) 2021 cartoon-raccoon
+
+# todo:
+# - add verbose output
+# - add coloured messages
+# - add dry-run flag
 
 # Start!
 init() {
@@ -585,7 +590,7 @@ declare -Ar linkdirs=(
 )
 
 function link_all() {
-    
+
 }
 
 #*                 .    o8o  oooo  
@@ -635,6 +640,15 @@ cleanup() {
     echo ""
     echo "[*] All done, enjoy your new system!"
 }
+
+#*                              o8o              
+#*                              `"'              
+#* ooo. .oo.  .oo.    .oooo.   oooo  ooo. .oo.   
+#* `888P"Y88bP"Y88b  `P  )88b  `888  `888P"Y88b  
+#*  888   888   888   .oP"888   888   888   888  
+#*  888   888   888  d8(  888   888   888   888  
+#* o888o o888o o888o `Y888""8o o888o o888o o888o 
+                                              
 
 ##### The magic happens here. #####
 parse_args $@
