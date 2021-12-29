@@ -10,7 +10,7 @@
 # - add dry-run flag
 
 # Start!
-init() {
+function init() {
     echo '
       _                              _
  ___ | |_  _ __  __ _  _ __     ___ | |__
@@ -35,7 +35,7 @@ init() {
         || fail "[!] Git not installed, aborting!"
 }
 
-print_help() {
+function print_help() {
     echo "./strap.sh - a program for bootstrapping an Arch Linux system
 
 strap.sh is a bash script for bootstrapping my (cartoon-raccoon's) Arch Linux
@@ -151,7 +151,7 @@ declare -r REPO_DIR=$PWD
 ##### Short Argument Parsing #####
 
 # bug: this cannot account for unknown flags
-parse_short_toggle_args() {
+function parse_short_toggle_args() {
     interactive "$1"
     reinstall "$1"
     sysctl "$1"
@@ -165,37 +165,37 @@ parse_short_toggle_args() {
     # fi
 }
 
-interactive() {
+function interactive() {
     if [[ $1 = *i* ]]; then
         params[interactive]=true
     fi
 }
 
-reinstall() {
+function reinstall() {
     if [[ $1 = *r* ]]; then
         params[reinstall]=true
     fi
 }
 
-sysctl() {
+function sysctl() {
     if [[ $1 = *s* ]]; then
         params[sysctl]=false
     fi
 }
 
-# link() {
+# function link() {
 #     if [[ $1 = *l* ]]; then
 #         params[link]=false
 #     fi
 # }
 
-essential() {
+function essential() {
     if [[ $1 = *e* ]]; then
         params[essential]=true
     fi
 }
 
-verbose() {
+function verbose() {
     if [[ $1 = *v* ]]; then
         params[verbose]=true
     fi
@@ -203,7 +203,7 @@ verbose() {
 
 ##### Valued Argument Parsing #####
 
-parse_valued_args() {
+function arse_valued_args() {
     case $1 in
     window-manager)
         params[windowm]="$2"
@@ -238,7 +238,7 @@ parse_valued_args() {
 
 ##### Parsing Driver Function #####
 
-parse_args() {
+function parse_args() {
 
     # parsing subcommand
     case $1 in
@@ -339,7 +339,7 @@ parse_args() {
     _check_values
 }
 
-_check_values() {
+function _check_values() {
 
     # checking helper
     case ${params[helper]} in
@@ -377,7 +377,7 @@ _check_values() {
     esac
 }
 
-confirm() {
+function confirm() {
     echo "Subcommand: ${params[subcommand]}"
     echo ""
     echo "Behaviour:"
@@ -423,7 +423,7 @@ and assumes that you already have them installed."
 #* o888o o888o o888o 8""888P'   "888" `Y888""8o o888o o888o 
 
 # The main install function.
-install_all() {
+function install_all() {
     echo '----------| Installation |----------'
     echo '[*] Running full system upgrade:'
     echo ''
@@ -464,7 +464,7 @@ install_all() {
     install_driver
 }
 
-install_helper() {
+function install_helper() {
     local url=${helper_urls[${params[helper]}]}
     local helper=${params[helper]}
 
@@ -484,7 +484,7 @@ install_helper() {
 }
 
 # drives the entire install process
-install_driver() {
+function install_driver() {
     local wm="${params[windowm]}"
     local dm="${params[displaym]}"
 
@@ -511,7 +511,7 @@ install_driver() {
 
 # check if a package is already installed
 # and take action according to whether reinstall is enabled
-install_check() {
+function install_check() {
     if pacman -Q "$1" > /dev/null 2>&1; then
         echo -n "$1 is already installed."
         if ${params[reinstall]}; then
@@ -526,7 +526,7 @@ install_check() {
 }
 
 # ask the user if they would like to reinstall
-install_pkg() {
+function install_pkg() {
     # is reinstall
     if $2; then
         if ${params[interactive]}; then
@@ -549,7 +549,7 @@ install_pkg() {
 }
 
 # actually handles the install
-_install() {
+function _install() {
     local pkg=$1
     local helper=${params[helper]}
 
@@ -602,16 +602,16 @@ function link_all() {
 #*  `V88V"V8P'   "888" o888o o888o 
 
 ##### Helper functions #####
-fail() {
+function fail() {
     echo "$1" >&2
     exit "$2"
 }
 
-check_missing_value() {
+function check_missing_value() {
     [[ -n "$1" ]] && fail "strap.sh: missing value for parameter $1" 2
 }
 
-get_user_choice() {
+function get_user_choice() {
     read -r choice
 
     case $choice in
@@ -627,7 +627,7 @@ get_user_choice() {
     esac
 }
 
-cleanup() {
+function cleanup() {
     echo ""
     echo "Cleaning up..."
 
