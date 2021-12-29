@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # strap.sh: A ridiculously over-engineered Arch Linux bootstrap script.
+# It's probably one of the best pieces of software I've ever written.
 # This software is dual-licensed under the Unlicense and the WTFPL.
 # Copyright (c) 2021 cartoon-raccoon
 
 # todo:
 # - add verbose output
 # - add coloured messages
-# - add dry-run flag
+# - use dry-run flag in program
 
 # Start!
 function init() {
@@ -49,7 +50,7 @@ the user's home directory, by symlinking, copying or moving the file.
 
 strap.sh is heavily tailored to my own Arch Linux setup. Use at your own risk!
 
-USAGE: ./strap.sh [SUBCOMMAND] [-irsev] [OPTIONS]
+USAGE: ./strap.sh [SUBCOMMAND] [-irsdev] [OPTIONS]
 
 SUBCOMMANDS:
 
@@ -74,8 +75,9 @@ FLAGS:
 
     --no-sysctl/-s:   After the installation phase, do not enable system services.
     
-    --no-link/-l:     After installation, do not link dotfiles.
-                      (Deprecated, use the install subcommand to prevent linking.)
+    --dry-run/-d:     Enables dry-run mode. The script will run through the entire
+                      bootstrap sequence, but the actual installation and linking
+                      will not be carried out.
 
     --essential/-e:   Only install essential apps that the dotfiles rely on.
                       This does NOT install base dependencies like the X server,
@@ -130,6 +132,7 @@ declare -A params=(
     [interactive]=false
     [reinstall]=false
     [sysctl]=true
+    [dryrun]=false
     [essential]=false
     [verbose]=false
     [action]="link"
@@ -155,7 +158,7 @@ function parse_short_toggle_args() {
     interactive "$1"
     reinstall "$1"
     sysctl "$1"
-    #link "$1"
+    dry_run "$1"
     essential "$1"
     verbose "$1"
 
@@ -183,11 +186,11 @@ function sysctl() {
     fi
 }
 
-# function link() {
-#     if [[ $1 = *l* ]]; then
-#         params[link]=false
-#     fi
-# }
+function dry_run() {
+    if [[ $1 = *d* ]]; then
+        params[dryrun]=true
+    fi
+}
 
 function essential() {
     if [[ $1 = *e* ]]; then
@@ -295,27 +298,27 @@ function parse_args() {
             ;;
         --interactive)
             check_missing_value "$state"
-            interactive=true
+            params[interactive]=true
             ;;
         --reinstall)
             check_missing_value "$state"
-            reinstall=true
+            params[reinstall]=true
             ;;
         --no-sysctl)
             check_missing_value "$state"
-            sysctl=false
+            params[sysctl]=false
             ;;
-        # --no-link)
-        #     check_missing_value $state
-        #     link=false
-        #     ;;
+        --dry-run)
+            check_missing_value "$state"
+            params[dryrun]=true
+            ;;
         --essential)
             check_missing_value "$state"
-            essential=true
+            params[essential]=true
             ;;
         --verbose)
             check_missing_value "$state"
-            verbose=true
+            params[verbose]=true
             ;;
         --*)
             fail "strap.sh: unknown parameter '$arg'" 1
@@ -395,11 +398,17 @@ function confirm() {
     echo "AUR helper:        ${params[helper]}"
     echo ""
 
-    if ${params[essential]}; then
+    if ${params[essential]} && ! ${params[dryrun]}; then
         echo "WARNING: essential mode only installs APPLICATIONS.
 It does not install base dependencies like the 
 X server, pulseaudio, ALSA, graphics drivers, etc.
 and assumes that you already have them installed."
+        echo ""
+    fi
+
+    if ${params[dryrun]}; then
+        echo "You have enabled dry-run mode. The script will now run through 
+the entire sequence, but nothing will be installed,linked or enabled."
         echo ""
     fi
     
