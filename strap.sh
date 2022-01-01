@@ -8,7 +8,9 @@
 # todo:
 # - add verbose output
 # - add coloured messages
-# - use dry-run flag in program
+# - implement dry-run functionality
+# - implement post-link hooks
+# - implement other hooks
 
 # Start!
 function init() {
@@ -43,10 +45,15 @@ strap.sh is a bash script for bootstrapping my (cartoon-raccoon's) Arch Linux
 system. It is designed to be run from inside my dotfiles git repo, and sets up
 the entire system from a base Arch install.
 
-strap.sh has two main phases: first, it installs all the requisite packages and
-then runs systemctl to enable the relevant system services (in my case, MPD and
-my display manager). next, it hooks up dotfiles to the appropriate directory in
-the user's home directory, by symlinking, copying or moving the file.
+strap.sh has three main phases: first, it sources a package list and installs all 
+the requisite packages. Next, it hooks up dotfiles to the appropriate directory 
+in the user's home directory, by symlinking, copying or moving the file, and
+lastly runs systemctl to enable the relevant system services (in my case, MPD and
+my display manager).
+
+After each phase, strap.sh can run hooks to perform user-specific behaviour. These
+hooks are sourced from a hooks file and allow the user to perform specific actions
+for various special cases.
 
 strap.sh is heavily tailored to my own Arch Linux setup. Use at your own risk!
 
@@ -114,6 +121,10 @@ OPTIONS:
     The AUR helper to install. Can be paru (default), yay or pacaur. By default,
     install installs the bin version of the helper, so as to avoid downloading more
     dependencies and compilation times (paru requires cargo, yay requires go).
+
+    --hooks/-hk [FILE]:
+
+    The hooks file to source from. Defaults to `hooks.sh`.
 "
 }
 
@@ -206,7 +217,7 @@ function verbose() {
 
 ##### Valued Argument Parsing #####
 
-function arse_valued_args() {
+function parse_valued_args() {
     case $1 in
     window-manager)
         params[windowm]="$2"
@@ -408,7 +419,7 @@ and assumes that you already have them installed."
 
     if ${params[dryrun]}; then
         echo "You have enabled dry-run mode. The script will now run through 
-the entire sequence, but nothing will be installed,linked or enabled."
+the entire sequence, but nothing will be installed, linked or enabled."
         echo ""
     fi
     
@@ -541,12 +552,9 @@ function install_pkg() {
         if ${params[interactive]}; then
             echo -n " Would you like to reinstall? [Y/n] "
             get_user_choice || return 0
-            echo "Reinstalling package $1..."
-            _install "$1"
-        else
-            echo "Reinstalling package $1..."
-            _install "$1"
         fi
+        echo "Reinstalling package $1..."
+        _install "$1"
     else
         if ${params[interactive]}; then
             echo -n "Install $1? [Y/n] "
@@ -583,6 +591,7 @@ function _install() {
 #*                                                       "Y88888P'  
 
 declare -r CONFIG_DIR="$HOME/.config"
+declare -r HOME_DIR="$HOME"
 
 # list of dest and source files
 # key: dest file
@@ -602,6 +611,14 @@ declare -Ar linkdirs=(
     ["$CONFIG_DIR/nvim/init.vim"]="nvim/init.vim"
     ["$CONFIG_DIR/picom/picom.conf"]="picom/picom.conf"
     ["$CONFIG_DIR/polybar/config"]="polybar/config"
+    ["$CONFIG_DIR/qtile/autostart.sh"]="qtile/autostart.sh"
+    ["$CONFIG_DIR/config.py"]="qtile/config.py"
+    ["$CONFIG_DIR/scrot/run.sh"]="scrot/run.sh"
+    ["$HOME_DIR/.spectrwm.conf"]="spectrwm/.spectrwm.conf"
+    ["$CONFIG_DIR/spectrwm/bar_action.sh"]="spectrwm/bar_action.sh"
+    ["$CONFIG_DIR/spotify-dbus.sh"]="spotify/spotify-dbus.sh"
+    ["$CONFIG_DIR/xmobar/xmobarrc"]="xmobar/xmobarrc"
+    ["$CONFIG_DIR/xmonad/xmonad.hs"]="xmonad/xmonad.hs"
 )
 
 declare link_action=""
@@ -613,10 +630,13 @@ function link_all() {
     for $src in ${linkdirs[@]}; do
         local dest=${!linkdirs[$src]}
         mkdir -p $(dirname $dest)
-        $link_action $src $dest
+        $link_action "$src" "$dest"
     done
+
+    run_link_hooks
 }
 
+# sets the link action based on parameters given
 function set_link_action {
     case ${params[action]} in
     link)
@@ -629,6 +649,11 @@ function set_link_action {
         link_action="mv"
         ;;
     esac
+}
+
+# run any user-defined post-link hooks
+function run_link_hooks {
+
 }
 
 #*                 .    o8o  oooo  
@@ -691,7 +716,7 @@ function cleanup() {
 ##### The magic happens here. #####
 
 function main() {
-    parse_args $@
+    parse_args "$@"
     init
     confirm
 
@@ -712,4 +737,4 @@ function main() {
 }
 
 # call main
-main $@
+main "$@"
