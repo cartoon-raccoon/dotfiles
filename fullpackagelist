@@ -1,169 +1,170 @@
-acpi 1.7-3
-adobe-source-han-sans-jp-fonts 2.004-1
-adobe-source-han-serif-jp-fonts 2.000-1
-alacritty 0.9.0-3
-android-apktool 2.5.0-2
-apple-music-electron-git 2.5.1.679.d287245-1
-arandr 0.1.10-7
-audacity 1:2.4.1-4
-autoconf 2.71-1
-automake 1.16.5-1
-awesome 4.3-3
-base 2-2
-bind 9.16.23-3
-binwalk 2.3.3-3
-bison 3.8.2-1
-bitwarden 1.30.0-1
-bitwarden-cli 1.20.0-1
-blackarch-keyring 20180925-3
-bless 0.6.3-1
-blueman 2.2.3-2
-bluez-utils 5.62-1
-bootiso 4.2.0-1
-brightnessctl 0.5.1-2
-bspwm 0.9.10-1
-cabal-install 3.4.0.0-58
-cadence 0.9.1-4
-cava 0.7.4-1
-cbonsai 1.3.1-3
-cogsy 0.2.2-1
-cowsay 3.04-2
-discord 0.0.16-1
-discord-rpc-git 3.4.0.r10.g963aa9f-3
-dunst 1.7.3-1
-exa 0.10.1-4
-figlet 2.2.5-4
-file-roller 3.40.0-1
-firefox 95.0.1-1
-fish 3.3.1-1
-flameshot 0.10.2-1
-flex 2.6.4-3
-foliate 2.6.3-1
-foxitreader 2.4.4.0911-4
-gedit 40.1-3
-gef 2158.d98ffb7-2
-github-cli 2.3.0-1
-go 2:1.17.5-1
-google-chrome 96.0.4664.110-1
-gparted 1.3.1-1
-grub 2:2.06-2
-htop 3.1.2-1
-i2c-tools 4.3-3
-inetutils 2.2-1
-intel-ucode 20210608-1
-inter-font 3.19-1
-jd-gui 1.6.6-2
-john 1.9.0.jumbo1-5
-kitty 0.23.1-2
-libreoffice-still 7.1.8-2
-lightdm-gtk-greeter-settings 1.2.2-7
-linux-lts 5.10.85-1
-lolcat 100.0.1-1
-man-pages 5.13-1
-mcomix 1.3.0.dev0-4
-minecraft-launcher 928-1
-mpc 0.34-1
-mpd 0.23.5-1
-multimc5 0.6.13-1
-musescore 3.6.2-3
-nano 6.0-1
-nasm 2.15.05-1
-ncmpcpp 0.9.2-4
-neofetch 7.1.0-2
-neovim 0.6.0-1
-nerd-fonts-fira-code 2.1.0-2
-nerd-fonts-jetbrains-mono 2.1.0-3
-net-tools 2.10-1
-network-manager-applet 1.24.0-1
-nmap 7.92-1
-opam 2.1.1-1
-openbsd-netcat 1.218_2-1
-pacaur 4.8.6-1
-pacgraph 20110629-5
-pacman-contrib 1.4.0-4
-paru 1.7.3-1
-pasystray 0.8.0-1
-pfetch 0.6.0-3
-polybar 3.5.7-1
-pwndbg 2021.06.22-2
-python-discord 1.7.3-1
-python-praw 7.4.0-4
-python-pwntools 4.7.0-2
-python-pyalsa 1.2.6-2
-python-uncompyle6 3.8.0-2
-python-z3 4.8.13-2
-qtile 0.18.1-4
-ranger 1.9.3-4
-reflector 2021.7.8-2
-rpi-imager 1.6.2-2
-rustup 1.24.3-2
-shellcheck 0.7.2-115
-signal-desktop 5.26.0-1
-sl 5.02-6
-spectrwm 3.4.1-1
-speedtest-cli 2.1.3-2
-spotify 1:1.1.68.632-1
-steam 1.0.0.74-1
-stegdetect 19.ac1df7a-1
-steghide 0.5.1-10
-stegsolve 1.3-1
-themix-full-git 1.13.3-2
-thunar 4.16.10-1
-tmux 3.2_a-1
-tokei 12.1.2-1
-torbrowser-launcher 0.3.5-3
-traceroute 2.1.0-5
-transmission-gtk 3.00-2
-ttf-fira-code 6.1-1
-ttf-vista-fonts 1-10
-tty-clock 2.3-1
-upower 0.99.13-1
-valgrind 3.17.0-1
-virtualbox 6.1.30-3
-visual-studio-code-bin 1.63.2-1
-vivaldi-ffmpeg-codecs 98.0.4710.4-1
-vlc 3.0.16-4
-wine 6.23-1
-xautolock 2.2-6
-xf86-video-vesa 2.5.0-2
-xmobar 0.39-34
-xmonad-contrib 0.16-136
-xorg-bdftopcf 1.1-2
-xorg-docs 1.7.1-3
-xorg-font-util 1.3.2-2
-xorg-fonts-100dpi 1.0.3-7
-xorg-fonts-75dpi 1.0.3-7
-xorg-iceauth 1.0.8-2
-xorg-mkfontscale 1.2.1-2
-xorg-server 21.1.2-1
-xorg-server-devel 21.1.2-1
-xorg-server-xnest 21.1.2-1
-xorg-server-xvfb 21.1.2-1
-xorg-sessreg 1.1.2-2
-xorg-smproxy 1.0.6-3
-xorg-x11perf 1.6.1-2
-xorg-xbacklight 1.2.3-2
-xorg-xcmsdb 1.0.5-3
-xorg-xcursorgen 1.0.7-2
-xorg-xdriinfo 1.0.6-2
-xorg-xev 1.2.4-1
-xorg-xgamma 1.0.6-3
-xorg-xinput 1.6.3-2
-xorg-xkbevd 1.1.4-3
-xorg-xkbutils 1.0.4-4
-xorg-xkill 1.0.5-2
-xorg-xlsatoms 1.1.3-2
-xorg-xlsclients 1.1.4-2
-xorg-xmodmap 1.0.10-2
-xorg-xpr 1.0.5-2
-xorg-xrefresh 1.0.6-2
-xorg-xsetroot 1.1.2-2
-xorg-xvinfo 1.1.4-2
-xorg-xwayland 21.1.4-1
-xorg-xwd 1.0.8-1
-xorg-xwud 1.0.5-2
-xss-lock 0.3.0.g1e158fb20108-4
-xterm 370-1
-youtube-dl 2021.06.06-3
-ytop-bin 0.6.2-1
-zoom 5.8.0-1
+acpi
+adobe-source-han-sans-jp-fonts
+adobe-source-han-serif-jp-fonts
+alacritty
+android-apktool
+apple-music-electron-git
+arandr
+audacity
+autoconf
+automake
+awesome
+base
+bind
+binwalk
+bison
+bitwarden
+bitwarden-cli
+blackarch-keyring
+bless
+blueman
+bluez-utils
+bootiso
+brightnessctl
+bspwm
+cabal-install
+cadence
+cava
+cbonsai
+cogsy
+cowsay
+discord
+discord-rpc-git
+dunst
+exa
+figlet
+file-roller
+firefox
+fish
+flameshot
+flex
+foliate
+foxitreader
+gedit
+gef
+github-cli
+go
+google-chrome
+gparted
+grub
+htop
+i2c-tools
+inetutils
+intel-ucode
+inter-font
+jd-gui
+john
+kitty
+libreoffice-still
+lightdm-gtk-greeter-settings
+linux-lts
+lolcat
+man-pages
+mcomix
+minecraft-launcher
+mpc
+mpd
+multimc5
+musescore
+nano
+nasm
+ncmpcpp
+neofetch
+neovim
+nerd-fonts-fira-code
+nerd-fonts-jetbrains-mono
+net-tools
+network-manager-applet
+nmap
+opam
+openbsd-netcat
+pacaur
+pacgraph
+pacman-contrib
+paru
+pasystray
+pfetch
+polybar
+pwndbg
+python-discord
+python-praw
+python-pwntools
+python-pyalsa
+python-uncompyle6
+python-z3
+qtile
+ranger
+reflector
+rpi-imager
+rustup
+shellcheck
+signal-desktop
+sl
+spectrwm
+speedtest-cli
+spotify
+steam
+stegdetect
+steghide
+stegsolve
+sxiv
+themix-full-git
+thunar
+tmux
+tokei
+torbrowser-launcher
+traceroute
+transmission-gtk
+ttf-fira-code
+ttf-vista-fonts
+tty-clock
+upower
+valgrind
+virtualbox
+visual-studio-code-bin
+vivaldi-ffmpeg-codecs
+vlc
+wine
+xautolock
+xf86-video-vesa
+xmobar
+xmonad-contrib
+xorg-bdftopcf
+xorg-docs
+xorg-font-util
+xorg-fonts-100dpi
+xorg-fonts-75dpi
+xorg-iceauth
+xorg-mkfontscale
+xorg-server
+xorg-server-devel
+xorg-server-xnest
+xorg-server-xvfb
+xorg-sessreg
+xorg-smproxy
+xorg-x11perf
+xorg-xbacklight
+xorg-xcmsdb
+xorg-xcursorgen
+xorg-xdriinfo
+xorg-xev
+xorg-xgamma
+xorg-xinput
+xorg-xkbevd
+xorg-xkbutils
+xorg-xkill
+xorg-xlsatoms
+xorg-xlsclients
+xorg-xmodmap
+xorg-xpr
+xorg-xrefresh
+xorg-xsetroot
+xorg-xvinfo
+xorg-xwayland
+xorg-xwd
+xorg-xwud
+xss-lock
+xterm
+youtube-dl
+ytop-bin
+zoom
