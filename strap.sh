@@ -124,7 +124,7 @@ OPTIONS:
 
     --hooks/-hk [FILE]:
 
-    The hooks file to source from. Defaults to `hooks.sh`.
+    The hooks file to source from. Defaults to hooks.sh.
 "
 }
 
@@ -629,7 +629,7 @@ function link_all() {
 
     for $src in ${linkdirs[@]}; do
         local dest=${!linkdirs[$src]}
-        mkdir -p $(dirname $dest)
+        mkdir -p $(dirname "$dest")
         $link_action "$src" "$dest"
     done
 
@@ -653,7 +653,7 @@ function set_link_action {
 
 # run any user-defined post-link hooks
 function run_link_hooks {
-
+    true
 }
 
 #*                 .    o8o  oooo  
@@ -703,6 +703,28 @@ function cleanup() {
     echo ""
     echo "[*] All done, enjoy your new system!"
 }
+
+declare -Ar colors=(
+    [black]="\u001b[30m"
+    [red]="\u001b[31m"
+    [green]="\u001b[32m"
+    [yellow]="\u001b[33m"
+    [blue]="\u001b[34m"
+    [magenta]="\u001b[35m"
+    [brblack]="\u001b[30;1m"
+    [brred]="\u001b[31;1m"
+    [brgreen]="\u001b[32;1m"
+    [bryellow]="\u001b[33;1m"
+    [brblue]="\u001b[34;1m"
+    [brmagenta]="\u001b[34;1m"
+    [reset]="\u001b[0m"
+)
+
+declare -Ar format=(
+    [bold]="\u001b[1m"
+    [underline]="\u001b[4m"
+    [reversed]="\u001b[7m"
+)
 
 #*                              o8o              
 #*                              `"'              
