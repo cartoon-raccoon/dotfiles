@@ -8,7 +8,6 @@
 # todo:
 # - add verbose output
 # - add coloured messages
-# - implement dry-run functionality
 # - implement post-link hooks
 # - implement other hooks
 
@@ -36,6 +35,8 @@ function init() {
     # Check whether git is installed
     pacman -Q git > /dev/null \
         || fail "[!] Git not installed, aborting!"
+
+    trap on_ctrlc SIGINT
 }
 
 function print_help() {
@@ -448,7 +449,11 @@ function install_all() {
     echo '[*] Running full system upgrade:'
     echo ''
 
-    sudo pacman -Syu --noconfirm || fail "[!] Error on system upgrade, aborting." 1
+    if ! ${params[dryrun]}; then
+        sudo pacman -Syu --noconfirm || fail "[!] Error on system upgrade, aborting." 1
+    else
+        echo ""
+    fi
     echo ""
 
     echo "[*] Installing AUR helper ${params[helper]}:"
@@ -491,13 +496,12 @@ function install_helper() {
     cd ..
 
     echo "Cloning into $helper..."
-    # git clone $url
+    dryrunck && echo "git clone $url"
     echo "cd'ed into $helper-bin..."
     echo "running makepkg..."
 
-    # makepkg -si
+    dryrunck && echo "makepkg -si"
 
-    echo "$url"
     echo ""
 
     cd $REPO_DIR || fail "Directory $REPO_DIR does not exist." 1
@@ -554,14 +558,18 @@ function install_pkg() {
             get_user_choice || return 0
         fi
         echo "Reinstalling package $1..."
-        _install "$1"
+        if ! ${params[dryrun]}; then
+            _install "$1"
+        fi
     else
         if ${params[interactive]}; then
             echo -n "Install $1? [Y/n] "
             get_user_choice || return 0
         fi
         echo "Installing package $1..."
-        _install $1
+        if ! ${params[dryrun]}; then
+            _install $1
+        fi
     fi
 }
 
@@ -629,8 +637,11 @@ function link_all() {
 
     for $src in ${linkdirs[@]}; do
         local dest=${!linkdirs[$src]}
-        mkdir -p $(dirname "$dest")
-        $link_action "$src" "$dest"
+        echo "Linking $src to $dest..."
+        if ! ${params[dryrun]}; then
+            mkdir -p $(dirname "$dest")
+            $link_action "$src" "$dest"
+        fi
     done
 
     run_link_hooks
@@ -674,6 +685,10 @@ function check_missing_value() {
     [[ -n "$1" ]] && fail "strap.sh: missing value for parameter $1" 2
 }
 
+function dryrunck() {
+    ! ${params[dryrun]}
+}
+
 function get_user_choice() {
     read -r choice
 
@@ -695,13 +710,19 @@ function cleanup() {
     echo "Cleaning up..."
 
     local orphans=$(pacman -Qqtd)
-    if [[ -n $orphans ]]; then
+    if [[ -n $orphans ]] && ! ${params[dryrun]}; then
         sudo pacman -Rs --noconfirm $(pacman -Qqtd) \
             || fail "[!] Failed to clean orphaned packages."
     fi
 
     echo ""
     echo "[*] All done, enjoy your new system!"
+}
+
+function on_ctrlc() {
+    echo "\nSIGINT received, stopping!"
+
+    exit 1
 }
 
 declare -Ar colors=(
