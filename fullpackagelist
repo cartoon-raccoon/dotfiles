@@ -84,6 +84,7 @@ pacman-contrib
 paru
 pasystray
 pfetch
+polkit-gnome
 polybar
 pwndbg
 python-discord
