@@ -42,6 +42,7 @@ foliate
 foxitreader
 gedit
 gef
+ghidra
 github-cli
 go
 google-chrome
@@ -61,7 +62,6 @@ linux-lts
 lolcat
 man-pages
 mcomix
-minecraft-launcher
 mpc
 mpd
 multimc5
@@ -124,6 +124,7 @@ virtualbox
 visual-studio-code-bin
 vivaldi-ffmpeg-codecs
 vlc
+vmware-workstation
 wine
 xautolock
 xf86-video-vesa
