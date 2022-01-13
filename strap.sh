@@ -7,13 +7,15 @@
 
 # todo:
 # - add verbose output
-# - add coloured messages
+# - improve coloured messages
+#   - add different indicators for different actions
+#   - e.g. [*] for info, ==> for major actions
 # - implement post-link hooks
 # - implement other hooks
 
 # Start!
 function init() {
-    echo '
+    say '
       _                              _
  ___ | |_  _ __  __ _  _ __     ___ | |__
 / __|| __||  __|/ _` ||  _ \   / __||  _ \
@@ -21,9 +23,9 @@ function init() {
 |___/ \__||_|   \__,_|| .__/(_)|___/|_| |_|
                       |_|
 '
-    echo "./strap.sh v0.1.0"
-    echo "(c) 2021 cartoon-raccoon"
-    echo ""
+    say "./strap.sh v0.1.0"
+    say "(c) 2021 cartoon-raccoon"
+    # info ""
 
     # Check whether OS is Arch
     [[ -e /etc/os-release ]] \
@@ -40,7 +42,7 @@ function init() {
 }
 
 function print_help() {
-    echo "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
+    info "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
 
 strap.sh is a bash script for bootstrapping my (cartoon-raccoon's) Arch Linux
 system. It is designed to be run from inside my dotfiles git repo, and sets up
@@ -175,7 +177,7 @@ function parse_short_toggle_args() {
     verbose "$1"
 
     # if [[ $1 = (^-irslev) ]]; then
-    #     echo "Unknown flag"
+    #     info "Unknown flag"
     #     exit 1
     # fi
 }
@@ -393,46 +395,43 @@ function _check_values() {
 }
 
 function confirm() {
-    echo "Subcommand: ${params[subcommand]}"
-    echo ""
-    echo "Behaviour:"
-    echo "interactive mode:   ${params[interactive]}"
-    echo "do reinstallation:  ${params[reinstall]}"
-    echo "enable services:    ${params[sysctl]}"
-    echo "install essentials: ${params[essential]}"
-    echo "verbose mode:       ${params[verbose]}"
-    echo "dotfile action:     ${params[action]}"
-    echo ""
+    printf "\n${format[bold]}SUMMARY OF ACTIONS:${colors[reset]}\n\n"
+    printf "Subcommand: %s\n\n" "${params[subcommand]}"
+    printf "Behaviour:\n"
+    printf "interactive mode:   %s\n" "${params[interactive]}"
+    printf "do reinstallation:  %s\n" "${params[reinstall]}"
+    printf "enable services:    %s\n" "${params[sysctl]}"
+    printf "install essentials: %s\n" "${params[essential]}"
+    printf "verbose mode:       %s\n" "${params[verbose]}"
+    printf "dotfile action:     %s\n" "${params[action]}"
 
-    echo "Your chosen core apps:"
-    echo "Display Manager:   ${params[displaym]}"
-    echo "Window Manager(s): ${params[windowm]}"
-    echo "AUR helper:        ${params[helper]}"
-    echo ""
+    printf "\nYour chosen core apps:\n"
+    printf "Display Manager:    %s\n" "${params[displaym]}"
+    printf "Window Manager(s):  %s\n" "${params[windowm]}"
+    printf "AUR helper:         %s\n" "${params[helper]}"
+    printf "\n"
 
     if ${params[essential]} && ! ${params[dryrun]}; then
-        echo "WARNING: essential mode only installs APPLICATIONS.
+        warn "WARNING: essential mode only installs APPLICATIONS.
 It does not install base dependencies like the 
 X server, pulseaudio, ALSA, graphics drivers, etc.
 and assumes that you already have them installed."
-        echo ""
     fi
 
     if ${params[dryrun]}; then
-        echo "You have enabled dry-run mode. The script will now run through 
+        warn "You have enabled dry-run mode. The script will now run through 
 the entire sequence, but nothing will be installed, linked or enabled."
-        echo ""
     fi
     
-    echo -n "Do you want to continue? [Y/n] "
+    ask "Do you want to continue? [Y/n] "
     
     if ! get_user_choice; then
-        echo "Exiting!"
+        info "Exiting!"
         exit 0
     fi
 
-    echo "Proceeding with bootstrap."
-    echo ""
+    say "Proceeding with bootstrap."
+    # info ""
 }
 
 #*  o8o                           .             oooo  oooo  
@@ -445,40 +444,39 @@ the entire sequence, but nothing will be installed, linked or enabled."
 
 # The main install function.
 function install_all() {
-    echo '----------| Installation |----------'
-    echo '[*] Running full system upgrade:'
-    echo ''
+    say  '----------| Installation |----------'
+    info 'Running full system upgrade:'
+    echo ""
 
     if ! ${params[dryrun]}; then
         sudo pacman -Syu --noconfirm || fail "[!] Error on system upgrade, aborting." 1
     else
-        echo ""
+        info "Dry run, skipping upgrade."
     fi
-    echo ""
+    # info ""
 
-    echo "[*] Installing AUR helper ${params[helper]}:"
-    echo "=========================================="
+    info "Installing AUR helper ${params[helper]}:"
+    say  "=========================================="
     local helper_bin=""
     if [[ "${params[helper]}" = "pacaur" ]]; then
         local helper_bin="pacaur"
     else
         local helper_bin="${params[helper]}-bin"
     fi
-    
+     
     if ! pacman -Q ${params[helper]} > /dev/null 2>&1 \
     || ! pacman -Q $helper_bin > /dev/null 2>&1; then
         install_helper
     else 
-        echo "Helper $helper_bin is already installed."
-        echo ""
+        info "Helper $helper_bin is already installed."
     fi
 
     if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
         fail "[!] Cannot find package list required for install - Aborting!" 1
     fi
 
-    echo "[*] Installing packages from package list:"
-    echo "=========================================="
+    info "Installing packages from package list:"
+    say  "=========================================="
 
     if ${params[essential]}; then
         packagelist=$(cat esspackagelist)
@@ -495,14 +493,12 @@ function install_helper() {
 
     cd ..
 
-    echo "Cloning into $helper..."
-    dryrunck && echo "git clone $url"
-    echo "cd'ed into $helper-bin..."
-    echo "running makepkg..."
+    info "Cloning into $helper..."
+    dryrunck && say "git clone $url"
+    info "cd'ed into $helper-bin..."
+    info "running makepkg..."
 
-    dryrunck && echo "makepkg -si"
-
-    echo ""
+    dryrunck && say "makepkg -si"
 
     cd $REPO_DIR || fail "Directory $REPO_DIR does not exist." 1
 }
@@ -537,11 +533,11 @@ function install_driver() {
 # and take action according to whether reinstall is enabled
 function install_check() {
     if pacman -Q "$1" > /dev/null 2>&1; then
-        echo -n "$1 is already installed."
+        say -n "$1 is already installed."
         if ${params[reinstall]}; then
             install_pkg "$1" true
         else
-            echo " Skipping..."
+            say " Skipping..."
             return 0
         fi
     else
@@ -554,19 +550,19 @@ function install_pkg() {
     # is reinstall
     if $2; then
         if ${params[interactive]}; then
-            echo -n " Would you like to reinstall? [Y/n] "
+            ask " Would you like to reinstall? [Y/n] "
             get_user_choice || return 0
         fi
-        echo "Reinstalling package $1..."
+        info "Reinstalling package $1..."
         if ! ${params[dryrun]}; then
             _install "$1"
         fi
     else
         if ${params[interactive]}; then
-            echo -n "Install $1? [Y/n] "
+            ask "Install $1? [Y/n] "
             get_user_choice || return 0
         fi
-        echo "Installing package $1..."
+        info "Installing package $1..."
         if ! ${params[dryrun]}; then
             _install $1
         fi
@@ -579,11 +575,11 @@ function _install() {
     local helper=${params[helper]}
 
     # always interactive
-    #todo: implement check for why it failed
+    #todo: implement check for why it failed 
     if ! sudo pacman -S --noconfirm "$pkg"; then
-        echo ""
-        echo "$pkg not found with pacman, using $helper instead."
-        $helper -S "$pkg"
+        # info ""
+        info "$pkg not found with pacman, using $helper instead."
+        $helper -S "$pkg" 
     fi
     return 0
 }
@@ -633,13 +629,15 @@ declare link_action=""
 
 # handles the linking process
 function link_all() {
+    info "Starting linking"
+
     set_link_action
 
-    for $src in ${linkdirs[@]}; do
-        local dest=${!linkdirs[$src]}
-        echo "Linking $src to $dest..."
+    for dest in "${!linkdirs[@]}"; do
+        local src=${linkdirs[$dest]}
+        say "Linking $src to $dest..."
         if ! ${params[dryrun]}; then
-            mkdir -p $(dirname "$dest")
+            mkdir -p $(dirname "$dest") 
             $link_action "$src" "$dest"
         fi
     done
@@ -675,16 +673,36 @@ function run_link_hooks {
 #*  888   888    888 .  888   888  
 #*  `V88V"V8P'   "888" o888o o888o 
 
-##### Helper functions #####
+##### Helper functions ##### 
+function ask() {
+    printf "%s" "$1"
+}
+
+function say() {
+    if [[ "$1" = "-n" ]]; then  
+        printf "%s"   "$2"
+    else
+        printf "%s\n" "$1"
+    fi
+}
+
+function info() {
+    printf "${format[bold]}${colors[green]}[*]${colors[reset]} %s\n" "$1"
+}
+
+function warn() { 
+    printf "${format[bold]}${colors[yellow]}[!]${colors[reset]} %s\n\n" "$1"
+}
+
 function fail() {
-    echo "$1" >&2
+    printf "%s\n" "$1" >&2
     exit "$2"
 }
 
 function check_missing_value() {
     [[ -n "$1" ]] && fail "strap.sh: missing value for parameter $1" 2
 }
-
+ 
 function dryrunck() {
     ! ${params[dryrun]}
 }
@@ -701,47 +719,47 @@ function get_user_choice() {
         ;;
     *)
         fail "Unknown option: $choice" 2
-        ;;
+        ;; 
     esac
 }
 
 function cleanup() {
-    echo ""
-    echo "Cleaning up..."
+    # info ""
+    info "Cleaning up..."
 
     local orphans=$(pacman -Qqtd)
-    if [[ -n $orphans ]] && ! ${params[dryrun]}; then
+    if [[ -n $orphans ]] &&  ! ${params[dryrun]}; then
         sudo pacman -Rs --noconfirm $(pacman -Qqtd) \
             || fail "[!] Failed to clean orphaned packages."
     fi
 
-    echo ""
-    echo "[*] All done, enjoy your new system!"
-}
+    # info ""
+    info "All done, enjoy your new system!"
+} 
 
-function on_ctrlc() {
-    echo "\nSIGINT received, stopping!"
+function on_ctrlc() { 
+    info "\nSIGINT received, stopping!"
 
     exit 1
 }
 
 declare -Ar colors=(
-    [black]="\u001b[30m"
+    [black]="\u001b[30m" 
     [red]="\u001b[31m"
     [green]="\u001b[32m"
     [yellow]="\u001b[33m"
     [blue]="\u001b[34m"
-    [magenta]="\u001b[35m"
+    [magenta]="\u001b[35m" 
     [brblack]="\u001b[30;1m"
     [brred]="\u001b[31;1m"
-    [brgreen]="\u001b[32;1m"
+    [brgreen]="\u001b[32;1m" 
     [bryellow]="\u001b[33;1m"
     [brblue]="\u001b[34;1m"
-    [brmagenta]="\u001b[34;1m"
+    [brmagenta]="\u001b[34;1m" 
     [reset]="\u001b[0m"
 )
 
-declare -Ar format=(
+declare -Ar format=( 
     [bold]="\u001b[1m"
     [underline]="\u001b[4m"
     [reversed]="\u001b[7m"
@@ -766,14 +784,13 @@ function main() {
     if [[ "${params[subcommand]}" != "link" ]]; then
         install_all
     else    
-        echo "Skipping install."
+        info "Skipping install."
     fi
 
     if [[ "${params[subcommand]}" != "install" ]]; then
-        #link_all
-        echo "linking..."
+        link_all
     else 
-        echo "Skipping linking."
+        info "Skipping linking."
     fi
 
     cleanup
@@ -781,3 +798,4 @@ function main() {
 
 # call main
 main "$@"
+ 
