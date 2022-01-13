@@ -11,7 +11,9 @@
 #   - add different indicators for different actions
 #   - e.g. [*] for info, ==> for major actions
 # - implement post-link hooks
-# - implement other hooks
+# - implement pre and post-install hooks
+# - move all user-specific config out of the source into a config.sh file
+#   - i.e. link_dirs
 
 # Start!
 function init() {
