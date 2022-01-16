@@ -43,6 +43,12 @@ function init() {
     trap on_ctrlc SIGINT
 }
 
+# todo
+function check_config_vars() {
+    # [[ -v pkg_list_full ]]
+    true
+}
+
 function print_help() {
     info "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
 
@@ -127,9 +133,9 @@ OPTIONS:
     install installs the bin version of the helper, so as to avoid downloading more
     dependencies and compilation times (paru requires cargo, yay requires go).
 
-    --hooks/-hk [FILE]:
+    --config/-cf [FILE]:
 
-    The hooks file to source from. Defaults to hooks.sh.
+    The config file to source from. Defaults to config.sh.
 "
 }
 
@@ -155,6 +161,7 @@ declare -A params=(
     [displaym]="lightdm"
     [windowm]="all"
     [helper]="paru"
+    [config]="config.sh"
 )
 
 # aur urls of aur helpers
@@ -249,8 +256,11 @@ function parse_valued_args() {
             ;;
         esac
         ;;
+    config)
+        params[config]="$2"
+        ;;
     *)
-        fail "strap.sh: unknown perimeter $1" 2
+        fail "strap.sh: unknown parameter $1" 2
         ;;
     esac
 }
@@ -310,6 +320,11 @@ function parse_args() {
         -a|--action)
             check_missing_value "$state"
             state="action"
+            continue
+            ;;
+        -cf|--config)
+            check_missing_value "$state"
+            state="config"
             continue
             ;;
         --interactive)
@@ -394,6 +409,10 @@ function _check_values() {
         fail "strap.sh: unrecognized dotfile action: ${params[action]}" 2
         ;;
     esac
+
+    if ! [[ -e "${params[config]}" ]]; then
+        fail "strap.sh: config file '${params[config]}' does not exist" 2
+    fi
 }
 
 function confirm() {
@@ -406,6 +425,7 @@ function confirm() {
     printf "install essentials: %s\n" "${params[essential]}"
     printf "verbose mode:       %s\n" "${params[verbose]}"
     printf "dotfile action:     %s\n" "${params[action]}"
+    printf "config file:        %s\n" "${params[config]}"
 
     printf "\nYour chosen core apps:\n"
     printf "Display Manager:    %s\n" "${params[displaym]}"
@@ -444,6 +464,8 @@ the entire sequence, but nothing will be installed, linked or enabled."
 #*  888   888   888  o.  )88b   888 . d8(  888   888   888  
 #* o888o o888o o888o 8""888P'   "888" `Y888""8o o888o o888o 
 
+declare -a packagelist=()
+
 # The main install function.
 function install_all() {
     say  '----------| Installation |----------'
@@ -473,20 +495,38 @@ function install_all() {
         info "Helper $helper_bin is already installed."
     fi
 
-    if ! [[ -e fullpackagelist ]] || ! [[ -e esspackagelist ]]; then
-        fail "[!] Cannot find package list required for install - Aborting!" 1
-    fi
+    parse_pkg_lists
 
     info "Installing packages from package list:"
     say  "=========================================="
 
-    if ${params[essential]}; then
-        packagelist=$(cat esspackagelist)
-    else
-        packagelist=$(cat fullpackagelist)
+    install_driver
+}
+
+# todo: make pkglistfile configurable
+function parse_pkg_lists() {
+    local pkglistfile=""
+
+    if ! [[ -e fullpackagelist ]] && ! [[ -e esspackagelist ]]; then
+        fail "[!] Cannot find package list required for install - Aborting!" 1
     fi
 
-    install_driver
+    if ${params[essential]}; then
+        pkglistfile="esspackagelist"
+    else
+        pkglistfile="fullpackagelist"
+    fi
+
+    while IFS="" read -r pkg || [[ -n "$pkg" ]]; do
+        if ! [[ "$pkg" == \#* ]]; then
+            packagelist+=("$pkg")
+        else
+            # the line is a comment
+            continue
+        fi
+    done < "$pkglistfile"
+
+    unset IFS
 }
 
 function install_helper() {
@@ -516,7 +556,7 @@ function install_driver() {
 
     install_check $dm
 
-    for package in $packagelist; do
+    for package in "${packagelist[@]}"; do
         if [[ "$package" = "xmonad" ]]\
         || [[ "$package" = "i3-gaps" ]]\
         || [[ "$package" = "qtile" ]]\
@@ -633,6 +673,11 @@ declare link_action=""
 function link_all() {
     info "Starting linking"
 
+    source "${params[config]}"
+
+    [[ -v linkdirs ]] || \
+        fail "strap.sh: link-directories not set" 2
+
     set_link_action
 
     for dest in "${!linkdirs[@]}"; do
@@ -644,7 +689,7 @@ function link_all() {
         fi
     done
 
-    run_link_hooks
+    run_post_link_hooks
 }
 
 # sets the link action based on parameters given
@@ -663,7 +708,7 @@ function set_link_action {
 }
 
 # run any user-defined post-link hooks
-function run_link_hooks {
+function run_post_link_hooks {
     true
 }
 
