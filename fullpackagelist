@@ -1,8 +1,8 @@
+# this list contains all packages explicitly installed. (pacman -Qqet)
 acpi
 adobe-source-han-sans-jp-fonts
 adobe-source-han-serif-jp-fonts
 alacritty
-android-apktool
 apple-music-electron-git
 arandr
 audacity
@@ -53,7 +53,6 @@ i2c-tools
 inetutils
 intel-ucode
 inter-font
-jd-gui
 john
 kitty
 libreoffice-still
@@ -63,6 +62,8 @@ lolcat
 man-pages
 mcomix
 mpc
+# note: config file must be copied to /etc/mpd.conf
+# do this in a post-install hook before linking
 mpd
 multimc5
 musescore
