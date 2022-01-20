@@ -28,6 +28,7 @@ Each directory contains the dotfiles and other scripts used for running the apps
 - `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song. Started automatically by the WM.
 - `spectrwm/bar_action.sh`: Generates bar contents for `spectrwm`.
 - `qtile/autostart.sh`: Qtile startup script.
+- `fish/pridefetch`: A python script called in `fish_greeting` to display a pride flag and relevant system infromation. Credit to [megabytesofrem/pridefetch](https://github.com/megabytesofrem/pridefetch) on GitHub.
 
 ## Bootstrap script
 
