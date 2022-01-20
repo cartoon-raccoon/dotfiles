@@ -616,10 +616,13 @@ function _install() {
     local pkg=$1
     local helper=${params[helper]}
 
-    # always interactive
     #todo: implement check for why it failed 
-    if ! sudo pacman -S --noconfirm "$pkg"; then
+    if sudo pacman -Ss "$pkg"; then
         # info ""
+        info "installing $pkg with pacman"
+        sudo pacman -S "$pkg" --noconfirm || warn "could not install $pkg"
+    else
+        # always interactive
         info "$pkg not found with pacman, using $helper instead."
         $helper -S "$pkg" 
     fi
