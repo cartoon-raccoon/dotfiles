@@ -1,4 +1,5 @@
 set -x EDITOR (which nvim)
+
 set -x PATH "$HOME/.cargo/bin/:$HOME/.local/bin/cross/bin:$PATH"
 
 # mpc functions
@@ -70,8 +71,8 @@ alias baraction="$EDITOR ~/.config/bar_action.sh"
 
 alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
-alias raccoonpi="ssh alarm@192.168.79.2"
-alias raccoonpi-out="ssh alarm@cartoonraccoon.ddnsgeek.com -p 42169"
+alias raccoonpi="ssh ubuntu@192.168.79.2"
+alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
 
 alias up="cd .."
 alias up2="cd ../../"
