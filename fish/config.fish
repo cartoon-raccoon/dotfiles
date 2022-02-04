@@ -49,6 +49,8 @@ function cheat
 	curl cheat.sh/$argv[1]
 end
 
+export MPC_FORMAT='%artist%: %title% \[%album%\]'
+
 alias ls="exa -l"
 #alias fucking="sudo"
 #alias pls="sudo"
