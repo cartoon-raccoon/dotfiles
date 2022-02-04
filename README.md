@@ -42,3 +42,4 @@ Each directory contains the dotfiles and other scripts used for running the apps
 ## Todo
 
 - Set up DPMS and `xss-lock` to dim the screen before locking
+- Convert `mpd_notify.sh` to a C program using `lib{mpdclient,notify}`
