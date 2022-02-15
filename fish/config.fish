@@ -1,6 +1,8 @@
 set -x EDITOR (which nvim)
 
-set -x PATH "$HOME/.cargo/bin/:$HOME/.local/bin/cross/bin:$PATH"
+set -x PATH "$HOME/.cargo/bin/:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.local/bin/cross/bin:$PATH"
+
+# set -x QT_QPA_PLATFORMTHEME "qt5ct"
 
 # mpc functions
 function mpcload
@@ -22,6 +24,10 @@ alias mpcls="mpc lsplaylists"
 
 # package management functions
 function addpkg
+	sudo pacman -S $argv
+end
+
+function gimme
 	sudo pacman -S $argv
 end
 
@@ -75,6 +81,9 @@ alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
 alias raccoonpi="ssh ubuntu@192.168.79.2"
 alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
+
+alias "angrtivate"="source ~/Projects/angr/bin/activate.fish"
+# alias "deangrtivate"="~/Projects/angr/bin/deactivate"
 
 alias up="cd .."
 alias up2="cd ../../"
