@@ -98,6 +98,7 @@ keys = [
     Key([mod],"Print", lazy.spawn("/home/sammy/.config/scrot/run.sh")),
     Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u")),
     Key([mod, "shift"], "f", lazy.spawn("flameshot")),    
+    
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
         Key([], "f", lazy.spawn("firefox")),
@@ -106,8 +107,18 @@ keys = [
         Key([], "c", lazy.spawn("code")),
         Key([], "r", lazy.spawn("alacritty -e ranger")),
         Key([], "t", lazy.spawn("thunar")),
-        Key([], "m", lazy.spawn("multimc"))
+        Key([], "m", lazy.spawn("multimc")),
+        Key([], "v", lazy.spawn("vmware")),
     ], mode = "launch"),
+
+    # chord to launch cysec tools but i use more cli tools lol
+    KeyChord([mod], "o", [
+        Key([], "c", lazy.spawn("cutter")),
+        Key([], "g", lazy.spawn("gdbgui")),
+        Key([], "d", lazy.spawn("ghidra")),
+        Key([], "w", lazy.spawn("wireshark")),
+        Key([], "v", lazy.spawn("vmware")),
+    ], mode = "hackery"),
 
     Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"))
 ]
@@ -125,7 +136,9 @@ groups = [
     # main
     Group(' ', spawn = ["firefox"], layout = "  max  "), 
     # dev
-    Group(' ', spawn = ["code"], layout = "  max  "), 
+    Group(' ', layout = "  max  "), 
+    # terminals
+    Group(' ', layout = " equal ", spawn = ["alacritty", "alacritty"]),
     # files
     Group(' ', spawn = ["thunar"]), 
     # social
@@ -161,7 +174,8 @@ for i in range(1, len(groups) + 1):
     ])
 
 #####! LAYOUTS !#####
-
+# naming convention: keep names to 7 characters long, pad with spaces on each side
+# if cannot align in the exact middle, align left
 layouts = [
     layout.Tile(
         add_after_last = True,
@@ -172,6 +186,16 @@ layouts = [
         ratio = 0.55,
         ratio_increment = 0.05,
         name = " tile  "
+    ),
+    layout.Tile(
+        add_after_last = True,
+        add_on_top = False,
+        border_focus = "#efefef",
+        border_normal = "#5f676a",
+        margin = 4,
+        ratio = 0.5,
+        ratio_increment = 0.05,
+        name = " equal "
     ),
     layout.MonadTall(
         border_focus = "#efefef",
