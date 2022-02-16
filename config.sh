@@ -20,10 +20,30 @@ declare -a pre_install_hooks=()
 
 declare -a post_install_hooks=(
     cp_mpd_conf,
+    install_non_pacman_pymodules
+    clone_all_remote_projects
 )
 
 function cp_mpd_conf() {
     sudo cp mpd/mpd.conf /etc/mpd.conf
+}
+
+function install_non_pacman_pymodules() {
+    sudo pip3 install angr angrdbg greatfet facedancer
+}
+
+function clone_all_remote_projects() {
+    # check that a remote urls file exists
+    [[ -e ./remote_urls ]] || echo "remote-url file not present!"; return 1
+    # check if projects dir exists, create if not
+    [[ -e ~/Projects ]] || mkdir ~/Projects
+    cd_back=$PWD
+
+    cd ~/Projects
+    while read url; do
+        git clone "$url"
+    done < remote_urls
+    cd "$cd_back"
 }
 
 ### LINK DIRECTORIES
