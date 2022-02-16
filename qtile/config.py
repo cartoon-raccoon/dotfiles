@@ -134,7 +134,7 @@ mouse = [
 
 groups = [
     # main
-    Group(' ', spawn = ["firefox"], layout = "  max  "), 
+    Group(' ', layout = "  max  ", spawn = ["firefox"]), 
     # dev
     Group(' ', layout = "  max  "), 
     # terminals
@@ -144,7 +144,7 @@ groups = [
     # social
     Group(' '),
     # music
-    Group(' ', spawn = ["spotify"]),
+    Group(' ', layout = " equal ", spawn = ["spotify"]),
     # misc
     Group(' '),
     # reading
@@ -423,6 +423,7 @@ bottom_bar = bar.Bar(
         widget.Chord(
             chords_colors={
                 'launch': ("#fabd2f", "#282828"),
+                'hackery': ("#fabd2f", "#282828")
             },
             name_transform=lambda name: name.upper(),
         ),
