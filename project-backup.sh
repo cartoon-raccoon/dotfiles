@@ -11,6 +11,9 @@ cd ~/Projects
 
 for dir in *; do
     if [[ -e $dir/.git/ ]]; then
+        # ignore dotfiles cause if this script is running,
+        # we should have already cloned it
+        [[ "$dir" == "dotfiles" ]] && continue
         cd $dir
         url=$(git config --get remote.origin.url)
         echo "$dir cloned from $url"
