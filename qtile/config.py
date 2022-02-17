@@ -413,20 +413,20 @@ bottom_bar = bar.Bar(
         #widget.Mpris2(
         #    fmt = '{title}',
         #    name = 'spotify',
-        #    objname = 'org.mpris.MediaPlayer2.spotify'
+        #    objname = 'org.mpris.MediaPlayer2.spotify',
         #),
+        widget.Chord(
+            chords_colors={
+                'launch': ("#fabd2f", "#282828"),
+                'hackery': ("#fabd2f", "#282828"),
+            },
+            name_transform=lambda name: name.upper(),
+        ),
         widget.TextBox(text = '|'),
         widget.CapsNumLockIndicator(
             
         ),
         widget.TextBox(text = '|'),
-        widget.Chord(
-            chords_colors={
-                'launch': ("#fabd2f", "#282828"),
-                'hackery': ("#fabd2f", "#282828")
-            },
-            name_transform=lambda name: name.upper(),
-        ),
         widget.Systray(),
         widget.Spacer(length = 8),
         widget.Clock(format='%A, %d %b %Y %I:%M%p'),
