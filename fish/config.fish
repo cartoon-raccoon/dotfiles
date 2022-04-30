@@ -82,6 +82,8 @@ alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 alias raccoonpi="ssh ubuntu@192.168.79.2"
 alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
 
+alias ip="ip -c=always"
+
 alias "angrtivate"="source ~/Projects/angr/bin/activate.fish"
 # alias "deangrtivate"="~/Projects/angr/bin/deactivate"
 
@@ -91,6 +93,8 @@ alias up3="cd ../../../"
 alias up4="cd ../../../../"
 alias up5="cd ../../../../../"
 
+alias hexedit="hexedit --color"
+
 alias icccm="curl www.call-with-current-continuation.org/rants/icccm.txt"
 # opam configuration
-source /home/sammy/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+# source /home/sammy/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
