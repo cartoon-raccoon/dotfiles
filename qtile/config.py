@@ -146,9 +146,9 @@ groups = [
     # music
     Group(' ', layout = " equal ", spawn = ["spotify"]),
     # misc
-    Group(' '),
+    Group(' ', layout = " equal "),
     # reading
-    Group(' '),
+    Group(' ', layout = " equal "),
     # dropdowns
     # ScratchPad("dropdowns",
     #     DropDown("term", "alacritty", opacity = 0.9),
