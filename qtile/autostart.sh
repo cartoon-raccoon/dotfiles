@@ -4,9 +4,11 @@ WALLPAPER_PATH="/home/sammy/Pictures/Wallpaper"
 
 xss-lock "/home/sammy/.config/i3/i3lock" &
 picom &
-feh --bg-scale $WALLPAPER_PATH/starfield.jpg
+feh --bg-scale $WALLPAPER_PATH/village_at_dusk.jpg
 
 nm-applet &
+
+bluetoothctl -- power on
 #$HOME/.config/polybar/launch.sh &
 
 #! NOTE: running polkit authenticator here means it will only work on qtile
