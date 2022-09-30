@@ -83,6 +83,8 @@ keys = [
     Key([mod], "comma", lazy.spawn("mpc prev")),
 
     Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
+    Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
+    Key([], "XF86AudioPrev", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
     Key([mod, "shift"], "period", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
     Key([mod, "shift"], "comma", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
 
@@ -103,11 +105,13 @@ keys = [
     KeyChord([mod],"p", [
         Key([], "f", lazy.spawn("firefox")),
         Key([], "s", lazy.spawn("spotify")),
+        Key([], "a", lazy.spawn("/opt/Cider/cider")),
         Key([], "d", lazy.spawn("discord")),
         Key([], "c", lazy.spawn("code")),
         Key([], "r", lazy.spawn("alacritty -e ranger")),
         Key([], "t", lazy.spawn("thunar")),
         Key([], "m", lazy.spawn("multimc")),
+        Key([], "t", lazy.spawn("texmaker")),
         Key([], "v", lazy.spawn("vmware")),
     ], mode = "launch"),
 
