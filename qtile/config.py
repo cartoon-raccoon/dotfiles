@@ -65,6 +65,7 @@ keys = [
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating,"),
     Key([mod], "m", lazy.group.setlayout("  max  ")),
+    Key([mod], "e", lazy.group.setlayout(" equal ")), 
     Key([mod], "w", lazy.group.setlayout("tabbed ")),
 
     # Basic QTile commands
@@ -81,6 +82,9 @@ keys = [
     Key([mod], "grave", lazy.spawn("mpc toggle")),
     Key([mod], "period", lazy.spawn("mpc next")),
     Key([mod], "comma", lazy.spawn("mpc prev")),
+    Key([mod], "XF86AudioPlay", lazy.spawn("mpc toggle")),
+    Key([mod], "XF86AudioNext", lazy.spawn("mpc next")),
+    Key([mod], "XF86AudioPrev", lazy.spawn("mpc prev")),
 
     Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
     Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
