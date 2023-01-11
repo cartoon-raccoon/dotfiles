@@ -63,6 +63,8 @@ alias ls="exa -l"
 
 alias fishreload="source ~/.config/fish/config.fish"
 
+alias tlmgr="/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode $argv"
+
 alias cavaconf="$EDITOR ~/.config/cava/config"
 alias picomconf="$EDITOR ~/.config/picom/picom.conf"
 
