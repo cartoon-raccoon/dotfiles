@@ -109,7 +109,7 @@ keys = [
     KeyChord([mod],"p", [
         Key([], "f", lazy.spawn("firefox")),
         Key([], "s", lazy.spawn("spotify")),
-        Key([], "a", lazy.spawn("/opt/Cider/cider")),
+        Key([], "a", lazy.spawn("anki")),
         Key([], "d", lazy.spawn("discord")),
         Key([], "c", lazy.spawn("code")),
         Key([], "r", lazy.spawn("alacritty -e ranger")),
@@ -290,7 +290,7 @@ top_bar = bar.Bar(
         widget.Mpd2(
             status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [ {repeat}{random}{single}{consume}]",
             idle_format = " {idle_message} ",
-            idle_message = "Nothing playing",
+            idle_message = "Rien à jouer",
             format_fns = dict(
                 #all=lambda s: cgi.escape(s),
                 artist=artist_truncate,
