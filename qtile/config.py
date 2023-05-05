@@ -142,7 +142,7 @@ mouse = [
 
 groups = [
     # main
-    Group(' ', layout = "  max  ", spawn = ["firefox"]), 
+    Group(' ', layout = "  max  ", spawn = ["firefox"]), 
     # dev
     Group(' ', layout = "  max  "), 
     # terminals
@@ -302,10 +302,10 @@ top_bar = bar.Bar(
             fontsize = 13,
             play_states = {'play': ' ', 'pause': ' ', 'stop' : ' '},
             prepare_status = {
-                'consume': ' ', 
-                'random' : '咽 ', 
-                'repeat' : '凌 ',
-                'single' : '綾 ',
+                'consume': '󰆘 ', 
+                'random' : ' ', 
+                'repeat' : '󰑖 ',
+                'single' : '󰑘 ',
                 'updating_db': 'ﮮ ',
             },
             space = '- ',
@@ -313,7 +313,7 @@ top_bar = bar.Bar(
             markup = False,
         ),
         widget.Volume(
-            fmt = '墳 {}',
+            fmt = '󰕾 {}',
             fontsize = 13,
         ),
         widget.Spacer(length = bar.STRETCH),
