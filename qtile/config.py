@@ -154,7 +154,7 @@ groups = [
     # music
     Group(' ', layout = " equal ", spawn = ["spotify"]),
     # misc
-    Group(' ', layout = " equal "),
+    Group(' ', layout = " equal "),
     # reading
     Group(' ', layout = " equal "),
     # dropdowns
@@ -352,7 +352,7 @@ top_bar = bar.Bar(
             padding = -9,
         ),
         widget.CPU(
-            fmt = " {}",
+            fmt = " {}",
             format = "{freq_current}GHz ({load_percent}%)",
             fontsize = 13,
             background = '#932546',
