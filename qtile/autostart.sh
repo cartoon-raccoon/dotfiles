@@ -4,7 +4,7 @@ WALLPAPER_PATH="/home/sammy/Pictures/Wallpaper"
 
 xss-lock "/home/sammy/.config/i3/i3lock" &
 picom &
-feh --bg-scale $WALLPAPER_PATH/village_at_dusk.jpg
+feh --bg-scale $WALLPAPER_PATH/meme.png
 
 nm-applet &
 
