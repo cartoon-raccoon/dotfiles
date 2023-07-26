@@ -437,12 +437,12 @@ bottom_bar = bar.Bar(
         widget.TextBox(text = '|'),
         widget.Systray(),
         widget.Spacer(length = 8),
-        widget.Clock(format='%A, %d %b %Y %I:%M%p'),
+        widget.Clock(format='%A, %d %b %Y %H:%M'),
         widget.Spacer(length = 8),
         widget.QuickExit(
             padding = 1,
             foreground = 'fb4934',
-            default_text = '[  ]',
+            default_text = '[ 󰗼 ]',
             countdown_format = '[ {} ]'
         ),
     ],
@@ -458,6 +458,12 @@ screens = [
         left = bar.Gap(size = 8),
         right = bar.Gap(size = 8),
     ),
+    Screen(
+        top=top_bar,
+        bottom=bottom_bar,
+        left = bar.Gap(size = 8),
+        right = bar.Gap(size = 8),
+    )
 ]
 
 #####! ADDITIONAL VARIABLES !#####
