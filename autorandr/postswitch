@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# set wallpaper
+feh --bg-fill "$DESKTOP_BKGD"
+
+# regenerate lock screen
+~/.i3lock-bkgd > "$HOME/.log/i3lock/i3lock-bkgd.log" &
