@@ -1,8 +1,8 @@
-set -x EDITOR (which nvim)
+#set -x EDITOR (which nvim)
 
-set -x PATH "$HOME/.cargo/bin/:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.local/bin/cross/bin:$PATH"
+#set -x PATH "$HOME/.cargo/bin/:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.local/bin/cross/bin:$PATH"
 
-set -x LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/lib/jvm/default/lib/server/"
+#set -x LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/lib/jvm/default/lib/server/"
 
 # set -x QT_QPA_PLATFORMTHEME "qt5ct"
 
@@ -57,7 +57,7 @@ function cheat
 	curl cheat.sh/$argv[1]
 end
 
-export MPC_FORMAT='%artist%: %title% \[%album%\]'
+#export MPC_FORMAT='%artist%: %title% \[%album%\]'
 
 alias ls="exa -l"
 #alias fucking="sudo"
@@ -96,6 +96,8 @@ alias up2="cd ../../"
 alias up3="cd ../../../"
 alias up4="cd ../../../../"
 alias up5="cd ../../../../../"
+
+alias reset-bkgd="feh --bg-fill $DESKTOP_BKGD"
 
 alias hexedit="hexedit --color"
 
