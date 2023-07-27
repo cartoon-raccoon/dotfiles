@@ -18,17 +18,26 @@ Each directory contains the dotfiles and other scripts used for running the apps
 - Shell: `fish`
 - Terminal: `alacritty`
 - Music: `ncmpcpp`
-- Editor: `Neovim`
+- Editor: `nvim`
 - Other apps: `cava`, `scrot`, `spotify`, `feh`, `i3lock`, etc.
 
-## Other scripts
+## Other Scripts
 
-- `spotify/spotify-dbus.sh`: Uses dbus to send mpris2 player methods to control spotify. Bound to keybinds inside the WM config files.
+- `spotify/spotify-dbus.sh`: Uses dbus to send mpris2 player methods to control spotify. Bound to
+keybinds inside the WM config files.
 - `scrot/run.sh`: A script to take screenshots. Bound to keybinds.
-- `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song. Started automatically by the WM.
+- `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song.
+Started automatically by the WM.
 - `spectrwm/bar_action.sh`: Generates bar contents for `spectrwm`.
+- `autorandr/postswitch`: A hook script run by autorandr when it is invoked. It runs `feh` to reset
+the desktop background and `i3lock-bkgd` to regenerate the lockscreen background.
+- `lightdm/profile`: A profile script sourced by LightDM on login. It starts the global authenticator
+and runs `autorandr` to set the appropriate RandR config.
+- `i3/{i3lock, i3lock-bkgd.py}`: A script to run `i3lock` configured, and a Python script to
+automatically regenerate the lock screen background according to display setup.
 - `qtile/autostart.sh`: Qtile startup script.
-- `fish/pridefetch`: A python script called in `fish_greeting` to display a pride flag and relevant system infromation. Credit to [megabytesofrem/pridefetch](https://github.com/megabytesofrem/pridefetch) on GitHub.
+- `fish/pridefetch`: A python script called in `fish_greeting` to display a pride flag and relevant
+system infromation. Credit to [megabytesofrem/pridefetch](https://github.com/megabytesofrem/pridefetch) on GitHub.
 
 ## Bootstrap script
 
