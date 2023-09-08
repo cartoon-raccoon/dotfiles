@@ -10,6 +10,6 @@ nm-applet &
 
 bluetoothctl -- power on
 #$HOME/.config/polybar/launch.sh &
-
+blueman-applet &
 
 pkill mpd_notify.sh; ~/.config/mpd/mpd_notify.sh &
