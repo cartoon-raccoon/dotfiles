@@ -1,12 +1,14 @@
 ##### cartoon-raccoon's qtile config file #####
 
 from typing import List  # noqa: F401
+import copy
 
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, ScratchPad, DropDown, Key, KeyChord, Match, Screen, Rule
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
+from libqtile import qtile
 
 import os
 import subprocess
@@ -14,7 +16,13 @@ import datetime
 import cgi
 
 mod = "mod4"
-terminal = guess_terminal()
+
+if qtile.core.name == "x11":
+    terminal = "alacritty"
+elif qtile.core.name == "wayland":
+    terminal = "kitty"
+else:
+    terminal = guess_terminal()
 
 #####! KEYBINDS !#####
 
@@ -110,11 +118,14 @@ keys = [
         Key([], "f", lazy.spawn("firefox")),
         Key([], "s", lazy.spawn("spotify")),
         Key([], "a", lazy.spawn("anki")),
+        Key([], "o", lazy.spawn("obsidian")),
+        Key([], "n", lazy.spawn("notion-app")),
         Key([], "d", lazy.spawn("discord")),
         Key([], "c", lazy.spawn("code")),
         Key([], "r", lazy.spawn("alacritty -e ranger")),
         Key([], "t", lazy.spawn("thunar")),
-        Key([], "m", lazy.spawn("multimc")),
+        Key([], "m", lazy.spawn("minecraft-launcher")),
+        Key([], "s", lazy.spawn("steam")),
         Key([], "t", lazy.spawn("texmaker")),
         Key([], "v", lazy.spawn("vmware")),
     ], mode = "launch"),
@@ -126,7 +137,13 @@ keys = [
         Key([], "d", lazy.spawn("ghidra")),
         Key([], "w", lazy.spawn("wireshark")),
         Key([], "v", lazy.spawn("vmware")),
+        Key([], "q", lazy.spawn("qFlipper")),
     ], mode = "hackery"),
+
+    KeyChord([mod], "i", [
+        Key([], "f", lazy.spawn("freecad")),
+        Key([], "k", lazy.spawn("kicad")),
+    ], mode= "design"),
 
     Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"))
 ]
@@ -427,6 +444,7 @@ bottom_bar = bar.Bar(
             chords_colors={
                 'launch': ("#fabd2f", "#282828"),
                 'hackery': ("#fabd2f", "#282828"),
+                'design': ("#fabd2f", "#282828"),
             },
             name_transform=lambda name: name.upper(),
         ),
@@ -450,6 +468,9 @@ bottom_bar = bar.Bar(
     margin = [4, 0, 0, 0],
     background = '202020'
 )
+
+screen2_top = copy.deepcopy(top_bar)
+screen2_bottom = copy.deepcopy(bottom_bar)
 
 screens = [
     Screen(
@@ -514,9 +535,14 @@ focus_on_window_activation = "smart"
 
 #####! WINDOW HOOKS !#####
 
+if qtile.core.name == "x11":
+    startup_script = "~/.config/qtile/autostart.sh"
+elif qtile.core.name == "wayland":
+    startup_script = ""
+
 @hook.subscribe.startup_once
 def autostart():
-    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+    home = os.path.expanduser(startup_script)
     subprocess.call([home])
 
 @hook.subscribe.client_new
