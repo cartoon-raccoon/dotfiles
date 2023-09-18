@@ -1,9 +1,7 @@
-##############################################################
-## This is an example configuration file. Copy it to        ##
-## $XDG_CONFIG_HOME/ncmpcpp/config or $HOME/.ncmpcpp/config ##
-## and set up your preferences.                             ##
-##############################################################
-#
+#################################################
+#### Cartoon Raccoon's NCMPCPP Configuration ####
+#################################################
+
 ##### directories ######
 ##
 ## Directory for storing ncmpcpp related files.  Changing it is useful if you
@@ -385,7 +383,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (20)[white]{b|f:Album} (50)
 ## Note: You can specify third character which will be used to build 'empty'
 ## part of progressbar.
 ##
-#progressbar_look = =>
+progressbar_look = =|-
 #
 ## Available values: database, playlist.
 ##
@@ -393,7 +391,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (20)[white]{b|f:Album} (50)
 #
 ## Available values: classic, alternative.
 ##
-#user_interface = classic
+user_interface = alternative
 #
 #data_fetching_delay = yes
 #
@@ -426,7 +424,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (20)[white]{b|f:Album} (50)
 #
 lyrics_fetchers = azlyrics, genius, musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
 #
-#follow_now_playing_lyrics = no
+follow_now_playing_lyrics = yes
 #
 #fetch_lyrics_for_current_song_in_background = no
 #
@@ -545,7 +543,7 @@ display_bitrate = yes
 #
 #search_engine_default_search_mode = 1
 #
-#external_editor = nano
+external_editor = nvim
 #
 ## Note: set to yes if external editor is a console application.
 ##
