@@ -25,7 +25,15 @@ function song() {
 	echo "${ADDR[1]}"
 }
 
+function send_notif() {
+	notify-send \
+		--app-name="Music" \
+		-h string:bgcolor:#333333 "$@"
+}
+
 while "true"; do
+	# wait for a player event in mpc
+	mpc idle player > /dev/null
 
 	# if mpc current is empty and oldname is not
 	# it means that this is the first time mpc current is empty
@@ -33,10 +41,7 @@ while "true"; do
 	if [[ -z $(mpc current) ]] && [[ -n "$oldname" ]]; then
 		# set oldname to mpc current so it won't trigger more than once
 		oldname=$(mpc current)
-		notify-send \
-			--app-name="Music" \
-			-h string:bgcolor:#333333 \
-			"Stopped playing"
+		send_notif "Stopped playing"
 	fi
 
 	# if oldname does not match mpc current and mpc current len > 0,
@@ -48,12 +53,7 @@ while "true"; do
 		#artist $current
 		#song $current
 		
-		notify-send \
-			--app-name="Music" \
-			-h string:bgcolor:#333333 \
-			"Now playing:" "$(mpc current)"
+		send_notif "Now playing:" "$current"
 	fi
 
-	sleep 1
-	
 done
