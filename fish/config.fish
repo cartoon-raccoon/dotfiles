@@ -59,7 +59,7 @@ end
 
 #export MPC_FORMAT='%artist%: %title% \[%album%\]'
 
-alias ls="exa -l"
+alias ls="eza -l"
 #alias fucking="sudo"
 #alias pls="sudo"
 
@@ -87,6 +87,7 @@ alias raccoonpi="ssh ubuntu@192.168.79.2"
 alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
 
 alias ip="ip -c=always"
+alias anglais="LANG=en_CA $argv"
 
 alias "angrtivate"="source ~/Projects/angr/bin/activate.fish"
 # alias "deangrtivate"="~/Projects/angr/bin/deactivate"
