@@ -25,16 +25,25 @@ def artist_truncate(s):
     else:
         return s
     
+prompt = widget.Prompt()
+def mpd_play_playlist(qtile):
+    def callback(s):
+        qtile.spawn("mpc clear")
+        qtile.spawn(f"mpc load {s}")
+        qtile.spawn("mpc play")
+    prompt.start_input("PLAYLIST", callback)
+    
 colors = {
     "blue"  : '#2d728f',
     "green" : '#659157',
 }
 
+
 primary_top = bar.Bar(
     [
         widget.Mpd2(
-            status_format = "{play_status} {artist}: {title} ({elapsed}/{duration}) [ {repeat}{random}{single}{consume}]",
-            idle_format = " {idle_message} ",
+            status_format = "󰝚  {play_status} {artist}: {title} ({elapsed}/{duration}) [ {repeat}{random}{single}{consume}]",
+            idle_format = "󰝚  {idle_message}",
             idle_message = "Rien à jouer",
             format_fns = dict(
                 #all=lambda s: cgi.escape(s),
@@ -57,9 +66,24 @@ primary_top = bar.Bar(
             update_interval = 0.5,
             markup = False,
         ),
-        widget.Volume(
+        widget.Sep(padding=10),
+        widget.Mpris2(
+           format='{xesam:artist}: {xesam:title}',
+           playing_text='󰓇    {track}',
+           paused_text='󰓇    {track}',
+           max_chars=100,
+           fontsize=13,
+           scroll=False,
+           name='spotify',
+           objname='org.mpris.MediaPlayer2.spotify',
+           #width=300
+        ),
+        widget.Sep(padding=10),
+        widget.PulseVolume(
+            cardid=6,
             fmt = '󰕾 {}',
             fontsize = 13,
+            step=5,
         ),
         widget.Spacer(length = bar.STRETCH),
         widget.TextBox(text = '',
@@ -111,7 +135,7 @@ primary_top = bar.Bar(
         ),
         widget.Net(
             interface = "wlp6s0",
-            format = " {down}   {up}  ",
+            format = " {down:6.2f}{down_suffix:<2}   {up:6.2f}{up_suffix:<2}  ",
             fontsize = 13,
             background = '#4a314d',
             padding = 5,
@@ -150,37 +174,48 @@ primary_top = bar.Bar(
     background = "#202020",
 )
 
+
 # the bottom bar.
 primary_bottom = bar.Bar(
     [
         widget.CurrentLayout(),
         widget.GroupBox(
-            highlight_method = 'line',
-            highlight_color = ['#202020', '#343434'],
-            this_current_screen_border = '#fabd2f',
-            this_screen_border = '#fabd2f',
+            highlight_method='line',
+            highlight_color=['#202020', '#343434'],
+            this_current_screen_border='#fabd2f',
+            this_screen_border='#fabd2f',
+            visible_groups=[
+                "HOME",
+                "DEV",
+                "TERMINAL",
+                "FILES",
+                "SOCIAL",
+                "MUSIC",
+                "MISC",
+                "NOTES",
+                "READING",
+            ]
         ),
-        widget.Spacer(length = 15),
-        widget.Prompt(),
+        widget.Spacer(length=15),
+        prompt,
+        widget.Spacer(length=15),
         widget.WindowName(),
-        #widget.Mpris2(
-        #    fmt = '{title}',
-        #    name = 'spotify',
-        #    objname = 'org.mpris.MediaPlayer2.spotify',
-        #),
         widget.Chord(
             chords_colors={
                 'launch': ("#fabd2f", "#282828"),
-                'hackery': ("#fabd2f", "#282828"),
-                'design': ("#fabd2f", "#282828"),
+                'hackery': ("#d16014", "#282828"),
+                'design': ("#2d728f", "#282828"),
+                'f': ("#932546", "#eeeeee"),
+                't': ("#932546", "#eeeeee"),
+                's': ("#932546", "#eeeeee"),
             },
             name_transform=lambda name: name.upper(),
         ),
-        widget.TextBox(text = '|'),
+        widget.Sep(padding=10),
         widget.CapsNumLockIndicator(
             
         ),
-        widget.TextBox(text = '|'),
+        widget.Sep(padding=10),
         widget.Systray(),
         widget.Spacer(length = 8),
         widget.Clock(format='%A, %d %b %Y %H:%M'),
@@ -198,7 +233,16 @@ primary_bottom = bar.Bar(
 )
 
 secondary_top = bar.Bar(
-    [],
+    [
+        widget.Wttr(
+            format="%l: %t (%f) [%C]",
+            # location={
+            #     "Toronto": "Toronto"
+            # },
+            lang="en",
+            fontsize=13
+        )
+    ],
     30,
     margin = [0, 0, 4, 0],
     background = '#202020',
@@ -206,7 +250,31 @@ secondary_top = bar.Bar(
 )
 
 secondary_bottom = bar.Bar(
-    [],
+    [
+        widget.TaskList(
+            icon_size=14,
+            fontsize=13
+        ),
+        widget.Spacer(length=bar.STRETCH),
+        widget.GroupBox(
+            highlight_method='line',
+            highlight_color=['#202020', '#343434'],
+            this_current_screen_border='#fabd2f',
+            this_screen_border='#fabd2f',
+            visible_groups=[
+                "HOME",
+                "DEV",
+                "TERMINAL",
+                "FILES",
+                "SOCIAL",
+                "MUSIC",
+                "MISC",
+                "NOTES",
+                "READING",
+            ]
+        ),
+        widget.CurrentLayout(),
+    ],
     30,
     margin = [4, 0, 0, 0],
     background = '#202020',

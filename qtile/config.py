@@ -17,6 +17,8 @@ import subprocess
 import datetime
 import cgi
 
+import bars
+
 mod = "mod4"
 
 if qtile.core.name == "x11":
@@ -73,9 +75,10 @@ keys = [
     
     # Toggle fullscreen and floating
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
-    Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating,"),
+    Key([mod], "y", lazy.window.toggle_floating(), desc="Toggle floating,"),
     Key([mod], "m", lazy.group.setlayout("  max  ")),
-    Key([mod], "e", lazy.group.setlayout(" equal ")), 
+    Key([mod], "e", lazy.group.setlayout(" equal ")),
+    Key([mod], "t", lazy.group.setlayout(" tile  ")),
     Key([mod], "w", lazy.group.setlayout("tabbed ")),
 
     # Basic QTile commands
@@ -85,8 +88,8 @@ keys = [
         desc="Spawn a command using a prompt widget"),
 
     # dropdown commands
-    #Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term')),
-    #Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell')),
+    Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term')),
+    Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell')),
 
     # music control keys
     Key([mod], "grave", lazy.spawn("mpc toggle")),
@@ -95,6 +98,7 @@ keys = [
     Key([mod], "XF86AudioPlay", lazy.spawn("mpc toggle")),
     Key([mod], "XF86AudioNext", lazy.spawn("mpc next")),
     Key([mod], "XF86AudioPrev", lazy.spawn("mpc prev")),
+    Key([mod, "shift"], "m", lazy.function(bars.mpd_play_playlist)),
 
     Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
     Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
@@ -117,20 +121,28 @@ keys = [
     
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
-        Key([], "f", lazy.spawn("firefox")),
-        Key([], "s", lazy.spawn("spotify")),
+        KeyChord([], "f", [
+            Key([], "i", lazy.spawn("firefox")),
+            Key([], "r", lazy.spawn("freecad")),
+        ], name="f"),
+        KeyChord([], "s", [
+            Key([], "p", lazy.spawn("spotify")),
+            Key([], "t", lazy.spawn("steam")),
+        ], name="s"),
+        KeyChord([], "t", [
+            Key([], "h", lazy.spawn("thunar")),
+            Key([], "e", lazy.spawn("texmaker")),
+        ], name="t"),
         Key([], "a", lazy.spawn("anki")),
+        Key([], "k", lazy.spawn("kicad")),
         Key([], "o", lazy.spawn("obsidian")),
         Key([], "n", lazy.spawn("notion-app")),
         Key([], "d", lazy.spawn("discord")),
         Key([], "c", lazy.spawn("code")),
         Key([], "r", lazy.spawn("alacritty -e ranger")),
-        Key([], "t", lazy.spawn("thunar")),
         Key([], "m", lazy.spawn("minecraft-launcher")),
-        Key([], "s", lazy.spawn("steam")),
-        Key([], "t", lazy.spawn("texmaker")),
         Key([], "v", lazy.spawn("vmware")),
-    ], mode = "launch"),
+    ], name="launch"),
 
     # chord to launch cysec tools but i use more cli tools lol
     KeyChord([mod], "o", [
@@ -140,65 +152,86 @@ keys = [
         Key([], "w", lazy.spawn("wireshark")),
         Key([], "v", lazy.spawn("vmware")),
         Key([], "q", lazy.spawn("qFlipper")),
-    ], mode = "hackery"),
+    ], name="hackery"),
 
     KeyChord([mod], "i", [
         Key([], "f", lazy.spawn("freecad")),
         Key([], "k", lazy.spawn("kicad")),
-    ], mode= "design"),
+    ], name="design"),
 
     Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"))
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
+    Drag(
+        [mod], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()
+    ),
+    Drag(
+        [mod], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()
+    ),
+    Click(
+        [mod], "Button4", lazy.group.next_window(),
+    ),
+    Click(
+        [mod], "Button5", lazy.group.prev_window(),
+    ),
+    Click(
+        [mod], "Button8", lazy.screen.next_group(),
+    ),
+    Click(
+        [mod], "Button9", lazy.screen.prev_group(),
+    ),
+    Click(
+        [mod], "Button2", lazy.window.bring_to_front()
+    )
 ]
 
 groups = [
     # main
-    Group(' ', layout = "  max  ", spawn = ["firefox"]), 
+    Group('HOME', layout="  max  ", spawn=["firefox"], label=' '), 
     # dev
-    Group(' ', layout = "  max  "), 
+    Group('DEV', layout="  max  ", label=' '), 
     # terminals
-    Group(' ', layout = " equal ", spawn = ["alacritty", "alacritty"]),
+    Group('TERMINAL', layout=" equal ", spawn = ["alacritty", "alacritty"], label=' '),
     # files
-    Group(' ', spawn = ["thunar"]), 
+    Group('FILES', spawn = ["thunar"], label=' '), 
     # social
-    Group(' '),
+    Group('SOCIAL', label=' '),
     # music
-    Group(' ', layout = " equal ", spawn = ["spotify"]),
+    Group('MUSIC', layout=" equal ", spawn=["spotify", "alacritty -e ncmpcpp"], label=' '),
     # misc
-    Group(' ', layout = " equal "),
+    Group('MISC', layout=" equal ", label=' '),
+    # note taking
+    Group('NOTES', layout="  max  ", spawn=["obsidian"], label='󰠮 '),
     # reading
-    Group(' ', layout = " equal "),
+    Group('READING', layout="tabbed ", label=' '),
     # dropdowns
-    # ScratchPad("dropdowns",
-    #     DropDown("term", "alacritty", opacity = 0.9),
-    #     DropDown("qshell", "alacritty -e qtile shell", opacity = 0.9)
-    # )
+    ScratchPad("dropdowns", [
+        DropDown("term", "alacritty", opacity = 0.9),
+        DropDown("qshell", "alacritty -e qtile shell", opacity = 0.9)
+    ]),
 ]
 
 # Bind group to its index in the group list and define mappings for window management.
-for i in range(1, len(groups) + 1):
+for i in range(1, len(groups)):
     group = groups[i - 1]
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], str(i), lazy.group[group.name].toscreen(toggle=True),
-            desc="Switch to group {}".format(group.name)),
+    if isinstance(group, Group):
+        keys.extend([
+            # mod1 + letter of group = switch to group
+            Key([mod], str(i), lazy.group[group.name].toscreen(toggle=True),
+                desc="Switch to group {}".format(group.name)),
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], str(i), lazy.window.togroup(group.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(group.name)),
+            # mod1 + shift + letter of group = switch to & move focused window to group
+            Key([mod, "shift"], str(i), lazy.window.togroup(group.name, switch_group=True),
+                desc="Switch to & move focused window to group {}".format(group.name)),
 
-        # mod1 + ctrl + letter of group = move focused to group but do not switch
-        Key([mod, "control"], str(i), lazy.window.togroup(group.name),
-            desc="Move focused window to group {}".format(group.name)),
-    ])
+            # mod1 + ctrl + letter of group = move focused to group but do not switch
+            Key([mod, "mod1"], str(i), lazy.window.togroup(group.name),
+                desc="Move focused window to group {}".format(group.name)),
+        ])
 
 #####! LAYOUTS !#####
 # naming convention: keep names to 7 characters long, pad with spaces on each side
@@ -294,14 +327,14 @@ screens = [
     Screen(
         top=primary_top,
         bottom=primary_bottom,
-        left = bar.Gap(size = 8),
-        right = bar.Gap(size = 8),
+        left = bar.Gap(size=8),
+        right = bar.Gap(size=8),
     ),
     Screen(
         top=secondary_top,
         bottom=secondary_bottom,
-        left = bar.Gap(size = 8),
-        right = bar.Gap(size = 8),
+        left = bar.Gap(size=8),
+        right = bar.Gap(size=8),
     )
 ]
 
@@ -310,7 +343,7 @@ screens = [
 dgroups_key_binder = None
 dgroups_app_rules = [
     Rule(
-        Match(wm_type = [
+        Match(wm_type=[
             "confirm",
             "download",
             "notification",
@@ -319,15 +352,15 @@ dgroups_app_rules = [
             "dialog",
             "error",
         ]),
-        float = True
+        float=True
     ),
     Rule(
-        Match(wm_class = [
+        Match(wm_class=[
             "Pavucontrol",
             "Oomox",
         ]),
-        float = True,
-        break_on_match = False
+        float=True,
+        break_on_match=False
     )
 ] 
 main = None  # WARNING: this is deprecated and will be removed soon
@@ -345,8 +378,8 @@ floating_layout = layout.Floating(
         Match(title='branchdialog'),  # gitk
         Match(title='pinentry'),  # GPG key password entry
     ],
-    border_focus = "#efefef",
-    border_normal = "#5f676a"
+    border_focus="#efefef",
+    border_normal="#5f676a"
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -370,6 +403,11 @@ def floating_dialogs(window):
     bubble = window.window.get_wm_window_role() == 'bubble'
     if dialog or bubble or transient:
         window.floating = True
+
+@hook.subscribe.client_mouse_enter
+def on_focus_change(window):
+    if window.info()['floating']:
+        window.bring_to_front()
 
 
 # Needed by some Java programs
