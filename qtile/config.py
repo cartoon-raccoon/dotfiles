@@ -3,9 +3,8 @@
 # symlinked to ~/.config/qtile/config.py.
 
 from typing import List  # noqa: F401
-import copy
 
-from libqtile import bar, layout, widget
+from libqtile import bar, layout
 from libqtile.config import Click, Drag, Group, ScratchPad, DropDown, Key, KeyChord, Match, Screen, Rule
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -15,7 +14,6 @@ from libqtile import qtile
 import os
 import subprocess
 import datetime
-import cgi
 
 import bars
 
@@ -76,101 +74,147 @@ keys = [
     # Toggle fullscreen and floating
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
     Key([mod], "y", lazy.window.toggle_floating(), desc="Toggle floating,"),
-    Key([mod], "m", lazy.group.setlayout("  max  ")),
-    Key([mod], "e", lazy.group.setlayout(" equal ")),
-    Key([mod], "t", lazy.group.setlayout(" tile  ")),
-    Key([mod], "w", lazy.group.setlayout("tabbed ")),
+    Key([mod], "m", lazy.group.setlayout("max"), desc="Set 'max' layout"),
+    Key([mod], "e", lazy.group.setlayout("equal"), desc="Set 'equal' layout"),
+    Key([mod], "t", lazy.group.setlayout("tile"), desc="Set 'tile' layout"),
+    Key([mod], "w", lazy.group.setlayout("tabbed"), desc="Set 'tabbed' layout"),
 
     # Basic QTile commands
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
+    Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload Qtile config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(),
+    Key([mod], "r", lazy.function(bars.spawncmd),
         desc="Spawn a command using a prompt widget"),
 
     # dropdown commands
-    Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term')),
-    Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell')),
+    Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term'),
+        desc="Toggle a dropdown terminal"),
+    Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell'),
+        desc="Toggle a dropdown Qtile shell"),
 
     # music control keys
-    Key([mod], "grave", lazy.spawn("mpc toggle")),
-    Key([mod], "period", lazy.spawn("mpc next")),
-    Key([mod], "comma", lazy.spawn("mpc prev")),
-    Key([mod], "XF86AudioPlay", lazy.spawn("mpc toggle")),
-    Key([mod], "XF86AudioNext", lazy.spawn("mpc next")),
-    Key([mod], "XF86AudioPrev", lazy.spawn("mpc prev")),
-    Key([mod, "shift"], "m", lazy.function(bars.mpd_play_playlist)),
+    Key([mod], "grave", lazy.spawn("mpc toggle"), desc="Pause or play MPD"),
+    Key([mod], "period", lazy.spawn("mpc next"), desc="Skip to the next song on MPD"),
+    Key([mod], "comma", lazy.spawn("mpc prev"), desc="Move to the previous song on MPD"),
+    Key([mod], "XF86AudioPlay", lazy.spawn("mpc toggle"), desc="Play/pause MPD"),
+    Key([mod], "XF86AudioNext", lazy.spawn("mpc next"), desc="Skip to next song on MPD"),
+    Key([mod], "XF86AudioPrev", lazy.spawn("mpc prev"), desc="Move to previous song on MPD"),
+    Key([mod, "shift"], "p", lazy.function(bars.mpd_play_playlist),
+        desc="Activate MPD playlist prompt"),
 
-    Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t")),
-    Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
-    Key([], "XF86AudioPrev", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
+    Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t"),
+        desc="Play/pause Spotify"),
+    Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n"),
+        desc="Skip to the next song on Spotify"),
+    Key([], "XF86AudioPrev", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p"),
+        desc="Move to the previous song on Spotify"),
     Key([mod, "shift"], "period", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
     Key([mod, "shift"], "comma", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
+    Key([mod], "a", lazy.widget["wbox_mpd"].toggle(),
+        desc="Show/hide the MPD bar widget"),
+    Key([mod], "s", lazy.widget["wbox_spotify"].toggle(),
+        desc="Show/hide the Spotify bar widget"),
+    Key([], 'F10', lazy.group['music'].dropdown_toggle('ncmpcpp'),
+        desc="Toggle a dropdown NCMPCPP window"),
+
+    KeyChord([mod, "shift"], "m", [
+            Key([], "s", lazy.widget["wbox_spotify"].toggle(),
+                desc="Show/hide the MPD bar widget"),
+            Key([], "m", lazy.widget["wbox_mpd"].toggle(),
+                desc="Show/hide the Spotify bar widget"),
+
+            Key([mod, "shift"], "m", lazy.ungrab_all_chords(),
+                desc="Leave the chord")
+        ],
+        mode=True,
+        name="music",
+        desc="A chord to toggle the music app widgets on the top bar"
+    ),
 
     # volume and brightness control
-    Key([], 'XF86AudioRaiseVolume', lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")),
-    Key([], 'XF86AudioLowerVolume', lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")),
-    Key([], 'XF86AudioMute', lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")),
+    Key([], 'XF86AudioRaiseVolume', lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"),
+        desc="Raise volume by 5%"),
+    Key([], 'XF86AudioLowerVolume', lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"),
+        desc="Lower volume by 5%"),
+    Key([], 'XF86AudioMute', lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
+        desc="Mute/unmute"),
 
-    Key([], 'XF86MonBrightnessUp', lazy.spawn("brightnessctl set +10%")),
-    Key([], 'XF86MonBrightnessDown', lazy.spawn("brightnessctl set 10%-")),
+    Key([], 'XF86MonBrightnessUp', lazy.spawn("brightnessctl set +10%"),
+        desc="Raise screen brightness"),
+    Key([], 'XF86MonBrightnessDown', lazy.spawn("brightnessctl set 10%-"),
+        desc="Lower screen brightness"),
 
     # screenshot keys
-    Key([mod],"Print", lazy.spawn("/home/sammy/.config/scrot/run.sh")),
-    Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u")),
-    Key([mod, "shift"], "f", lazy.spawn("flameshot")),    
+    Key([mod],"Print", lazy.spawn("/home/sammy/.config/scrot/run.sh"),
+        desc="Take a screenshot of the full screen"),
+    Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u"),
+        desc="Take a screenshot of the active window"),
+    Key([mod, "shift"], "f", lazy.spawn("flameshot"),
+        desc="Launch flameshot"),    
     
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
         KeyChord([], "f", [
-            Key([], "i", lazy.spawn("firefox")),
-            Key([], "r", lazy.spawn("freecad")),
+            Key([], "i", lazy.spawn("firefox"), desc="Launch Firefox"),
+            Key([], "r", lazy.spawn("freecad"), desc="Launch FreeCAD"),
         ], name="f"),
         KeyChord([], "s", [
-            Key([], "p", lazy.spawn("spotify")),
-            Key([], "t", lazy.spawn("steam")),
+            Key([], "p", lazy.spawn("spotify"), desc="Launch Spotify"),
+            Key([], "t", lazy.spawn("steam"), desc="Launch Steam"),
         ], name="s"),
         KeyChord([], "t", [
-            Key([], "h", lazy.spawn("thunar")),
-            Key([], "e", lazy.spawn("texmaker")),
+            Key([], "h", lazy.spawn("thunar"), desc="Launch File Explorer"),
+            Key([], "e", lazy.spawn("texmaker"), desc="Launch TexMaker"),
         ], name="t"),
-        Key([], "a", lazy.spawn("anki")),
-        Key([], "k", lazy.spawn("kicad")),
-        Key([], "o", lazy.spawn("obsidian")),
-        Key([], "n", lazy.spawn("notion-app")),
-        Key([], "d", lazy.spawn("discord")),
-        Key([], "c", lazy.spawn("code")),
-        Key([], "r", lazy.spawn("alacritty -e ranger")),
-        Key([], "m", lazy.spawn("minecraft-launcher")),
-        Key([], "v", lazy.spawn("vmware")),
+        Key([], "a", lazy.spawn("anki"), desc="Launch Anki"),
+        Key([], "k", lazy.spawn("kicad"), desc="Launch KiCAD"),
+        Key([], "o", lazy.spawn("obsidian"), desc="Launch Obsidian"),
+        Key([], "n", lazy.spawn("notion-app"), desc="Launch Notion"),
+        Key([], "d", lazy.spawn("discord"), desc="Launch Discord"),
+        Key([], "c", lazy.spawn("code"), desc="Launch VSCode"),
+        Key([], "r", lazy.spawn("alacritty -e ranger"), desc="Launch Ranger"),
+        Key([], "m", lazy.spawn("minecraft-launcher"), desc="Launch Minecraft"),
+        Key([], "v", lazy.spawn("vmware"), desc="Launch VMWare"),
+
+        Key([mod], "p", lazy.ungrab_all_chords(),
+            desc="Leave the chord"),
     ], name="launch"),
 
-    # chord to launch cysec tools but i use more cli tools lol
+    # Hackery mode: to launch cysec tools but i use more cli tools lol
     KeyChord([mod], "o", [
-        Key([], "c", lazy.spawn("cutter")),
-        Key([], "g", lazy.spawn("gdbgui")),
-        Key([], "d", lazy.spawn("ghidra")),
-        Key([], "w", lazy.spawn("wireshark")),
-        Key([], "v", lazy.spawn("vmware")),
-        Key([], "q", lazy.spawn("qFlipper")),
+        Key([], "c", lazy.spawn("cutter"), desc="Launch Cutter"),
+        Key([], "g", lazy.spawn("gdbgui"), desc="Launch GDBGUI"),
+        Key([], "d", lazy.spawn("ghidra"), desc="Ghidra"),
+        Key([], "w", lazy.spawn("wireshark"), desc="Launch Wireshark"),
+        Key([], "v", lazy.spawn("vmware"), desc="Launch VMWare"),
+        Key([], "q", lazy.spawn("qFlipper"), desc="Launch qFlipper"),
+
+        Key([mod], "o", lazy.ungrab_all_chords(),
+            desc="Leave the chord"),
     ], name="hackery"),
 
+    # Design mode: to launch design tools
     KeyChord([mod], "i", [
-        Key([], "f", lazy.spawn("freecad")),
-        Key([], "k", lazy.spawn("kicad")),
+        Key([], "f", lazy.spawn("freecad"), desc="Launch FreeCAD"),
+        Key([], "k", lazy.spawn("kicad"), desc="KiCAD"),
+
+        Key([mod], "i", lazy.ungrab_all_chords(),
+            desc="Leave the chord"),
     ], name="design"),
 
-    Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"))
+    Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"),
+        desc="Lock the system"),
 ]
 
 # Drag floating layouts.
 mouse = [
     Drag(
         [mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()
+        start=lazy.window.get_position()
     ),
     Drag(
         [mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()
+        start=lazy.window.get_size()
     ),
     Click(
         [mod], "Button4", lazy.group.next_window(),
@@ -189,35 +233,59 @@ mouse = [
     )
 ]
 
-groups = [
+# all groups with associated Keybinds
+groups_with_kbs = [
     # main
-    Group('HOME', layout="  max  ", spawn=["firefox"], label=' '), 
+    Group('HOME', layout="max", spawn=["firefox"], label=' '), 
     # dev
-    Group('DEV', layout="  max  ", label=' '), 
+    Group('DEV', layout="max", label=' '), 
     # terminals
-    Group('TERMINAL', layout=" equal ", spawn = ["alacritty", "alacritty"], label=' '),
+    Group('TERMINAL', layout="equal", spawn = ["alacritty", "alacritty"], label=' '),
     # files
-    Group('FILES', spawn = ["thunar"], label=' '), 
+    Group('FILES', spawn=["thunar"], label=' '), 
     # social
-    Group('SOCIAL', label=' '),
+    Group('SOCIAL', spawn=["discord"], matches=[Match(wm_class="discord")],label=' '),
     # music
-    Group('MUSIC', layout=" equal ", spawn=["spotify", "alacritty -e ncmpcpp"], label=' '),
+    Group('MUSIC', layout="equal", spawn=["spotify", "alacritty -e ncmpcpp"], label=' '),
     # misc
-    Group('MISC', layout=" equal ", label=' '),
+    Group('MISC', layout="equal", label=' '),
     # note taking
-    Group('NOTES', layout="  max  ", spawn=["obsidian"], label='󰠮 '),
+    Group('NOTES', layout="max", spawn=["obsidian"], label='󰠮 '),
     # reading
-    Group('READING', layout="tabbed ", label=' '),
+    Group('READING', layout="tabbed", label=' '),
+]
+
+groups = groups_with_kbs + [
+    ScratchPad("music",[
+        DropDown("ncmpcpp", "alacritty -e ncmpcpp",
+            height=0.5,
+            width=0.4,
+            x=0,
+            on_focus_lost_hide=False,
+        )
+    ], single=True),
     # dropdowns
     ScratchPad("dropdowns", [
-        DropDown("term", "alacritty", opacity = 0.9),
-        DropDown("qshell", "alacritty -e qtile shell", opacity = 0.9)
+        DropDown("term", "alacritty", 
+            opacity=0.9,
+            height=0.5,
+            width=0.4,
+            x=0.6,
+            on_focus_lost_hide=False,
+        ),
+        DropDown("qshell", "alacritty -e qtile shell",
+            opacity=0.9,
+            height=0.5,
+            width=0.4,
+            x=0.6, y=0.5,
+            on_focus_lost_hide=False,
+        )
     ]),
 ]
 
 # Bind group to its index in the group list and define mappings for window management.
-for i in range(1, len(groups)):
-    group = groups[i - 1]
+for i in range(1, len(groups_with_kbs) + 1):
+    group = groups_with_kbs[i - 1]
     if isinstance(group, Group):
         keys.extend([
             # mod1 + letter of group = switch to group
@@ -245,7 +313,7 @@ layouts = [
         margin = 4,
         ratio = 0.55,
         ratio_increment = 0.05,
-        name = " tile  "
+        name = "tile"
     ),
     layout.Tile(
         add_after_last = True,
@@ -255,14 +323,14 @@ layouts = [
         margin = 4,
         ratio = 0.5,
         ratio_increment = 0.05,
-        name = " equal "
+        name = "equal"
     ),
     layout.MonadTall(
         border_focus = "#efefef",
         border_normal = "#5f676a",
         margin = 4,
         ratio = 0.55,
-        name = "monadt "
+        name = "monadt"
     ),
     layout.TreeTab(
         active_bg = "#efefef",
@@ -274,10 +342,10 @@ layouts = [
         inactive_bg = "#5f676a",
         inactive_fg = "#efefef",
         sections = ['Tabs'],
-        name = "tabbed "
+        name = "tabbed"
     ),
     layout.Max(
-        name = "  max  "
+        name = "max"
     ),
     #layout.Columns(
     #    border_focus_stack='#efefef',
@@ -404,10 +472,10 @@ def floating_dialogs(window):
     if dialog or bubble or transient:
         window.floating = True
 
-@hook.subscribe.client_mouse_enter
-def on_focus_change(window):
-    if window.info()['floating']:
-        window.bring_to_front()
+# @hook.subscribe.client_mouse_enter
+# def on_focus_change(window):
+#     if window.info()['floating']:
+#         window.bring_to_front()
 
 
 # Needed by some Java programs
