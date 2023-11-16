@@ -5,3 +5,6 @@ feh --bg-fill "$DESKTOP_BKGD"
 
 # regenerate lock screen
 ~/.i3lock-bkgd > "$HOME/.log/i3lock/i3lock-bkgd.log" &
+
+# reload qtile config
+qtile cmd-obj -o cmd -f reload_config
