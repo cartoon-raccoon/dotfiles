@@ -13,3 +13,6 @@ bluetoothctl -- power on
 blueman-applet &
 
 pkill mpd_notify.sh; ~/.config/mpd/mpd_notify.sh &
+
+# todo: fix this in udev but this is a bodge for now
+sudo chmod a+rw /dev/hidraw*
