@@ -57,6 +57,12 @@ function cheat
 	curl cheat.sh/$argv[1]
 end
 
+function newproj
+	cd ~/Projects
+	mkdir $argv
+	cd $argv[1]
+end
+
 #export MPC_FORMAT='%artist%: %title% \[%album%\]'
 
 alias ls="eza -l"
