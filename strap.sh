@@ -530,7 +530,7 @@ function parse_pkg_lists() {
 }
 
 function install_helper() {
-    local url=${helper_urls[${params[helper]}]}
+    local url="${helper_urls[${params[helper]}]}"
     local helper=${params[helper]}
 
     cd ..
