@@ -10,6 +10,7 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
 from libqtile import qtile
+from libqtile.log_utils import logger
 
 import os
 import subprocess
@@ -36,6 +37,8 @@ keys = [
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(),
         desc="Move window focus to other window"),
+    Key(["mod1"], "Page_Up", lazy.layout.next(), desc="Move focus to next window"),
+    Key(["mod1"], "Page_Down", lazy.layout.previous(), desc="Move focus to previous window"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -74,6 +77,7 @@ keys = [
     # Toggle fullscreen and floating
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen."),
     Key([mod], "y", lazy.window.toggle_floating(), desc="Toggle floating,"),
+    Key([mod], "minus", lazy.window.toggle_minimized()),
     Key([mod], "m", lazy.group.setlayout("max"), desc="Set 'max' layout"),
     Key([mod], "e", lazy.group.setlayout("equal"), desc="Set 'equal' layout"),
     Key([mod], "t", lazy.group.setlayout("tile"), desc="Set 'tile' layout"),
@@ -99,9 +103,11 @@ keys = [
     Key([mod], "XF86AudioPlay", lazy.spawn("mpc toggle"), desc="Play/pause MPD"),
     Key([mod], "XF86AudioNext", lazy.spawn("mpc next"), desc="Skip to next song on MPD"),
     Key([mod], "XF86AudioPrev", lazy.spawn("mpc prev"), desc="Move to previous song on MPD"),
+    Key(["mod1"], "XF86AudioPlay", lazy.spawn("mpc toggle"), desc="Play/pause MPD (Alt)"),
+    Key(["mod1"], "XF86AudioNext", lazy.spawn("mpc next"), desc="Skip to next song on MPD (Alt)"),
+    Key(["mod1"], "XF86AudioPrev", lazy.spawn("mpc prev"), desc="Move to previous song on MPD (Alt)"),
     Key([mod, "shift"], "p", lazy.function(bars.mpd_play_playlist),
         desc="Activate MPD playlist prompt"),
-
     Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t"),
         desc="Play/pause Spotify"),
     Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n"),
@@ -169,12 +175,16 @@ keys = [
         Key([], "a", lazy.spawn("anki"), desc="Launch Anki"),
         Key([], "k", lazy.spawn("kicad"), desc="Launch KiCAD"),
         Key([], "o", lazy.spawn("obsidian"), desc="Launch Obsidian"),
-        Key([], "n", lazy.spawn("notion-app"), desc="Launch Notion"),
+        KeyChord([], "n", [
+            Key([], "n", lazy.spawn("notion-app"), desc="Launch Notion"),
+            Key([], "c", lazy.spawn("alacritty -e ncmpcpp"), desc="launch ncmpcpp"),
+        ], name="n"),
         Key([], "d", lazy.spawn("discord"), desc="Launch Discord"),
         Key([], "c", lazy.spawn("code"), desc="Launch VSCode"),
         Key([], "r", lazy.spawn("alacritty -e ranger"), desc="Launch Ranger"),
         Key([], "m", lazy.spawn("minecraft-launcher"), desc="Launch Minecraft"),
         Key([], "v", lazy.spawn("vmware"), desc="Launch VMWare"),
+        Key([], "l", lazy.spawn("logisim-evolution"), desc="Launch Logisim"),
 
         Key([mod], "p", lazy.ungrab_all_chords(),
             desc="Leave the chord"),
@@ -197,6 +207,7 @@ keys = [
     KeyChord([mod], "i", [
         Key([], "f", lazy.spawn("freecad"), desc="Launch FreeCAD"),
         Key([], "k", lazy.spawn("kicad"), desc="KiCAD"),
+        Key([], "l", lazy.spawn("logisim-evolution"), desc="Launch Logisim"),
 
         Key([mod], "i", lazy.ungrab_all_chords(),
             desc="Leave the chord"),
@@ -217,10 +228,10 @@ mouse = [
         start=lazy.window.get_size()
     ),
     Click(
-        [mod], "Button4", lazy.group.next_window(),
+        [mod], "Button4", lazy.layout.next(),
     ),
     Click(
-        [mod], "Button5", lazy.group.prev_window(),
+        [mod], "Button5", lazy.layout.prev(),
     ),
     Click(
         [mod], "Button8", lazy.screen.next_group(),
@@ -236,9 +247,9 @@ mouse = [
 # all groups with associated Keybinds
 groups_with_kbs = [
     # main
-    Group('HOME', layout="max", spawn=["firefox"], label=' '), 
+    Group('HOME', layout="max", spawn=["firefox"], matches=[Match(wm_class="firefox")], label=' '), 
     # dev
-    Group('DEV', layout="max", label=' '), 
+    Group('DEV', layout="max", spawn=["code"], matches=[Match(wm_class="code")], label=' '), 
     # terminals
     Group('TERMINAL', layout="equal", spawn = ["alacritty", "alacritty"], label=' '),
     # files
@@ -252,13 +263,19 @@ groups_with_kbs = [
     # note taking
     Group('NOTES', layout="max", spawn=["obsidian"], label='󰠮 '),
     # reading
-    Group('READING', layout="tabbed", label=' '),
+    Group('READING', layout="tabbed", 
+        matches=[
+            Match(wm_class="com.github.johnfactotum.Foliate"),
+            Match(wm_class="evince"),
+        ],
+        label=' '
+    ),
 ]
 
 groups = groups_with_kbs + [
     ScratchPad("music",[
         DropDown("ncmpcpp", "alacritty -e ncmpcpp",
-            height=0.5,
+            height=0.7,
             width=0.4,
             x=0,
             on_focus_lost_hide=False,
@@ -407,6 +424,13 @@ screens = [
 ]
 
 #####! ADDITIONAL VARIABLES !#####
+def should_float(window):
+    # floating check
+    dialog = window.window.get_wm_type() == 'dialog'
+    transient = window.window.get_wm_transient_for()
+    bubble = window.window.get_wm_window_role() == 'bubble'
+
+    return dialog or bubble or transient is not None
 
 dgroups_key_binder = None
 dgroups_app_rules = [
@@ -420,7 +444,9 @@ dgroups_app_rules = [
             "dialog",
             "error",
         ]),
-        float=True
+        Match(func=should_float),
+        float=True,
+        break_on_match=True,
     ),
     Rule(
         Match(wm_class=[
@@ -445,6 +471,7 @@ floating_layout = layout.Floating(
         Match(wm_class='ssh-askpass'),  # ssh-askpass
         Match(title='branchdialog'),  # gitk
         Match(title='pinentry'),  # GPG key password entry
+        Match(wm_class="blueman-manager"), # blueman 
     ],
     border_focus="#efefef",
     border_normal="#5f676a"
@@ -464,13 +491,13 @@ def autostart():
     home = os.path.expanduser(startup_script)
     subprocess.call([home])
 
+    # if window.window.get_wm_class()[0] == "evince":
+    #     window.togroup('READING')
+
 @hook.subscribe.client_new
-def floating_dialogs(window):
-    dialog = window.window.get_wm_type() == 'dialog'
-    transient = window.window.get_wm_transient_for()
-    bubble = window.window.get_wm_window_role() == 'bubble'
-    if dialog or bubble or transient:
-        window.floating = True
+def on_new_client(window):
+    if should_float(window):
+        window.enable_floating()
 
 # @hook.subscribe.client_mouse_enter
 # def on_focus_change(window):

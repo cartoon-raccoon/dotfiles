@@ -115,7 +115,7 @@ primary_top = bar.Bar(
                     format='{xesam:artist}: {xesam:title}',
                     playing_text='  {track} ',
                     paused_text='  {track} ',
-                    max_chars=100,
+                    max_chars=65,
                     fontsize=13,
                     scroll=False,
                     name='spotify',
@@ -163,7 +163,6 @@ primary_top = bar.Bar(
             fontsize = 13,
             background = '#659157',
             padding = 5,
-
         ),
         widget.TextBox(text = '',
             background = '#659157',
@@ -238,7 +237,7 @@ prompt = widget.Prompt(name="spawnprompt")
 def spawncmd(qtile):
     def callback(s):
         qtile.spawn(s)
-    prompt.start_input("SPAWN", callback)
+    prompt.start_input("SPAWN", callback, complete="cmd")
 
 # the bottom bar.
 primary_bottom = bar.Bar(
@@ -268,7 +267,9 @@ primary_bottom = bar.Bar(
         widget.Spacer(length=15),
         prompt,
         widget.Spacer(length=15),
-        widget.WindowName(),
+        widget.WindowName(
+            for_current_screen=True,
+        ),
         widget.Chord(
             chords_colors={
                 'launch': ("#fabd2f", "#282828"),
@@ -346,6 +347,9 @@ secondary_top = bar.Bar(
             fontsize=13
         ),
         widget.Spacer(bar.STRETCH),
+        widget.KhalCalendar(
+
+        )
     ],
     30,
     margin = [0, 0, 4, 0],
@@ -356,8 +360,14 @@ secondary_top = bar.Bar(
 secondary_bottom = bar.Bar(
     [
         widget.TaskList(
+            highlight_method='block',
             icon_size=14,
-            fontsize=13
+            fontsize=13,
+            padding=5,
+            max_title_width=300,
+            txt_floating="🗗 ",
+            txt_minimized="🗕 ",
+            txt_maximized="🗖 "
         ),
         widget.Spacer(length=bar.STRETCH),
         widget.GroupBox(
