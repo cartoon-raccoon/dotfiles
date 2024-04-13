@@ -20,12 +20,7 @@ import bars
 
 mod = "mod4"
 
-if qtile.core.name == "x11":
-    terminal = "alacritty"
-elif qtile.core.name == "wayland":
-    terminal = "kitty"
-else:
-    terminal = guess_terminal()
+terminal = "alacritty" 
 
 #####! KEYBINDS !#####
 
@@ -484,7 +479,7 @@ focus_on_window_activation = "smart"
 if qtile.core.name == "x11":
     startup_script = "~/.config/qtile/autostart.sh"
 elif qtile.core.name == "wayland":
-    startup_script = ""
+    startup_script = "~/.config/qtile/autostart_wl.sh"
 
 @hook.subscribe.startup_once
 def autostart():
