@@ -103,6 +103,8 @@ keys = [
     Key(["mod1"], "XF86AudioPrev", lazy.spawn("mpc prev"), desc="Move to previous song on MPD (Alt)"),
     Key([mod, "shift"], "p", lazy.function(bars.mpd_play_playlist),
         desc="Activate MPD playlist prompt"),
+
+    # Spotify keybinds
     Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t"),
         desc="Play/pause Spotify"),
     Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n"),
