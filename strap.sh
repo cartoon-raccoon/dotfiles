@@ -507,14 +507,14 @@ function install_all() {
 function parse_pkg_lists() {
     local pkglistfile=""
 
-    if ! [[ -e fullpackagelist ]] && ! [[ -e esspackagelist ]]; then
+    if ! [[ -e $pkglistdir/fullpackagelist ]] && ! [[ -e $pkglistdir/esspackagelist ]]; then
         fail "[!] Cannot find package list required for install - Aborting!" 1
     fi
 
     if ${params[essential]}; then
-        pkglistfile="esspackagelist"
+        pkglistfile="$pkglistdir/esspackagelist"
     else
-        pkglistfile="fullpackagelist"
+        pkglistfile="$pkglistdir/fullpackagelist"
     fi
 
     while IFS="" read -r pkg || [[ -n "$pkg" ]]; do
@@ -642,34 +642,6 @@ function _install() {
 declare -r CONFIG_DIR="$HOME/.config"
 declare -r HOME_DIR="$HOME"
 
-# list of dest and source files
-# key: dest file
-# value: src file
-
-# Add directories as needed.
-declare -Ar linkdirs=(
-    ["$CONFIG_DIR/alacritty/alacritty.yml"]="alacritty/alacritty.yml"
-    ["$CONFIG_DIR/cava/config"]="cava/config"
-    ["$CONFIG_DIR/dunst/dunstrc"]="dunst/dunstrc"
-    ["$CONFIG_DIR/fish/config.fish"]="fish.config.fish"
-    ["$CONFIG_DIR/i3/config"]="i3/config"
-    ["$CONFIG_DIR/i3/i3lock"]="i3/i3lock"
-    ["$CONFIG_DIR/mpd/mpd.conf"]="mpd/mpd.conf"
-    ["$CONFIG_DIR/mpd/mpd_notify.sh"]="mpd/mpd_notify.sh"
-    ["$CONFIG_DIR/ncmpcpp/config"]="ncmpcpp/config"
-    ["$CONFIG_DIR/nvim/init.vim"]="nvim/init.vim"
-    ["$CONFIG_DIR/picom/picom.conf"]="picom/picom.conf"
-    ["$CONFIG_DIR/polybar/config"]="polybar/config"
-    ["$CONFIG_DIR/qtile/autostart.sh"]="qtile/autostart.sh"
-    ["$CONFIG_DIR/config.py"]="qtile/config.py"
-    ["$CONFIG_DIR/scrot/run.sh"]="scrot/run.sh"
-    ["$HOME_DIR/.spectrwm.conf"]="spectrwm/.spectrwm.conf"
-    ["$CONFIG_DIR/spectrwm/bar_action.sh"]="spectrwm/bar_action.sh"
-    ["$CONFIG_DIR/spotify-dbus.sh"]="spotify/spotify-dbus.sh"
-    ["$CONFIG_DIR/xmobar/xmobarrc"]="xmobar/xmobarrc"
-    ["$CONFIG_DIR/xmonad/xmonad.hs"]="xmonad/xmonad.hs"
-)
-
 declare link_action=""
 
 # handles the linking process
@@ -677,6 +649,8 @@ function link_all() {
     info "Starting linking"
 
     source "${params[config]}"
+
+    echo $linkdirs
 
     [[ -v linkdirs ]] || \
         fail "strap.sh: link-directories not set" 2
@@ -792,6 +766,8 @@ function on_ctrlc() {
 
     exit 1
 }
+
+declare pkglistdir="packagelists/"
 
 declare -Ar colors=(
     [black]="\u001b[30m" 

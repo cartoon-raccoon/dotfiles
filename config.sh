@@ -19,7 +19,7 @@ declare -a pre_install_hooks=()
 ### POST-INSTALL-HOOKS
 
 declare -a post_install_hooks=(
-    cp_mpd_conf,
+    cp_mpd_conf
     install_non_pacman_pymodules
     clone_all_remote_projects
 )
@@ -52,7 +52,7 @@ function clone_all_remote_projects() {
 # value: src file
 
 # Add directories as needed.
-declare -A linkdirs=(
+declare -Ag linkdirs=(
     ["$CONFIG_DIR/alacritty/alacritty.yml"]="alacritty/alacritty.yml"
     ["$CONFIG_DIR/cava/config"]="cava/config"
     ["$CONFIG_DIR/dunst/dunstrc"]="dunst/dunstrc"
