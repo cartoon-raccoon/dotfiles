@@ -54,8 +54,14 @@ button:hover {
     color: #ffffff;
 }
 
+#workspaces button.active {
+    padding: 0 5px;
+    background-color: #fabd2f
+}
+
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(250, 208, 110, 1.0);
+    box-shadow: none;
 }
 
 #workspaces button.focused {
@@ -266,6 +272,10 @@ label:focus {
 
 #mpd.paused {
     background-color: #51a37a;
+}
+
+#mpris {
+    background-color: #1db954;
 }
 
 #language {

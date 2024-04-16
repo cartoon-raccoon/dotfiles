@@ -7,19 +7,16 @@
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "mpd"
+        "mpd",
+        "mpris"
     ],
     "modules-right": [
-        "idle_inhibitor",
         "disk",
-        "pulseaudio",
         "network",
         "cpu",
         "memory",
-        "temperature",
-        "backlight",
-        //"keyboard-state",
-        "battery"
+        "battery",
+        "temperature"
     ],
     // Modules configuration
     "keyboard-state": {
@@ -32,37 +29,60 @@
         }
     },
     "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon} Stopped ",
+        "format": "  {stateIcon} {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-paused": "  {stateIcon} [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-disconnected": "  Disconnected",
+        "format-stopped": "  Stopped [ {consumeIcon} {randomIcon} {repeatIcon}]",
         "unknown-tag": "N/A",
         "interval": 5,
         "consume-icons": {
-            "on": " "
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
         },
         "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
         },
         "repeat-icons": {
-            "on": " "
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
         },
         "single-icons": {
-            "on": "1 "
+            "on": "1"
         },
         "state-icons": {
             "paused": " ",
             "playing": " "
         },
-        "tooltip-format": "MPD (connected)",
+        "artist-len": 20,
+        "album-len": 20,
+        "tooltip-format": "MPD: {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) {stateIcon}",
         "tooltip-format-disconnected": "MPD (disconnected)"
     },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": " ",
-            "deactivated": " "
-        }
+    "mpris": {
+        "format": " {player_icon} {status_icon} {dynamic} ",
+        "player-icons": {
+            "spotify": " "
+        },
+        "format-stopped": "{player_icon} STOPPED",
+        "format-paused": " {player_icon} {status_icon} ",
+        "status-icons": {
+            "playing": " ",
+            "paused": " ",
+            "stopped": "󰓛 "
+        },
+        "dynamic-order": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "dynamic-len": 50,
+        "dynamic-importance": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "tooltip-format": "{player} ({status}): {dynamic}"
     },
     "disk": {
         "format": "/ {percentage_free}%",
@@ -77,26 +97,22 @@
     },
     "temperature": {
         // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
         "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+        "format-critical": "<span color=\"#ff0000\">{temperatureC}°C {icon}</span>",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""]
     },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
-    },
+    
     "battery": {
         "states": {
             // "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon} {capacity}%",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
+        "format": "{icon} {capacity}% ({time})",
+        "format-full": "Full {icon}",
+        "format-charging": "{capacity}% 󱐋",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
@@ -106,17 +122,6 @@
     "battery#bat0": {
         "bat": "BAT0"
     },
-    // "power-profiles-daemon": {
-    //   "format": "{icon}",
-    //   "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-    //   "tooltip": true,
-    //   "format-icons": {
-    //     "default": "",
-    //     "performance": "",
-    //     "balanced": "",
-    //     "power-saver": ""
-    //   }
-    // },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "  {essid} ({signalStrength}%)",
@@ -125,10 +130,31 @@
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
-    },
+    }
+},
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "pulseaudio",
+        "backlight",
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "power-profiles-daemon",
+        "clock",
+        "tray",
+        "idle_inhibitor"
+    ],
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        "format": "{volume}% {icon}  {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": " {format_source}",
@@ -145,35 +171,12 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    }
-},
-{
-    "layer": "top",
-    "position": "bottom",
-    "height": 25,
-    "spacing": 0,
-    "modules-left": [
-        "hyprland/workspaces",
-        "hyprland/submap"
-    ],
-    "modules-center": [
-        "hyprland/window"
-    ],
-    "modules-right": [
-        "clock",
-        "tray"
-    ],
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "󰛨 {percent}% [{icon}]",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "tooltip-format": "Backlight {percent}%"
+    },
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -183,11 +186,11 @@
             "1": " ",
             "2": " ",
             "3": " ",
-            "4": " ",
+            "4": " ",
             "5": " ",
             "6": " ",
             "7": " ",
-            "8": "󰠮 ",
+            "8": "󰹕 ",
             "9": " ",
             "urgent": " ",
             "focused": " ",
@@ -199,6 +202,15 @@
     },
     "hyprland/submap": {
         "format": "<span style=\"italic\">{}</span>"
+    },
+    "hyprland/window": {
+        "format": "{title}",
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "  $1",
+            "(.*) - Visual Studio Code": "󰨞  $1",
+            "nvim (.*)": "  $1",
+            "(.*) - Discord": "  $1"
+        }
     },
     "clock": {
         //"format": "{:%H:%M}  ",
@@ -228,5 +240,23 @@
     "tray": {
         // "icon-size": 21,
         "spacing": 10
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        }
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+          "default": "",
+          "performance": "",
+          "balanced": "",
+          "power-saver": ""
+        }
     }
 }]
