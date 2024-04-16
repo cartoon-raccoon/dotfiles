@@ -63,6 +63,10 @@ function newproj
 	cd $argv[1]
 end
 
+set -g theme_color_scheme nord
+set -g theme_newline_prompt '> '
+set -g theme_newline_cursor yes
+
 #export MPC_FORMAT='%artist%: %title% \[%album%\]'
 
 alias ls="eza -l"
@@ -74,18 +78,15 @@ alias fishreload="source ~/.config/fish/config.fish"
 alias tlmgr="/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode $argv"
 
 alias cavaconf="$EDITOR ~/.config/cava/config"
-alias picomconf="$EDITOR ~/.config/picom/picom.conf"
 
 alias alacconf="$EDITOR ~/.config/alacritty/alacritty.yml"
 alias fishconf="$EDITOR ~/.config/fish/config.fish"
-alias i3config="$EDITOR ~/.config/i3/config"
-alias polyconf="$EDITOR ~/.config/polybar/config"
+alias hyprconf="$EDITOR ~/.config/hypr/hyprland.conf"
+alias wayconf="$EDITOR ~/.config/waybar/config.jsonc"
+alias pacconf="sudo $EDITOR /etc/pacman.conf"
 
 alias xmonadconf="$EDITOR ~/.xmonad/xmonad.hs"
 alias xmobarconf="$EDITOR ~/.config/xmobar/xmobarrc"
-
-alias spectrconf="$EDITOR ~/.spectrwm.conf"
-alias baraction="$EDITOR ~/.config/bar_action.sh"
 
 alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
@@ -96,7 +97,7 @@ alias ip="ip -c=always"
 alias anglais="LANG=en_CA $argv"
 
 alias "angrtivate"="source ~/Projects/angr/bin/activate.fish"
-# alias "deangrtivate"="~/Projects/angr/bin/deactivate"
+# alias "deangrtivate"="~/Projects/angr/bin/deactivate"``
 
 alias up="cd .."
 alias up2="cd ../../"
