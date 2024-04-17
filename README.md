@@ -6,29 +6,36 @@ Each directory contains the dotfiles and other scripts used for running the apps
 
 ## Dependencies
 
-- Wayland Compositors:
-  - Hyprland (Waybar) [Active]
-  - Qtile (builtin bar)
+- Wayland Compositors (Bar):
+  - `hyprland` (`waybar`) [Active]
+  - `qtile` (builtin bar)
 - X11 Window Managers (Bar):
-  - XMonad (xmobar)
-  - Spectrwm (bar_action.sh)
-  - i3-gaps (polybar)
-  - Qtile (builtin bar)
+  - `xmonad` (`xmobar`)
+  - `spectrwm` (bar_action.sh)
+  - `i3-gaps` (`polybar`)
+  - `qtile` (builtin bar)
 - X11 Compositor: `picom`
+- Login Manager:
+  - `sddm` [Active]
+  - `lightdm`
 - Notifications: `dunst`
 - Shell: `fish`
 - Music Players:
   - `mpd` and `mpc`
+  - `ncmpcpp`
   - `spotify` (`playerctl`)
 - Terminals:
   - `alacritty` [Active]
   - `kitty`
-- Music: `ncmpcpp`
 - Editor: `neovim`
 - Screenshots:
   - `grim/slurp`
   - `scrot`
 - Other apps: each directory (except `packagelists`) is the name of its corresponding application, so to use its config you'll need to have that installed (duh).
+
+## Installation
+
+Generally, configuration files are placed in a directory with the path `~/.config/<app_name>`, but you should double-check on where the config file is placed for each individual application. To ensure that changes to the files are immediately reflected in this repository, you should create a symlink in the config directory that points to the corresponding file in this directory. There are some exceptions, however; `mpd` and `sddm` have their files placed into the root directory, so they should be copied instead.
 
 ## Package Lists
 
@@ -40,7 +47,7 @@ Lists of packages to install are found in the `packagelists/` directory.
 - `waybar/launch_waybar.sh`: A wrapper script that launches Waybar and sets up `inotify` file watchers to restart Waybar whenever its config file or stylesheet is modified.
 - `gammastep/gammastep.sh`: A wrapper script that pulls local coordinates based on IP address from `ipinfo.io` and runs `gammastep`, an app that adjusts display gamma based on time of day. Requires `curl` and `jq`.
 - `grim/grim.sh`: A wrapper script that runs `grim/slurp` to take screenshots, either of a selected output, window, or region, and to either copy that to a clipboard, or to a file. Supersedes `scrot/run.sh`.
-- `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song. Started automatically by the WM.
+- `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song. Started automatically by the window manager/compositor.
 - `fish/pridefetch`: A python script called in `fish_greeting` to display a pride flag and relevant system infromation. Credit to [megabytesofrem/pridefetch](https://github.com/megabytesofrem/pridefetch) on GitHub.
 
 ### Inactive Scripts
@@ -51,7 +58,7 @@ superseded by a premade console command that did what I wanted, or because I no 
 - `spotify/spotify-dbus.sh`: Uses dbus to send mpris2 player methods to control spotify. Bound to keybinds inside the WM config files. Requires DBus and its related utilities. Not currently used, superseded by `playerctl`.
 - `scrot/run.sh`: A script to take screenshots. Bound to keybinds. No longer used, as `scrot` only works on X11.
 - `spectrwm/bar_action.sh`: Generates bar contents for `spectrwm`.
-- `autorandr/postswitch`: A hook script run by autorandr when it is invoked. It runs `feh` to reset the desktop background and `i3lock-bkgd` to regenerate the lockscreen background. 
+- `autorandr/postswitch`: A hook script run by autorandr when it is invoked. It runs `feh` to reset the desktop background and `i3lock-bkgd` to regenerate the lockscreen background.
 - `lightdm/profile`: A profile script sourced by LightDM on login. It starts the global authenticator and runs `autorandr` to set the appropriate RandR config. Not currently active, as I now use SDDM.
 - `i3/{i3lock, i3lock-bkgd.py}`: A script to run `i3lock` configured, and a Python script to automatically regenerate the lock screen background according to display setup.
 
@@ -66,4 +73,5 @@ superseded by a premade console command that did what I wanted, or because I no 
 ## Todo
 
 - Get GeoClue working so gammastep can depend on that
+- Write script for duckyPad profile autoswitch
 - Convert `mpd_notify.sh` to a C program using `lib{mpdclient,notify}`
