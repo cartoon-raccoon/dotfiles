@@ -124,8 +124,9 @@ OPTIONS:
 
     The window manager to install. Can be all four (default), or xmonad, spectrwm, 
     qtile or i3-gaps only.
-    Note: this will only prevent installation of the WM itself. Any packages associated
-    with the WM (e.g. xmobar + xmonad-contrib with xmonad) will still be installed.
+    Note: for WMs that were specified to not be installed, this will only prevent
+    installation of the WM itself. Any packages associated with the WM
+    (e.g. xmobar + xmonad-contrib with xmonad) will still be installed.
     
     --aur-helper/-ah [paru|yay|pacaur]:
 
