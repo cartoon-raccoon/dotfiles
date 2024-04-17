@@ -11,7 +11,8 @@
         "mpris"
     ],
     "modules-right": [
-        "disk",
+        "disk#home",
+        "disk#games",
         "network",
         "cpu",
         "memory",
@@ -64,8 +65,8 @@
         "player-icons": {
             "spotify": " "
         },
-        "format-stopped": "{player_icon} STOPPED",
-        "format-paused": " {player_icon} {status_icon} ",
+        "format-stopped": "{player_icon} Stopped",
+        "format-paused": " {player_icon} Paused {status_icon} ",
         "status-icons": {
             "playing": " ",
             "paused": " ",
@@ -84,16 +85,23 @@
         ],
         "tooltip-format": "{player} ({status}): {dynamic}"
     },
-    "disk": {
-        "format": "/ {percentage_free}%",
-        "path": "/home"
+    "disk#home": {
+        "format": "/  {percentage_used}%",
+        "path": "/home",
+        "tooltip-format": "Home Partition: {used}/{total} Used"
+    },
+    "disk#games": {
+        "format": "/  {percentage_used}%",
+        "path": "/home/sammy/Games",
+        "tooltip-format": "Games Partition: {used}/{total} Used"
     },
     "cpu": {
-        "format": " {usage}%",
-        "tooltip": false
+        "format": " {usage}% ({avg_frequency}GHz)",
+        "tooltip": true 
     },
     "memory": {
-        "format": " {}%"
+        "format": " {percentage}% ({used}GB)",
+        "tooltip-format": "Memory: {used}/{total}GB Used"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -118,9 +126,6 @@
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
-    },
-    "battery#bat0": {
-        "bat": "BAT0"
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
