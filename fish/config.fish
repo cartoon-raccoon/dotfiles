@@ -4,7 +4,7 @@
 
 #set -x LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/lib/jvm/default/lib/server/"
 
-# set -x QT_QPA_PLATFORMTHEME "qt5ct"
+set -x CHEAT_PATH "$HOME/.cheat"
 
 # mpc functions
 function mpcload
@@ -54,7 +54,19 @@ function xephyr
 end
 
 function cheat
-	curl cheat.sh/$argv[1]
+	if not [ -e $CHEAT_PATH ]
+		mkdir $CHEAT_PATH
+	end
+
+	if not [ -e $CHEAT_PATH/$argv[1] ]
+		curl --silent cheat.sh/$argv[1] | tee $CHEAT_PATH/$argv[1]
+		# delete file we just tee'd if command doesn't exist
+		if grep 'Unknown topic' $CHEAT_PATH/$argv[1] > /dev/null
+			rm $CHEAT_PATH/$argv[1]
+		end
+	else
+		cat $CHEAT_PATH/$argv[1]
+	end
 end
 
 function newproj
@@ -63,9 +75,9 @@ function newproj
 	cd $argv[1]
 end
 
-set -g theme_color_scheme nord
-set -g theme_newline_prompt '> '
-set -g theme_newline_cursor yes
+# set -g theme_color_scheme nord
+# set -g theme_newline_prompt '> '
+# set -g theme_newline_cursor yes
 
 #export MPC_FORMAT='%artist%: %title% \[%album%\]'
 
