@@ -118,12 +118,19 @@ OPTIONS:
 
     --display-manager/-dm [lightdm|sddm]:
 
-    The display manager to install. Can be LightDM (default), or SDDM.
+    The display manager to install. Can be SDDM (default), or LightDM.
 
-    --window-manager/-wm [all|xmonad|qtile|spectrwm|i3]:
+    --compositor/-cp [all|hyprland|sway|qtile|none]:
 
-    The window manager to install. Can be all four (default), or xmonad, spectrwm, 
-    qtile or i3-gaps only.
+    The Wayland compositor to install. Can be all three (default), or hyprland,
+    sway, qtile, or none. If none is set, then a window manager *must* be installed.
+
+    --window-manager/-wm [all|xmonad|qtile|spectrwm|i3|none]:
+
+    The window manager to install. Can be all four, or xmonad, spectrwm, 
+    qtile, i3-gaps, or none (default). If none is set, then a Wayland compositor *must*
+    be installed.
+
     Note: for WMs that were specified to not be installed, this will only prevent
     installation of the WM itself. Any packages associated with the WM
     (e.g. xmobar + xmonad-contrib with xmonad) will still be installed.
@@ -159,8 +166,9 @@ declare -A params=(
     [essential]=false
     [verbose]=false
     [action]="link"
-    [displaym]="lightdm"
-    [windowm]="all"
+    [displaym]="sddm"
+    [windowm]="none"
+    [compositor]="all"
     [helper]="paru"
     [config]="config.sh"
 )
@@ -235,6 +243,9 @@ function parse_valued_args() {
     window-manager)
         params[windowm]="$2"
         ;;
+    compositor)
+        params[compositor]="$2"
+        ;;
     display-manager)
         params[displaym]="$2"
         ;;
@@ -306,6 +317,11 @@ function parse_args() {
         -wm|--window-manager)
             check_missing_value "$state"
             state="window-manager"
+            continue
+            ;;
+        -cp|--compositor)
+            check_missing_value "$state"
+            state="compositor"
             continue
             ;;
         -dm|--display-manager)
@@ -396,10 +412,18 @@ function _check_values() {
 
     # checking window manager
     case ${params[windowm]} in
-    xmonad|i3-gaps|spectrwm|qtile|all)
+    xmonad|i3-gaps|spectrwm|qtile|all|none)
         ;;
     *)
         fail "strap.sh: unsupported window manager: ${params[windowm]}" 2
+        ;;
+    esac
+
+    case ${params[compositor]} in
+    hyprland|qtile|sway|all|none)
+        ;;
+    *)
+        fail "strap.sh: unsupported Wayland compositor: ${params[compositor]}" 2
         ;;
     esac
 
@@ -410,6 +434,11 @@ function _check_values() {
         fail "strap.sh: unrecognized dotfile action: ${params[action]}" 2
         ;;
     esac
+
+    if [[ ${params[compositor]} == ${params[windowm]} ]] &&\
+       [[ ${params[compositor]} == "none" ]]; then
+        fail "strap.sh: compositor and window manager cannot both be none" 2
+    fi
 
     if ! [[ -e "${params[config]}" ]]; then
         fail "strap.sh: config file '${params[config]}' does not exist" 2
@@ -431,6 +460,7 @@ function confirm() {
     printf "\nYour chosen core apps:\n"
     printf "Display Manager:    %s\n" "${params[displaym]}"
     printf "Window Manager(s):  %s\n" "${params[windowm]}"
+    printf "Compositor(s):      %s\n" "${params[compositor]}"
     printf "AUR helper:         %s\n" "${params[helper]}"
     printf "\n"
 
@@ -651,10 +681,13 @@ function link_all() {
 
     source "${params[config]}"
 
-    echo $linkdirs
-
-    [[ -v linkdirs ]] || \
-        fail "strap.sh: link-directories not set" 2
+    warn "Please double check that your link directories have been configured.
+This script is unable to check for this and will assume that they are.
+Undefined behavior is possible past this point if they are not!!"
+    ask "I am certain that my link directories have been set: [y/n] "
+    if ! get_user_choice; then
+        fail "./strap.sh: link directories have not been set. Aborting!" 2
+    fi
 
     set_link_action
 
@@ -737,10 +770,10 @@ function get_user_choice() {
 
     case $choice in
     y|yes|Y|Yes)
-        return 0;
+        true;
         ;;
     n|no|N|No)
-        return 1;
+        false;
         ;;
     *)
         fail "Unknown option: $choice" 2
