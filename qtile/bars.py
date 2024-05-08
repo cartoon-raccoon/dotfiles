@@ -75,7 +75,7 @@ primary_top = bar.Bar(
                         elapsed=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
                         duration=lambda s: str(datetime.timedelta(seconds=int(float(s))))[2:],
                     ),
-                    fontsize=13,
+                    fontsize=15,
                     play_states = {'play': ' ', 'pause': ' ', 'stop' : ' '},
                     prepare_status = {
                         'consume': '󰆘 ', 
@@ -116,7 +116,7 @@ primary_top = bar.Bar(
                     playing_text='  {track} ',
                     paused_text='  {track} ',
                     max_chars=65,
-                    fontsize=13,
+                    fontsize=15,
                     scroll=False,
                     name='spotify',
                     objname='org.mpris.MediaPlayer2.spotify',
@@ -172,7 +172,7 @@ primary_top = bar.Bar(
         ),
         widget.CPU(
             format="  {freq_current}GHz ({load_percent}%)",
-            fontsize=13,
+            fontsize=15,
             background='#932546',
             padding=5,
         ),
@@ -192,7 +192,7 @@ primary_top = bar.Bar(
         widget.Wlan(
             interface="wlp6s0",
             format="  {essid} {percent:2.0%} ",
-            fontsize=13,
+            fontsize=15,
             background='#4a314d',
         ),
         widget.TextBox(text = '',
@@ -209,7 +209,7 @@ primary_top = bar.Bar(
             full_char='󱊣',
             unknown_char='󰂑',
             not_charging_char='󰂃',
-            fontsize=13,
+            fontsize=15,
             background='#d79921',
             padding=5,
             notify_below=0.15,
@@ -223,7 +223,7 @@ primary_top = bar.Bar(
         ),
         widget.ThermalSensor(
             fmt=' {}',
-            fontsize=13,
+            fontsize=15,
             background='#d16014',
             padding=5,
         )
@@ -344,7 +344,7 @@ secondary_top = bar.Bar(
             #     "Toronto": "Toronto"
             # },
             lang="en",
-            fontsize=13
+            fontsize=15
         ),
         widget.Spacer(bar.STRETCH),
         widget.KhalCalendar(
@@ -362,7 +362,7 @@ secondary_bottom = bar.Bar(
         widget.TaskList(
             highlight_method='block',
             icon_size=14,
-            fontsize=13,
+            fontsize=15,
             padding=5,
             max_title_width=300,
             txt_floating="🗗 ",

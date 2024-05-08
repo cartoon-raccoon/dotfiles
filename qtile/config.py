@@ -20,7 +20,11 @@ import bars
 
 mod = "mod4"
 
-terminal = "alacritty" 
+terminal = "alacritty"
+
+#os.environ["GDK_SCALE"] = "2"
+#os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
+#os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "2"
 
 #####! KEYBINDS !#####
 
@@ -82,7 +86,7 @@ keys = [
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload Qtile config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.function(bars.spawncmd),
+    Key([mod], "r", lazy.spawn("rofi -show drun"),
         desc="Spawn a command using a prompt widget"),
 
     # dropdown commands
@@ -105,14 +109,14 @@ keys = [
         desc="Activate MPD playlist prompt"),
 
     # Spotify keybinds
-    Key([], "XF86AudioPlay", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -t"),
+    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"),
         desc="Play/pause Spotify"),
-    Key([], "XF86AudioNext", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n"),
+    Key([], "XF86AudioNext", lazy.spawn("playerctl next"),
         desc="Skip to the next song on Spotify"),
-    Key([], "XF86AudioPrev", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p"),
+    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"),
         desc="Move to the previous song on Spotify"),
-    Key([mod, "shift"], "period", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -n")),
-    Key([mod, "shift"], "comma", lazy.spawn("/home/sammy/.config/spotify-dbus.sh -p")),
+    Key([mod, "shift"], "period", lazy.spawn("playerctl next")),
+    Key([mod, "shift"], "comma", lazy.spawn("playerctl previous")),
     Key([mod], "a", lazy.widget["wbox_mpd"].toggle(),
         desc="Show/hide the MPD bar widget"),
     Key([mod], "s", lazy.widget["wbox_spotify"].toggle(),
@@ -166,15 +170,15 @@ keys = [
             Key([], "t", lazy.spawn("steam"), desc="Launch Steam"),
         ], name="s"),
         KeyChord([], "t", [
-            Key([], "h", lazy.spawn("thunar"), desc="Launch File Explorer"),
             Key([], "e", lazy.spawn("texmaker"), desc="Launch TexMaker"),
         ], name="t"),
         Key([], "a", lazy.spawn("anki"), desc="Launch Anki"),
         Key([], "k", lazy.spawn("kicad"), desc="Launch KiCAD"),
         Key([], "o", lazy.spawn("obsidian"), desc="Launch Obsidian"),
         KeyChord([], "n", [
-            Key([], "n", lazy.spawn("notion-app"), desc="Launch Notion"),
+            Key([], "o", lazy.spawn("notion-app"), desc="Launch Notion"),
             Key([], "c", lazy.spawn("alacritty -e ncmpcpp"), desc="launch ncmpcpp"),
+            Key([], "e", lazy.spawn("nemo"), desc="Launch File Explorer"),
         ], name="n"),
         Key([], "d", lazy.spawn("discord"), desc="Launch Discord"),
         Key([], "c", lazy.spawn("code"), desc="Launch VSCode"),
@@ -250,7 +254,7 @@ groups_with_kbs = [
     # terminals
     Group('TERMINAL', layout="equal", spawn = ["alacritty", "alacritty"], label=' '),
     # files
-    Group('FILES', spawn=["thunar"], label=' '), 
+    Group('FILES', spawn=["nemo"], label=' '), 
     # social
     Group('SOCIAL', spawn=["discord"], matches=[Match(wm_class="discord")],label=' '),
     # music
@@ -409,6 +413,8 @@ screens = [
     Screen(
         top=primary_top,
         bottom=primary_bottom,
+        wallpaper="/home/sammy/Pictures/Wallpaper/korrabending-blue.png",
+        wallpaper_mode="stretch",
         left = bar.Gap(size=8),
         right = bar.Gap(size=8),
     ),
