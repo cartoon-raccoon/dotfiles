@@ -44,7 +44,7 @@ foreground = "#c5c8c6"
 TERM = "alacritty"
 
 [font]
-size = 9
+size = 6.5
 
 [font.glyph_offset]
 x = 0
