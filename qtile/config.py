@@ -22,9 +22,9 @@ mod = "mod4"
 
 terminal = "alacritty"
 
-#os.environ["GDK_SCALE"] = "2"
-#os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "2"
-#os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "2"
+os.environ["GDK_SCALE"] = "2"
+os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "1"
 
 #####! KEYBINDS !#####
 
@@ -90,9 +90,9 @@ keys = [
         desc="Spawn a command using a prompt widget"),
 
     # dropdown commands
-    Key([], 'F11', lazy.group['dropdowns'].dropdown_toggle('term'),
+    Key([mod], 'F11', lazy.group['dropdowns'].dropdown_toggle('term'),
         desc="Toggle a dropdown terminal"),
-    Key([], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell'),
+    Key([mod], 'F12', lazy.group['dropdowns'].dropdown_toggle('qshell'),
         desc="Toggle a dropdown Qtile shell"),
 
     # music control keys
@@ -401,7 +401,7 @@ layouts = [
 
 widget_defaults = dict(
     font='FiraCode Nerd Font',
-    fontsize=14,
+    fontsize=17,
     padding=3,
     foreground="#efefef",
 )
@@ -413,7 +413,7 @@ screens = [
     Screen(
         top=primary_top,
         bottom=primary_bottom,
-        wallpaper="/home/sammy/Pictures/Wallpaper/korrabending-blue.png",
+        wallpaper="/home/sammy/Pictures/Wallpaper/cyberpunkmotorcycle16x10.png",
         wallpaper_mode="stretch",
         left = bar.Gap(size=8),
         right = bar.Gap(size=8),
