@@ -91,7 +91,7 @@ alias tlmgr="/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode $argv"
 
 alias cavaconf="$EDITOR ~/.config/cava/config"
 
-alias alacconf="$EDITOR ~/.config/alacritty/alacritty.yml"
+alias alacconf="$EDITOR ~/.config/alacritty/alacritty.toml"
 alias fishconf="$EDITOR ~/.config/fish/config.fish"
 alias hyprconf="$EDITOR ~/.config/hypr/hyprland.conf"
 alias wayconf="$EDITOR ~/.config/waybar/config.jsonc"
