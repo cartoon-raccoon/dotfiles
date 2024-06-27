@@ -1,25 +1,27 @@
 #!/bin/bash
 
-BKGD="$HOME/.local/share/i3lock-bkgd/multihead.png"
+#BKGD="$HOME/.local/share/i3lock-bkgd/multihead.png"
+BKGD="$HOME/Pictures/Wallpaper/shmebulock.png"
 
 dunstctl set-paused true
 
 i3lock \
 -i "$BKGD" \
 --indicator \
---time-pos="ix-230:iy+2" \
---date-pos="tx:ty+40" \
---time-size=70 --date-size=30 \
---wrong-size=20 \
+--time-pos="ix-135:iy+2" \
+--date-pos="tx:ty+30" \
+--time-size=41 --date-size=20 \
+--wrong-size=15 \
 --force-clock --date-str "Bonjour, $(whoami)" \
 --inside-color=00000000 \
 --ring-color=ffffffff --line-uses-inside \
 --keyhl-color=3a77b5ff --bshl-color=3a77b5ff \
 --separator-color=00000000 \
 --insidever-color=fecf4dff --insidewrong-color=d23c3dff \
---ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos="x+550:h-240" \
---radius=60 --ring-width=10 --verif-text="" --wrong-text="" \
+--ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos="x+350:h-140" \
+--radius=30 --ring-width=5 --verif-text="" --wrong-text="" \
 --greeter-color="ffffffff" --time-color="ffffffff" --date-color="ffffffff" \
+--noinput-text="EMPTY"
 --pass-media-keys --pass-volume-keys
 
 dunstctl set-paused false
