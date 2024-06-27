@@ -22,7 +22,7 @@ mod = "mod4"
 
 terminal = "alacritty"
 
-os.environ["GDK_SCALE"] = "2"
+# os.environ["GDK_SCALE"] = "2"
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "1"
 
@@ -161,32 +161,45 @@ keys = [
     
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
+    # A ============================================================================
+        Key([], "a", lazy.spawn("anki"), desc="Launch Anki"),
+    # C ============================================================================
+        Key([], "c", lazy.spawn("code"), desc="Launch VSCode"),
+    # D ============================================================================
+        Key([], "d", lazy.spawn("discord"), desc="Launch Discord"),
+    # F ============================================================================
         KeyChord([], "f", [
             Key([], "i", lazy.spawn("firefox"), desc="Launch Firefox"),
             Key([], "r", lazy.spawn("freecad"), desc="Launch FreeCAD"),
         ], name="f"),
-        KeyChord([], "s", [
-            Key([], "p", lazy.spawn("spotify"), desc="Launch Spotify"),
-            Key([], "t", lazy.spawn("steam"), desc="Launch Steam"),
-        ], name="s"),
-        KeyChord([], "t", [
-            Key([], "e", lazy.spawn("texmaker"), desc="Launch TexMaker"),
-        ], name="t"),
-        Key([], "a", lazy.spawn("anki"), desc="Launch Anki"),
+    # K ============================================================================
         Key([], "k", lazy.spawn("kicad"), desc="Launch KiCAD"),
-        Key([], "o", lazy.spawn("obsidian"), desc="Launch Obsidian"),
+    # L ============================================================================
+        Key([], "l", lazy.spawn("logisim-evolution"), desc="Launch Logisim"),
+    # M ============================================================================
+        Key([], "m", lazy.spawn("minecraft-launcher"), desc="Launch Minecraft"),
+    # N ============================================================================
         KeyChord([], "n", [
             Key([], "o", lazy.spawn("notion-app"), desc="Launch Notion"),
             Key([], "c", lazy.spawn("alacritty -e ncmpcpp"), desc="launch ncmpcpp"),
             Key([], "e", lazy.spawn("nemo"), desc="Launch File Explorer"),
         ], name="n"),
-        Key([], "d", lazy.spawn("discord"), desc="Launch Discord"),
-        Key([], "c", lazy.spawn("code"), desc="Launch VSCode"),
+    # O ============================================================================
+        Key([], "o", lazy.spawn("obsidian"), desc="Launch Obsidian"),
+    # R ============================================================================
         Key([], "r", lazy.spawn("alacritty -e ranger"), desc="Launch Ranger"),
-        Key([], "m", lazy.spawn("minecraft-launcher"), desc="Launch Minecraft"),
+    # S ============================================================================
+        KeyChord([], "s", [
+            Key([], "p", lazy.spawn("spotify"), desc="Launch Spotify"),
+            Key([], "t", lazy.spawn("steam"), desc="Launch Steam"),
+        ], name="s"),
+    # T ============================================================================
+        KeyChord([], "t", [
+            Key([], "e", lazy.spawn("texmaker"), desc="Launch TexMaker"),
+        ], name="t"),
+    # V ============================================================================
         Key([], "v", lazy.spawn("vmware"), desc="Launch VMWare"),
-        Key([], "l", lazy.spawn("logisim-evolution"), desc="Launch Logisim"),
-
+    # ==============================================================================
         Key([mod], "p", lazy.ungrab_all_chords(),
             desc="Leave the chord"),
     ], name="launch"),
