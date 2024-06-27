@@ -156,7 +156,7 @@ primary_top = bar.Bar(
         ),
         widget.Memory(
             fmt = " {}",
-            format = '{MemUsed: .0f}M ({MemPercent: .1f}%)',
+            format = '{MemUsed: .0f}M ({MemPercent: .1f}%) ',
             background = '#659157',
             padding = 5,
         ),
@@ -167,7 +167,7 @@ primary_top = bar.Bar(
             padding=1,
         ),
         widget.CPU(
-            format="  {freq_current}GHz ({load_percent}%)",
+            format="  {freq_current}GHz ({load_percent}%) ",
             background='#932546',
             padding=5,
         ),
@@ -177,17 +177,28 @@ primary_top = bar.Bar(
             fontsize=36,
             padding=1,
         ),
-        # widget.Net(
-        #     interface = "wlp6s0",
-        #     format = " {down:6.2f}{down_suffix:<2}   {up:6.2f}{up_suffix:<2}  ",
-        #     fontsize = 13,
-        #     background = '#4a314d',
-        #     padding = 5,
-        # ),
         widget.Wlan(
+            ethernet_interface="enp197s0f3u1",
+            ethernet_message="  Ethernet",
             interface="wlp5s0",
-            format="  {essid} {percent:2.0%} ",
+            disconnected_message="Disconnected ",
+            format="  {essid}: {percent:2.0%}",
             background='#4a314d',
+            use_ethernet=True,
+        ),
+        widget.WidgetBox(
+            widgets=[
+                widget.Net(
+                    background="#4a314d",
+                    format="{down:6.2f}{down_suffix:<2}  {up:6.2f}{up_suffix:<2}  "
+                ),
+            ],
+            text_closed="",
+            text_open="",
+            background="#4a314d",
+            font="FiraCode Nerd Font Bold",
+            name="wbox_netusage",
+            padding=10,
         ),
         widget.TextBox(text='',
             background='#4a314d',
@@ -214,9 +225,12 @@ primary_top = bar.Bar(
             fontsize=36,
             padding=1,
         ),
-        widget.ThermalSensor(
-            fmt=' {}',
+        widget.ThermalZone(
+            format=' {temp}°C ',
+            format_crit=' {temp}°C ',
             background='#d16014',
+            high=60,
+            crit=80,
             padding=5,
         )
     ],
@@ -303,7 +317,10 @@ primary_bottom = bar.Bar(
         widget.Sep(padding=5),
         widget.CapsNumLockIndicator(),
         widget.Sep(padding=5),
-        widget.Systray(padding=10),
+        widget.Systray(
+            padding=5,
+            icon_size=25,
+        ),
         widget.Spacer(length=4),
         widget.Sep(padding=5),
         widget.Spacer(length=4),
