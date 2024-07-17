@@ -267,6 +267,7 @@ primary_bottom = bar.Bar(
                 "MISC",
                 "NOTES",
                 "READING",
+                "GAMING",
             ],
             name="primary-groupbox"
         ),

@@ -219,15 +219,17 @@ keys = [
 
     # Design mode: to launch design tools
     KeyChord([mod], "i", [
+        Key([], "b", lazy.spawn("blender"), desc="Launch Blender"),
         Key([], "f", lazy.spawn("freecad"), desc="Launch FreeCAD"),
-        Key([], "k", lazy.spawn("kicad"), desc="KiCAD"),
+        Key([], "i", lazy.spawn("inkscape"), desc="Launch Inkscape"),
+        Key([], "k", lazy.spawn("kicad"), desc="Launch KiCAD"),
         Key([], "l", lazy.spawn("logisim-evolution"), desc="Launch Logisim"),
 
         Key([mod], "i", lazy.ungrab_all_chords(),
             desc="Leave the chord"),
     ], name="design"),
 
-    Key([mod], "g", lazy.spawn("/home/sammy/.config/i3/i3lock"),
+    Key([mod], "g", lazy.spawn("loginctl lock-session"),
         desc="Lock the system"),
 ]
 
@@ -261,28 +263,69 @@ mouse = [
 # all groups with associated Keybinds
 groups_with_kbs = [
     # main
-    Group('HOME', layout="max", spawn=["firefox"], matches=[Match(wm_class="firefox")], label=' '), 
+    Group('HOME', 
+        layout="max",
+        spawn=["firefox"],
+        matches=[Match(wm_class="firefox")],
+        label=' '
+    ), 
     # dev
-    Group('DEV', layout="max", spawn=["code"], matches=[Match(wm_class="code")], label=' '), 
+    Group('DEV',
+        layout="max",
+        spawn=["code"],
+        matches=[Match(wm_class="code")],
+        label=' '
+    ), 
     # terminals
-    Group('TERMINAL', layout="equal", spawn = ["alacritty", "alacritty"], label=' '),
+    Group('TERMINAL',
+        layout="equal",
+        spawn = ["alacritty", "alacritty"],
+        label=' '
+    ),
     # files
-    Group('FILES', spawn=["nemo"], label=' '), 
+    Group('FILES',
+        spawn=["nemo"],
+        label=' '
+    ), 
     # social
-    Group('SOCIAL', spawn=["discord"], matches=[Match(wm_class="discord")],label=' '),
+    Group('SOCIAL',
+        spawn=["discord"],
+        matches=[Match(wm_class="discord")],
+        label=' '
+    ),
     # music
-    Group('MUSIC', layout="equal", spawn=["spotify", "alacritty -e ncmpcpp"], label=' '),
+    Group('MUSIC',
+        layout="equal", 
+        spawn=["spotify", "alacritty -e ncmpcpp"],
+        label=' '
+    ),
     # misc
-    Group('MISC', layout="equal", label=' '),
+    Group('MISC',
+        layout="equal",
+        label=' '
+    ),
     # note taking
-    Group('NOTES', layout="max", spawn=["obsidian"], label='󰠮 '),
+    Group('NOTES',
+        layout="max",
+        spawn=["obsidian"],
+        label='󰠮 '
+    ),
     # reading
-    Group('READING', layout="tabbed", 
+    Group('READING', 
+        layout="tabbed", 
         matches=[
             Match(wm_class="com.github.johnfactotum.Foliate"),
             Match(wm_class="evince"),
         ],
         label=' '
+    ),
+    # gaming
+    Group('GAMING', 
+        layout="max", 
+        matches=[
+            Match(wm_class="steamwebhelper"),
+        ],
+        label=' '
     ),
 ]
 
@@ -314,21 +357,24 @@ groups = groups_with_kbs + [
     ]),
 ]
 
+# keys for switching to groups
+group_keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
 # Bind group to its index in the group list and define mappings for window management.
-for i in range(1, len(groups_with_kbs) + 1):
-    group = groups_with_kbs[i - 1]
+for i in range(0, len(groups_with_kbs)):
+    group = groups_with_kbs[i]
     if isinstance(group, Group):
         keys.extend([
             # mod1 + letter of group = switch to group
-            Key([mod], str(i), lazy.group[group.name].toscreen(toggle=True),
+            Key([mod], group_keys[i], lazy.group[group.name].toscreen(toggle=True),
                 desc="Switch to group {}".format(group.name)),
 
             # mod1 + shift + letter of group = switch to & move focused window to group
-            Key([mod, "shift"], str(i), lazy.window.togroup(group.name, switch_group=True),
+            Key([mod, "shift"], group_keys[i], lazy.window.togroup(group.name, switch_group=True),
                 desc="Switch to & move focused window to group {}".format(group.name)),
 
             # mod1 + ctrl + letter of group = move focused to group but do not switch
-            Key([mod, "mod1"], str(i), lazy.window.togroup(group.name),
+            Key([mod, "mod1"], group_keys[i], lazy.window.togroup(group.name),
                 desc="Move focused window to group {}".format(group.name)),
         ])
 
@@ -378,36 +424,6 @@ layouts = [
     layout.Max(
         name = "max"
     ),
-    #layout.Columns(
-    #    border_focus_stack='#efefef',
-    #    border_focus='#efefef',
-    #    border_normal='#5f676a',
-    #    margin = 4,
-    #    name = "columns"
-    #),
-    #layout.Stack(
-    #    border_focus = "#efefef",
-    #    border_normal = "#5f676a",
-    #    num_stacks=2,
-    #    margin = 4,
-    #    name = " stack "
-    #),
-    #layout.Bsp(
-    #    border_focus = "#efefef",
-    #    border_normal = "#5f676a",
-    #    margin = 4,
-    #    name = "  bsp  "
-    #),
-    #layout.MonadWide(
-    #    border_focus = "#efefef",
-    #    border_normal = "#5f676a",
-    #    margin = 4,
-    #    name = "monadw "
-    #),
-    # layout.Matrix(),
-    # layout.RatioTile(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
 ]
 
 #####! SCREENS AND WIDGETS !#####
@@ -487,7 +503,14 @@ floating_layout = layout.Floating(
         Match(wm_class='ssh-askpass'),  # ssh-askpass
         Match(title='branchdialog'),  # gitk
         Match(title='pinentry'),  # GPG key password entry
-        Match(wm_class="blueman-manager"), # blueman 
+        Match(wm_class="steam_app_107410"), # Arma 3 Launcher
+        Match(wm_class="steam_app_1174180", title="Rockstar Games Launcher"), # Rockstar Games Launcher
+        Match(wm_class="blueman -manager"), # blueman 
+        # Any steam window that isn't the main window
+        Match(wm_class="steamwebhelper") & ~Match(title="Steam"),
+        # Blender windows
+        Match(wm_class="Blender", title="Blender Render"),
+        Match(wm_class="Blender", title="Blender Preferences"),
     ],
     border_focus="#efefef",
     border_normal="#5f676a"
