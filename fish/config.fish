@@ -5,6 +5,7 @@
 #set -x LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/lib/jvm/default/lib/server/"
 
 set -x CHEAT_PATH "$HOME/.cheat"
+env | grep EDITOR > /dev/null || set -x EDITOR (which nvim)
 
 # mpc functions
 function mpcload
