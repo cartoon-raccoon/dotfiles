@@ -50,7 +50,7 @@ function check_config_vars() {
 }
 
 function print_help() {
-    info "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
+    say "./strap.sh - a ridiculously over-engineered Arch Linux bootstrap script.
 
 strap.sh is a bash script for bootstrapping my (cartoon-raccoon's) Arch Linux
 system. It is designed to be run from inside my dotfiles git repo, and sets up
