@@ -60,7 +60,9 @@
   "display": {
     "color": "yellow",
     "separator": "   ",
-    "keyWidth": 19
+    "key": {
+      "width": 19
+    }
   }
   
 }
