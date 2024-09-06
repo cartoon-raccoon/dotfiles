@@ -361,7 +361,7 @@ secondary_top = bar.Bar(
 
         )
     ],
-    30,
+    35,
     margin = [0, 0, 4, 0],
     background = '#202020',
     opacity = 100
@@ -403,7 +403,7 @@ secondary_bottom = bar.Bar(
             width=70,
         ),
     ],
-    30,
+    35,
     margin = [4, 0, 0, 0],
     background = '#202020',
     opacity = 100

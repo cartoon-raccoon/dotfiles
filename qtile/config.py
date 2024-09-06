@@ -7,7 +7,6 @@ from typing import List  # noqa: F401
 from libqtile import bar, layout
 from libqtile.config import Click, Drag, Group, ScratchPad, DropDown, Key, KeyChord, Match, Screen, Rule
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 from libqtile import hook
 from libqtile import qtile
 from libqtile.log_utils import logger
@@ -20,7 +19,13 @@ import bars
 
 mod = "mod4"
 
-terminal = "alacritty"
+if qtile.core.name == "x11":
+    terminal = "alacritty"
+elif qtile.core.name == "wayland":
+    terminal = "alacritty -o 'font.size=9'"
+else:
+    logger.warn("Setting terminal: Unknown qtile backend, defaulting to alacritty")
+    terminal = "alacritty"
 
 # os.environ["GDK_SCALE"] = "2"
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
@@ -157,7 +162,12 @@ keys = [
     Key([mod, "shift"], "Print", lazy.spawn("/home/sammy/.config/scrot/run.sh -u"),
         desc="Take a screenshot of the active window"),
     Key([mod, "shift"], "f", lazy.spawn("flameshot"),
-        desc="Launch flameshot"),    
+        desc="Launch flameshot"),
+    
+    # Chord to control TreeTab
+    KeyChord([mod, "shift"], "Tab", [
+        
+    ], mode=True, name="TreeTab"),
     
     # Launch mode: keyboard shortcuts to launch a bunch of programs.
     KeyChord([mod],"p", [
@@ -231,6 +241,7 @@ keys = [
 
     Key([mod], "g", lazy.spawn("loginctl lock-session"),
         desc="Lock the system"),
+    
 ]
 
 # Drag floating layouts.
