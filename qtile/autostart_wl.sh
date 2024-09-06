@@ -8,6 +8,8 @@ bluetoothctl -- power on
 #$HOME/.config/polybar/launch.sh &
 blueman-applet &
 
+swayidle &
+
 #pkill mpd_notify.sh; ~/.config/mpd/mpd_notify.sh &
 
 # todo: fix this in udev but this is a bodge for now
