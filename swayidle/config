@@ -1,0 +1,4 @@
+timeout 300 brightnessctl -s set 10 resume brightnessctl -r
+timeout 570 loginctl lock-session
+timeout 600 wlopm --off "*" resume wlopm --on "*"
+timeout 7200 systemctl suspend
