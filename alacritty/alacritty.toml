@@ -44,7 +44,7 @@ foreground = "#c5c8c6"
 TERM = "alacritty"
 
 [font]
-size = 6.5
+size = 8
 
 [font.glyph_offset]
 x = 0
@@ -95,8 +95,8 @@ startup_mode = "Windowed"
 title = "Alacritty"
 
 [window.dimensions]
-columns = 0
-lines = 0
+columns = 140
+lines = 45
 
 [window.padding]
 x = 0
