@@ -236,10 +236,11 @@
                 "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
             }
         },
+        "timezone": "America/Toronto",
         "actions":  {
             "on-click-right": "mode",
-            "on-click-forward": "tz_up",
-            "on-click-backward": "tz_down",
+            "on-double-click": "tz_up",
+            "on-double-click-rightz": "tz_down",
             "on-scroll-up": "shift_up",
             "on-scroll-down": "shift_down"
         }
