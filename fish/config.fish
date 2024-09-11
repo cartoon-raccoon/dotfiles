@@ -70,6 +70,11 @@ function cheat
 	end
 end
 
+function clear
+	/usr/bin/clear
+	fish_greeting
+end
+
 function newproj
 	cd ~/Projects
 	mkdir $argv
