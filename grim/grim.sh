@@ -6,7 +6,7 @@ active_monitor=$(hyprctl activeworkspace | grep "on monitor" | cut -d " " -f 7 |
 filename="$(date '+%Y-%m-%d-%H_%M_%S')-$active_monitor"
 
 function get_active_window() {
-	window_info=$()
+	window_info="$(hyprctl activewindow | tr '\t' ' ' | tr '\n' '\t' | cut -d $(printf '\t') -f 4,5)"
 }
 
 # cd in
@@ -14,7 +14,11 @@ cd $scdir || mkdir $scdir; cd $scdir
 
 # grim it!
 if [ "$1" = -u ] || [ "$1" = --focused ]; then # taking active window
-	true
+	# todo
+	# 1. get window dimensions
+	# 2. disable blur, borders, rounding, etc.
+	# 3. grim and save it
+	# 4. re-enable decorations
 	notify-send --app-name="grim" -h string:bgcolor:#333333 \
 	"Screenshot Taken" "Active Window"
 elif [ "$1" = -r ] || [ "$1" = --region ]; then # taking selected region and copying to clipboard
