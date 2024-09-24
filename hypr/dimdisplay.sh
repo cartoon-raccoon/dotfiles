@@ -25,3 +25,5 @@ elif [[ "$action" == "reset" ]]; then
     brightnessctl -r > /dev/null
     $ext_display_connected && ddcutil setvcp 10 $fullbrightness
 fi
+
+exit 0
