@@ -20,15 +20,6 @@
         "temperature"
     ],
     // Modules configuration
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
     "mpd": {
         "format": "  {stateIcon} {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) [{consumeIcon} {randomIcon} {repeatIcon}]",
         "format-paused": "  {stateIcon} [{consumeIcon} {randomIcon} {repeatIcon}]",
@@ -120,7 +111,7 @@
         },
         "format": "{icon} {capacity}% ({time})",
         "format-full": "Full {icon}",
-        "format-charging": "{capacity}% 󱐋",
+        "format-charging": "{capacity}% ({time}) 󱐋",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
@@ -254,6 +245,15 @@
         "format-icons": {
             "activated": " ",
             "deactivated": " "
+        }
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
         }
     },
     "power-profiles-daemon": {

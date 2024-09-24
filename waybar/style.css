@@ -101,6 +101,7 @@ button:hover {
 #idle_inhibitor,
 #scratchpad,
 #power-profiles-daemon,
+#keyboard-state,
 #mpris,
 #mpd {
     padding-left: 7px;
