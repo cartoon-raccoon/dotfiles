@@ -28,7 +28,7 @@ elif [ "$1" = -r ] || [ "$1" = --region ]; then # taking selected region and cop
 		exit
 	fi
 	# todo: add regex to check for error condition
-	grim -g "$geometry" | wl-copy
+	grim -g "$geometry" - | wl-copy
 	notify-send --app-name="grim" -h string:bgcolor:#333333 \
 	"Screenshot Taken" "Selected Region to Clipboard"
 else # taking entire active monitor
