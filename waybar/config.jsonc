@@ -207,7 +207,10 @@
             "(.*) - Visual Studio Code": "󰨞  $1",
             "nvim (.*)": "  $1",
             "(.*) - Discord": "  $1",
-            "Steam": "  Steam"
+            "Steam": "  Steam",
+            "(.*) - Obsidian v1.7.4": "󰠮  $1",
+            "swayimg: (.*)": "  $1",
+            "Spotify Premium": "  Spotify"
         }
     },
     "clock": {
