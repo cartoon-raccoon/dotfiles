@@ -123,6 +123,11 @@ alias up3="cd ../../../"
 alias up4="cd ../../../../"
 alias up5="cd ../../../../../"
 
+alias cdunit="~/Documents/School Stuff/University"
+alias cdcourse="~/Documents/School\ Stuff/University/Courses/$argv[1]"
+
+alias dskentry="sudo find /usr -iname $argv[1].desktop"
+
 alias reset-bkgd="feh --bg-fill $DESKTOP_BKGD"
 
 alias hexedit="hexedit --color"
