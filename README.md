@@ -20,7 +20,9 @@ Each directory contains the dotfiles and other scripts used for running the apps
   - `gdm` [Active]
   - `sddm`
   - `lightdm`
-- Notifications: `dunst`
+- Notifications:
+  - `swaync` [Active] (still being configured)
+  - `dunst`
 - Shell: `fish`
 - Music Players:
   - `mpd` and `mpc`
@@ -50,6 +52,7 @@ Lists of packages to install are found in the `packagelists/` directory.
 - `gammastep/gammastep.sh`: A wrapper script that pulls local coordinates based on IP address from `ipinfo.io` and runs `gammastep`, an app that adjusts display gamma based on time of day. Requires `curl` and `jq`.
 - `hypr/dimdisplay.sh`: A script to dim displays of both an external monitor and my laptop monitor.
 - `hypr/workspaceswap.sh`: A script to swap workspaces across double monitors.
+- `hypr/loadmpdplaylist.sh`: A script to load an MPD playlist.
 - `grim/grim.sh`: A wrapper script that runs `grim/slurp` to take screenshots on Wayland, either of a selected output, window, or region, and to either copy that to clipboard, or to a file.
 - `scrot/run.sh`: A script to take screenshots on X11 in Qtile. Bound to keybinds.
 - `mpd/mpd_notify.sh`: A script to throw up a desktop notification whenever MPD changes song. Started automatically by the window manager/compositor.
