@@ -276,14 +276,12 @@ groups_with_kbs = [
     # main
     Group('HOME', 
         layout="max",
-        spawn=["firefox"],
         matches=[Match(wm_class="firefox")],
         label=' '
     ), 
     # dev
     Group('DEV',
         layout="max",
-        spawn=["code"],
         matches=[Match(wm_class="code")],
         label=' '
     ), 
