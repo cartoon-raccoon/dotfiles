@@ -1,0 +1,7 @@
+[Nemo Action]
+Name=Convert to WebP
+Comment=Convert an image file to the webp format.
+Exec=mogrify -format webp %F
+Selection=notnone
+Icon-Name=image
+Extensions=jpg;jpeg;png;svg;
