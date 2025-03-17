@@ -177,6 +177,8 @@
         "disable-scroll": true,
         "all-outputs": false,
         "warp-on-scroll": false,
+        "active-only": true,
+        "move-to-monitor": true,
         "format": "{icon}",
         "format-icons": {
             "1": " ",
@@ -204,13 +206,15 @@
         "format": "{title}",
         "rewrite": {
             "(.*) — Mozilla Firefox": "  $1",
+            "(.*) — Zen Browser": "  $1",
             "(.*) - Visual Studio Code": "󰨞  $1",
             "nvim (.*)": "  $1",
             "(.*) - Discord": "  $1",
             "Steam": "  Steam",
-            "(.*) - Obsidian v1.7.4": "󰠮  $1",
+            "(.*) - Obsidian v[0-9]+\\.[0-9]+\\.[0-9]+": "󰠮  $1",
             "swayimg: (.*)": "  $1",
-            "Spotify Premium": "  Spotify"
+            "Spotify Premium": "  Spotify",
+            "ncmpcpp [0-9]+\\.[0-9]+\\.[0-9]+": "  MPD"
         }
     },
     "clock": {
