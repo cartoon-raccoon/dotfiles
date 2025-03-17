@@ -27,10 +27,30 @@ elif [ "$1" = -r ] || [ "$1" = --region ]; then # taking selected region and cop
 		cd ~
 		exit
 	fi
-	# todo: add regex to check for error condition
-	grim -g "$geometry" - | wl-copy
-	notify-send --app-name="grim" -h string:bgcolor:#333333 \
-	"Screenshot Taken" "Selected Region to Clipboard"
+
+	if zenity --question --text="Save as file?" --icon=text-x-generic-symbolic; then
+
+		# get filename we want to save
+		filename=$(zenity --title="Save Screenshot" --file-selection --save --filename="$filename.png" --file-filter='*.png')
+		# if filename doesn't have extension, add it
+		if ! [[ "$filename" == *.png ]]; then
+			filename="$filename.png"
+		fi
+
+		# wait one second for the file selection window to clear
+		sleep 1
+
+		# do screenshot
+		grim -g "$geometry" "$filename"
+		notify-send --app-name="grim" -h string:bgcolor:#333333 \
+		"Screenshot Taken" "Saved as $filename"
+	else
+		sleep 1
+		# todo: add regex to check for error condition
+		grim -g "$geometry" - | wl-copy
+		notify-send --app-name="grim" -h string:bgcolor:#333333 \
+		"Screenshot Taken" "Selected Region to Clipboard"
+	fi
 else # taking entire active monitor
 	grim -o $active_monitor $filename.png
 	notify-send --app-name="grim" -h string:bgcolor:#333333 \
