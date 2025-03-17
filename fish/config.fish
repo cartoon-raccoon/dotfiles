@@ -102,6 +102,7 @@ alias fishconf="$EDITOR ~/.config/fish/config.fish"
 alias hyprconf="$EDITOR ~/.config/hypr/hyprland.conf"
 alias wayconf="$EDITOR ~/.config/waybar/config.jsonc"
 alias pacconf="sudo $EDITOR /etc/pacman.conf"
+alias duckconf="python ~/Projects/duckyPad-Config/duckypad_config.py"
 
 alias xmonadconf="$EDITOR ~/.xmonad/xmonad.hs"
 alias xmobarconf="$EDITOR ~/.config/xmobar/xmobarrc"
@@ -110,6 +111,8 @@ alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
 alias raccoonpi="ssh ubuntu@192.168.79.2"
 alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
+alias hyprsock1="nc -U /$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket.sock"
+alias hyprsock2="nc -U /$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
 alias ip="ip -c=always"
 alias anglais="LANG=en_CA $argv"
