@@ -175,7 +175,7 @@
     },
     "hyprland/workspaces": {
         "disable-scroll": true,
-        "all-outputs": false,
+        "all-outputs": true,
         "warp-on-scroll": false,
         "active-only": true,
         "move-to-monitor": true,
@@ -203,6 +203,7 @@
         "format": "<span style=\"italic\">{}</span>"
     },
     "hyprland/window": {
+        "max-length": 60,
         "format": "{title}",
         "rewrite": {
             "(.*) — Mozilla Firefox": "  $1",
