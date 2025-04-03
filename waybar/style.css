@@ -61,13 +61,15 @@ button:hover {
 #workspaces button.active {
     padding: 0 5px;
     background-color: #fabd2f;
-    border-radius: 5px
+    border-radius: 5px;
+    color: #333333
 }
 
 #workspaces button:hover {
     background: rgba(250, 208, 110, 1.0);
     box-shadow: none;
-    border-radius: 5px
+    border-radius: 5px;
+    color: #999999
 }
 
 #workspaces button.focused {
@@ -90,15 +92,18 @@ button:hover {
     padding-left: 7px;
     padding-right: 7px;
     border-radius: 13px;
-    background-color: #fabd2f
+    background-color: #fabd2f;
+    color: #333333
 }
 
 #submap.GROUPS {
     background-color: #b86f17;
+    color: #ffffff
 }
 
 #submap.LAYOUT {
     background-color: #d82727;
+    color: #ffffff
 }
 
 #clock,
