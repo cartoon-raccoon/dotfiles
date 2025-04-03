@@ -1,0 +1,33 @@
+profile docked {
+    output DP-1 {
+        enable
+        mode 3840x2160@160Hz
+        position 0,0
+        scale 1.875
+    }
+    output eDP-2 {
+        enable
+        position 2048,0
+    }
+}
+
+profile dockedext {
+    output DP-1 {
+        enable
+        mode 3840x2160@160Hz
+        position 0,0
+        scale 1.875
+    }
+    output eDP-1 {
+        enable
+        position 2048,0
+    }
+}
+
+profile fullportable {
+    output eDP-2 enable
+}
+
+profile slimportable {
+    output eDP-1 enable
+}
