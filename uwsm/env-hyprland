@@ -1,0 +1,2 @@
+export HYPRCURSOR_SIZE=20
+export HYPRLAND_CONFIG=/home/sammy/.config/hypr/hyprland-uwsm.conf
