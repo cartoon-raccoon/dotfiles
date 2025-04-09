@@ -1,0 +1,7 @@
+[Nemo Action]
+Name=Open in VSCode
+Comment=Open current folder in Visual Studio Code.
+Exec=code %P
+Selection=none
+Extension=any;
+Dependencies=code
