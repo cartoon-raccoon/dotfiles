@@ -1,0 +1,9 @@
+[Unit]
+Description=Kanshi
+Documentation=man:kanshi(1) man:kanshi(5)
+
+[Service]
+User=sammy
+Type=exec
+ExecStart=/usr/bin/kanshi
+
