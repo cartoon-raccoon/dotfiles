@@ -70,6 +70,22 @@ function cheat
 	end
 end
 
+function mkudevrule
+	set -f ruledir /etc/udev/rules.d
+	read -f -P "Enter rule priority: " rulepriority
+	read -f -P "Enter rule name: " rulename
+
+	if [ -z "$rulepriority" ] || [ -z "$rulename" ]; then
+		echo "Either rule priority or rulename not given, exiting"
+		return 1
+	end
+
+	set -f filename "$ruledir/$rulepriority-$rulename.rules"
+
+	echo "Writing to rules file $filename"
+	sudo $EDITOR $argv[1] $filename
+end
+
 function clear
 	/usr/bin/clear
 	fish_greeting
@@ -99,20 +115,16 @@ alias cavaconf="$EDITOR ~/.config/cava/config"
 
 alias alacconf="$EDITOR ~/.config/alacritty/alacritty.toml"
 alias fishconf="$EDITOR ~/.config/fish/config.fish"
-alias hyprconf="$EDITOR ~/.config/hypr/hyprland.conf"
 alias wayconf="$EDITOR ~/.config/waybar/config.jsonc"
 alias pacconf="sudo $EDITOR /etc/pacman.conf"
 alias duckconf="python ~/Projects/duckyPad-Config/duckypad_config.py"
 
-alias xmonadconf="$EDITOR ~/.xmonad/xmonad.hs"
-alias xmobarconf="$EDITOR ~/.config/xmobar/xmobarrc"
-
+alias hyprconf="$EDITOR ~/.config/hypr/hyprland.conf"
 alias qtileconf="$EDITOR ~/.config/qtile/config.py"
 
 alias raccoonpi="ssh ubuntu@192.168.79.2"
 alias raccoonpi-out="ssh ubuntu@cartoonraccoon.ddnsgeek.com -p 42169"
-alias hyprsock1="nc -U /$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket.sock"
-alias hyprsock2="nc -U /$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+alias hyprsock="nc -U /$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
 alias ip="ip -c=always"
 alias anglais="LANG=en_CA $argv"
@@ -130,8 +142,6 @@ alias cdunit="~/Documents/School Stuff/University"
 alias cdcourse="~/Documents/School\ Stuff/University/Courses/$argv[1]"
 
 alias dskentry="sudo find /usr -iname $argv[1].desktop"
-
-alias reset-bkgd="feh --bg-fill $DESKTOP_BKGD"
 
 alias hexedit="hexedit --color"
 
