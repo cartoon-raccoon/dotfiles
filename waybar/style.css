@@ -60,7 +60,7 @@ button:hover {
 
 #workspaces button.active {
     padding: 0 5px;
-    background-color: #fabd2f;
+    background-color: #f0932b;
     border-radius: 5px;
     color: #333333
 }
@@ -220,8 +220,8 @@ label:focus {
 }
 
 #cpu {
-    background-color: #2ecc71;
-    color: #000000;
+    background-color: #a54553;
+    color: #ffffff;
 }
 
 #memory {
@@ -229,15 +229,15 @@ label:focus {
 }
 
 #disk {
-    background-color: #964B00;
+    background-color: #d19232;
 }
 
 #backlight {
-    background-color: #90b1b1;
+    background-color: #255358;
 }
 
 #network {
-    background-color: #2980b9;
+    background-color: #c56907;
 }
 
 #network.disconnected {
@@ -278,7 +278,7 @@ label:focus {
 }
 
 #temperature {
-    background-color: #f0932b;
+    background-color: #5c5465;
 }
 
 #temperature.critical {

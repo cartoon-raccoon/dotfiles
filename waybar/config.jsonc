@@ -146,7 +146,8 @@
         "power-profiles-daemon",
         "clock",
         "tray",
-        "idle_inhibitor"
+        "idle_inhibitor",
+        "group/group-power"
     ],
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
@@ -215,7 +216,8 @@
             "(.*) - Obsidian v[0-9]+\\.[0-9]+\\.[0-9]+": "󰠮  $1",
             "swayimg: (.*)": "  $1",
             "Spotify Premium": "  Spotify",
-            "ncmpcpp [0-9]+\\.[0-9]+\\.[0-9]+": "  MPD"
+            "ncmpcpp [0-9]+\\.[0-9]+\\.[0-9]+": "  MPD",
+            "^nwg-displays$": "󰍺  Display Settings"
         }
     },
     "clock": {
@@ -274,5 +276,38 @@
           "balanced": "",
           "power-saver": ""
         }
+    },
+    "group/group-power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "children-class": "not-power"
+        },
+        "modules": [
+            "custom/power",
+            "custom/quit",
+            "custom/lock",
+            "custom/reboot"
+        ]
+    },
+    "custom/power": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "shutdown now"
+    },
+    "custom/quit": {
+        "format": "󰗼 ",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch exit"
+    },
+    "custom/lock": {
+        "format": "󰍁 ",
+        "tooltip": false,
+        "on-click": "hyprlock"
+    },
+    "custom/reboot": {
+        "format": "󰜉 ",
+        "tooltip": false,
+        "on-click": "reboot"
     }
 }]
