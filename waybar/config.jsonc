@@ -7,7 +7,7 @@
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "mpd",
+        //"mpd",
         "mpris"
     ],
     "modules-right": [
@@ -48,16 +48,23 @@
         },
         "artist-len": 20,
         "album-len": 20,
+        "title-len": 40,
         "tooltip-format": "MPD: {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) {stateIcon}",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle"
     },
     "mpris": {
         "format": " {player_icon} {status_icon} {dynamic} ",
         "player-icons": {
-            "spotify": " "
+            "spotify": " ",
+            "spotifyd": " ",
+            "mpv": " ",
+            "vlc": "󰕼 ",
+            "firefox": " ",
+            "mpd": " "
         },
         "format-stopped": "{player_icon} Stopped",
-        "format-paused": " {player_icon} Paused {status_icon} ",
+        "format-paused": " {player_icon} {status_icon} {title} ",
         "status-icons": {
             "playing": " ",
             "paused": " ",
@@ -68,13 +75,13 @@
             "artist",
             "album"
         ],
-        "dynamic-len": 50,
+        "dynamic-len": 80,
         "dynamic-importance": [
             "title",
             "artist",
             "album"
         ],
-        "tooltip-format": "{player} ({status}): {dynamic}"
+        "tooltip-format": "{player_icon} {status_icon}: {dynamic}"
     },
     "disk#home": {
         "format": "/  {percentage_used}%",
@@ -91,8 +98,8 @@
         "tooltip": true 
     },
     "memory": {
-        "format": " {percentage}% ({used}GB)",
-        "tooltip-format": "Memory: {used}/{total}GB Used"
+        "format": " {percentage}% ({used}GiB)",
+        "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -105,13 +112,14 @@
     
     "battery": {
         "states": {
-            // "good": 95,
+            "full": 100,
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon} {capacity}% ({time})",
+        "full-at": 100,
+        "format": "{icon} {capacity}%: {power}W  ({time})",
         "format-full": "Full {icon}",
-        "format-charging": "{capacity}% ({time}) 󱐋",
+        "format-charging": "{capacity}%: {power}W ({time}) 󱐋",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
@@ -121,8 +129,8 @@
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "  {essid} ({signalStrength}%)",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-ethernet": "  {ipaddr}/{cidr} -> {gwaddr}",
+        "tooltip-format-wifi": "Interface: {ifname}\nIP Addr: {ipaddr}/{cidr} via {gwaddr}",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
@@ -223,13 +231,13 @@
     "clock": {
         //"format": "{:%H:%M}  ",
         "format": "{:%A, %B %d, %Y (%R)}  ",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
-        "mode"          : "year",
-        "mode-mon-col"  : 3,
-        "weeks-pos"     : "right",
-        "on-scroll"     : 1,
-        "format": {
+            "mode"          : "year",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "format": {
                 "months":     "<span color='#ffead3'><b>{}</b></span>",
                 "days":       "<span color='#ecc6d9'><b>{}</b></span>",
                 "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
@@ -237,11 +245,11 @@
                 "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
             }
         },
-        "timezone": "America/Toronto",
+        "timezones": ["America/Toronto", "Asia/Singapore"],
         "actions":  {
-            "on-click-right": "mode",
+            "on-click": "mode",
             "on-double-click": "tz_up",
-            "on-double-click-rightz": "tz_down",
+            "on-double-click-right": "tz_down",
             "on-scroll-up": "shift_up",
             "on-scroll-down": "shift_down"
         }
