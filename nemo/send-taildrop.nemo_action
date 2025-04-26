@@ -1,0 +1,8 @@
+[Nemo Action]
+Name=Send on Taildrop
+Comment=Send the selected files on Taildrop
+
+Exec=<scripts/send-taildrop.py %F>
+Selection=notnone
+Extensions=nodirs;
+Quote=double
