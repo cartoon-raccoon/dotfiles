@@ -116,10 +116,8 @@
             "warning": 30,
             "critical": 15
         },
-        "full-at": 100,
-        "format": "{icon} {capacity}%: {power}W  ({time})",
-        "format-full": "Full {icon}",
-        "format-charging": "{capacity}%: {power}W ({time}) 󱐋",
+        "format": "{icon}  {capacity}%: {power:0.1f}W  ({time})",
+        "format-charging": "󱐋 {capacity}%: {power:0.1f}W ({time})",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
