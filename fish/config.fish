@@ -87,7 +87,7 @@ function mkudevrule
 end
 
 function clear
-	/usr/bin/clear
+	/usr/bin/clear $argv
 	fish_greeting
 end
 
