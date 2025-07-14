@@ -1,8 +1,10 @@
 [Nemo Action]
 Name=Send on Taildrop
 Comment=Send the selected files on Taildrop
+Icon-Name=mail-send-receive-symbolic
 
 Exec=<scripts/send-taildrop.py %F>
 Selection=notnone
 Extensions=nodirs;
 Quote=double
+Dependencies=tailscale;zenity

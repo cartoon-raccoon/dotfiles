@@ -5,3 +5,4 @@ Exec=mogrify -format webp %F
 Selection=notnone
 Icon-Name=image
 Extensions=jpg;jpeg;png;svg;
+Dependencies=mogrify;
