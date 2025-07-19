@@ -1,6 +1,7 @@
 // -*- mode: jsonc -*-
 [{
     "layer": "bottom", // Waybar at top layer
+    "output": "DP-1",
     "position": "top", // Waybar position (top|bottom|left|right)
     "height": 25, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
@@ -12,7 +13,7 @@
     ],
     "modules-right": [
         "disk#home",
-        "disk#games",
+        //"disk#games",
         "network",
         "cpu",
         "memory",
@@ -84,7 +85,7 @@
         "tooltip-format": "{player_icon} {status_icon}: {dynamic}"
     },
     "disk#home": {
-        "format": "/  {percentage_used}%",
+        "format": " /  {percentage_used}% ({used}/{total})",
         "path": "/home",
         "tooltip-format": "Home Partition: {used}/{total} Used"
     },
@@ -136,6 +137,7 @@
 },
 {
     "layer": "bottom",
+    "output": "DP-1",
     "position": "bottom",
     "height": 25,
     "spacing": 0,

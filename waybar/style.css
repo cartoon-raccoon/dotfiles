@@ -134,20 +134,19 @@ button:hover {
 }
 
 #disk.home {
-    padding: 0px 5px;
+    padding: 5px 5px;
     color: #ffffff;
-    border-radius: 13px 0px 0px 13px;
+    border-radius: 13px 13px 13px 13px;
     margin-left: 0px
     /* border-spacing: 5px */
 }
 
-#disk.games {
+/* #disk.games {
     padding: 0px 10px;
     color: #ffffff;
     border-radius: 0px 13px 13px 0px;
     margin-left: 0px
-    /* border-spacing: 5px */
-}
+} */
 
 #window,
 #workspaces {
