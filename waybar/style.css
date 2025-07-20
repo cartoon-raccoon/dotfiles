@@ -122,6 +122,9 @@ button:hover {
 #scratchpad,
 #power-profiles-daemon,
 #keyboard-state,
+#custom-weather,
+#group-power,
+#gamemode,
 #mpris,
 #mpd {
     padding-left: 7px;
@@ -133,20 +136,58 @@ button:hover {
     /* border-spacing: 5px */
 }
 
+#group-power {
+    padding-left: 14px;
+    background-color: #1d3d51;
+}
+
+#custom-weather.rainy {
+    background-color: #095e8c;
+}
+
+#custom-weather.sunny {
+    color: #000000;
+    background-color: #e0c411;
+}
+
+#custom-weather.partly_cloudy {
+    color: #000000;
+    background-color: #a3adb3;
+}
+#custom-weather.overcast {
+    background-color: #64717a;
+}
+
+#custom-power,
+#custom-quit,
+#custom-lock,
+#custom-reboot {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* #custom-power,
+#custom-quit,
+#custom-lock,
+#custom-reboot button:hover {
+    background: #3793cd;
+} */
+
 #disk.home {
     padding: 5px 5px;
     color: #ffffff;
-    border-radius: 13px 13px 13px 13px;
+    border-radius: 13px 0px 0px 13px;
     margin-left: 0px
     /* border-spacing: 5px */
 }
 
-/* #disk.games {
-    padding: 0px 10px;
+#disk.root {
+    padding: 5px 5px;
+    padding-right: 10px;
     color: #ffffff;
     border-radius: 0px 13px 13px 0px;
     margin-left: 0px
-} */
+}
 
 #window,
 #workspaces {
@@ -267,7 +308,7 @@ label:focus {
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
+    background-color: #5c5465;
 }
 
 #tray {
@@ -359,6 +400,15 @@ label:focus {
 
 #scratchpad.empty {
 	background-color: transparent;
+}
+
+#gamemode {
+    padding-left: 10px;
+    background-color: #494949;
+}
+
+#gamemode.running {
+    background-color: #168702;
 }
 
 #privacy {

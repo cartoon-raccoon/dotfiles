@@ -1,10 +1,11 @@
 // -*- mode: jsonc -*-
 [{
+    //* DP-1, top bar
+
     "layer": "bottom", // Waybar at top layer
     "output": "DP-1",
     "position": "top", // Waybar position (top|bottom|left|right)
     "height": 25, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
@@ -13,11 +14,10 @@
     ],
     "modules-right": [
         "disk#home",
-        //"disk#games",
+        "disk#root",
         "network",
         "cpu",
         "memory",
-        "battery",
         "temperature"
     ],
     // Modules configuration
@@ -85,46 +85,34 @@
         "tooltip-format": "{player_icon} {status_icon}: {dynamic}"
     },
     "disk#home": {
-        "format": " /  {percentage_used}% ({used}/{total})",
+        "format": " /  {percentage_used}%",
         "path": "/home",
         "tooltip-format": "Home Partition: {used}/{total} Used"
     },
-    "disk#games": {
-        "format": "/  {percentage_used}%",
-        "path": "/home/sammy/Games",
-        "tooltip-format": "Games Partition: {used}/{total} Used"
+    "disk#root": {
+        "format": "/  {percentage_used}%",
+        "path": "/",
+        "tooltip-format": "Root Partition: {used}/{total} Used"
     },
     "cpu": {
         "format": " {usage}% ({avg_frequency}GHz)",
-        "tooltip": true 
+        "tooltip": true,
+        "interval": 5
     },
     "memory": {
         "format": " {percentage}% ({used}GiB)",
-        "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB"
+        "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB",
+        "interval": 10
     },
     "temperature": {
         // "thermal-zone": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+        "hwmon-path": "/sys/class/hwmon/hwmon8/temp1_input",
         "critical-threshold": 80,
         "format-critical": "<span color=\"#ff0000\">{temperatureC}°C {icon}</span>",
         "format": "{icon} {temperatureC}°C",
         "format-icons": ["", "", ""]
     },
-    
-    "battery": {
-        "states": {
-            "full": 100,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}  {capacity}%: {power:0.1f}W  ({time})",
-        "format-charging": "󱐋 {capacity}%: {power:0.1f}W ({time})",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
+
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "  {essid} ({signalStrength}%)",
@@ -135,6 +123,7 @@
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     }
 },
+// DP-1, bottom bar
 {
     "layer": "bottom",
     "output": "DP-1",
@@ -151,7 +140,6 @@
         "hyprland/window"
     ],
     "modules-right": [
-        "power-profiles-daemon",
         "clock",
         "tray",
         "idle_inhibitor",
@@ -229,8 +217,8 @@
         }
     },
     "clock": {
-        //"format": "{:%H:%M}  ",
         "format": "{:%A, %B %d, %Y (%R)}  ",
+        "locale": "en_CA.UTF-8",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "mode"          : "year",
@@ -292,30 +280,103 @@
             "children-class": "not-power"
         },
         "modules": [
-            "custom/power",
             "custom/quit",
             "custom/lock",
+            "custom/power",
             "custom/reboot"
         ]
     },
     "custom/power": {
         "format": " ",
-        "tooltip": false,
-        "on-click": "shutdown now"
+        "tooltip": true,
+        "tooltip-format": "Shutdown",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -s"
     },
     "custom/quit": {
         "format": "󰗼 ",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch exit"
+        "tooltip": true,
+        "tooltip-format": "Logout",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -e"
     },
     "custom/lock": {
         "format": "󰍁 ",
-        "tooltip": false,
-        "on-click": "hyprlock"
+        "tooltip": true,
+        "tooltip-format": "Lock",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -l"
     },
     "custom/reboot": {
         "format": "󰜉 ",
-        "tooltip": false,
-        "on-click": "reboot"
+        "tooltip": true,
+        "tooltip-format": "Restart",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -r"
+    }
+},
+// DP-2, top bar
+{
+    "layer": "bottom",
+    "output": "DP-2",
+    "position": "top",
+    "height": 25,
+    "spacing": 0,
+    "modules-right": [
+        "gamemode"
+    ],
+    "gamemode": {
+        "format": "{glyph}",
+        "use-icon": true,
+        "icon-size": 15,
+        "glyph": "󰊗 ",
+        "hide-not-running": true
+    }
+},
+// DP-2, bottom bar
+{
+    "layer": "bottom",
+    "output": "DP-2",
+    "position": "bottom",
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+    "modules-right": [
+        "custom/weather"
+    ],
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "active-only": true,
+        "move-to-monitor": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "6": " ",
+            "7": " ",
+            "8": "󰹕 ",
+            "9": " ",
+            "10": "󰓓 ",
+            "urgent": " ",
+            "focused": " ",
+            "default": " "
+        }
+        // "persistent-workspaces": {
+        //     "*": 9
+        // }
+    },
+    "hyprland/submap": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "custom/weather": {
+        "format": "{}",
+        "tooltip": true,
+        "interval": 1800,
+        "exec": "wttrbar --nerd --custom-indicator \"{ICON}  {temp_C}°C ({FeelsLikeC}°C) [{areaName}]\"",
+        "return-type": "json"
     }
 }]
