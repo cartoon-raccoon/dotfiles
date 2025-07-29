@@ -319,6 +319,7 @@
     "height": 25,
     "spacing": 0,
     "modules-right": [
+        "privacy",
         "gamemode"
     ],
     "gamemode": {
@@ -327,6 +328,15 @@
         "icon-size": 15,
         "glyph": "󰊗 ",
         "hide-not-running": true
+    },
+    "privacy": {
+        "icon-size": 15,
+        "ignore": [
+            {
+                "type": "audio-in",
+                "name": "Discord_capture"
+            }
+        ]
     }
 },
 // DP-2, bottom bar
@@ -375,7 +385,7 @@
     "custom/weather": {
         "format": "{}",
         "tooltip": true,
-        "interval": 1800,
+        "interval": 900,
         "exec": "wttrbar --nerd --custom-indicator \"{ICON}  {temp_C}°C ({FeelsLikeC}°C) [{areaName}]\"",
         "return-type": "json"
     }
