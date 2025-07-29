@@ -1,0 +1,3 @@
+stylesheet=wofi.css
+allow_images=true
+matching=fuzzy
