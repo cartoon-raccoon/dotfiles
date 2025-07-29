@@ -141,9 +141,10 @@ alias up5="cd ../../../../../"
 alias cdunit="~/Documents/School Stuff/University"
 alias cdcourse="~/Documents/School\ Stuff/University/Courses/$argv[1]"
 
-alias dskentry="sudo find /usr -iname $argv[1].desktop"
+alias getdskentry="wofi --show drun --define=drun-print_desktop_file=true | sed -E \"s/(\.desktop) /\1:/\" 2> /dev/null"
 
 alias hexedit="hexedit --color"
+alias amdgpu_top="amdgpu_top --dark"
 
 alias icccm="curl www.call-with-current-continuation.org/rants/icccm.txt"
 # opam configuration
