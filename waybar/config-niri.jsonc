@@ -1,0 +1,392 @@
+// -*- mode: jsonc -*-
+[{
+    //* DP-1, top bar
+
+    "layer": "bottom", // Waybar at top layer
+    "output": "DP-1",
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 25, // Waybar height (to be removed for auto height)
+    "spacing": 0, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        //"mpd",
+        "mpris"
+    ],
+    "modules-right": [
+        "disk#home",
+        "disk#root",
+        "network",
+        "cpu",
+        "memory",
+        "temperature"
+    ],
+    // Modules configuration
+    "mpd": {
+        "format": "  {stateIcon} {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-paused": "  {stateIcon} [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-disconnected": "  Disconnected",
+        "format-stopped": "  Stopped [ {consumeIcon} {randomIcon} {repeatIcon}]",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "random-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "repeat-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "single-icons": {
+            "on": "1"
+        },
+        "state-icons": {
+            "paused": " ",
+            "playing": " "
+        },
+        "artist-len": 20,
+        "album-len": 20,
+        "title-len": 40,
+        "tooltip-format": "MPD: {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) {stateIcon}",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle"
+    },
+    "mpris": {
+        "format": " {player_icon} {status_icon} {dynamic} ",
+        "player-icons": {
+            "spotify": " ",
+            "spotifyd": " ",
+            "mpv": " ",
+            "vlc": "󰕼 ",
+            "firefox": " ",
+            "mpd": " "
+        },
+        "format-stopped": "{player_icon} Stopped",
+        "format-paused": " {player_icon} {status_icon} {title} ",
+        "status-icons": {
+            "playing": " ",
+            "paused": " ",
+            "stopped": "󰓛 "
+        },
+        "dynamic-order": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "dynamic-len": 80,
+        "dynamic-importance": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "tooltip-format": "{player_icon} {status_icon}: {dynamic}"
+    },
+    "disk#home": {
+        "format": " /  {percentage_used}%",
+        "path": "/home",
+        "tooltip-format": "Home Partition: {used}/{total} Used"
+    },
+    "disk#root": {
+        "format": "/  {percentage_used}%",
+        "path": "/",
+        "tooltip-format": "Root Partition: {used}/{total} Used"
+    },
+    "cpu": {
+        "format": " {usage}% ({avg_frequency}GHz)",
+        "tooltip": true,
+        "interval": 5
+    },
+    "memory": {
+        "format": " {percentage}% ({used}GiB)",
+        "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB",
+        "interval": 10
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon8/temp1_input",
+        "critical-threshold": 80,
+        "format-critical": "<span color=\"#ff0000\">{temperatureC}°C {icon}</span>",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""]
+    },
+
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": "  {ipaddr}/{cidr} -> {gwaddr}",
+        "tooltip-format-wifi": "Interface: {ifname}\nIP Addr: {ipaddr}/{cidr} via {gwaddr}",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    }
+},
+// DP-1, bottom bar
+{
+    "layer": "bottom",
+    "output": "DP-1",
+    "position": "bottom",
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "pulseaudio",
+        "backlight",
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "clock",
+        "tray",
+        "idle_inhibitor",
+        "group/group-power"
+    ],
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon}  {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "󰛨 {percent}% [{icon}]",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "tooltip-format": "Backlight {percent}%"
+    },
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "active-only": true,
+        "move-to-monitor": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "6": " ",
+            "7": " ",
+            "8": "󰹕 ",
+            "9": " ",
+            "10": "󰓓 ",
+            "urgent": " ",
+            "focused": " ",
+            "default": " "
+        }
+        // "persistent-workspaces": {
+        //     "*": 9
+        // }
+    },
+    "hyprland/submap": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "hyprland/window": {
+        "max-length": 60,
+        "format": "{title}",
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "  $1",
+            "(.*) — Zen Browser": "  $1",
+            "(.*) - Visual Studio Code": "󰨞  $1",
+            "nvim (.*)": "  $1",
+            "(.*) - Discord": "  $1",
+            "Steam": "  Steam",
+            "(.*) - Obsidian v[0-9]+\\.[0-9]+\\.[0-9]+": "󰠮  $1",
+            "swayimg: (.*)": "  $1",
+            "Spotify Premium": "  Spotify",
+            "ncmpcpp [0-9]+\\.[0-9]+\\.[0-9]+": "  MPD",
+            "^nwg-displays$": "󰍺  Display Settings"
+        }
+    },
+    "clock": {
+        "format": "{:%A, %B %d, %Y (%R)}  ",
+        "locale": "en_CA.UTF-8",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode"          : "year",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "timezones": ["America/Toronto", "Asia/Singapore"],
+        "actions":  {
+            "on-click": "mode",
+            "on-double-click": "tz_up",
+            "on-double-click-right": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        }
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+          "default": "",
+          "performance": "",
+          "balanced": "",
+          "power-saver": ""
+        }
+    },
+    "group/group-power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "children-class": "not-power"
+        },
+        "modules": [
+            "custom/quit",
+            "custom/lock",
+            "custom/power",
+            "custom/reboot"
+        ]
+    },
+    "custom/power": {
+        "format": " ",
+        "tooltip": true,
+        "tooltip-format": "Shutdown",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -s"
+    },
+    "custom/quit": {
+        "format": "󰗼 ",
+        "tooltip": true,
+        "tooltip-format": "Logout",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -e"
+    },
+    "custom/lock": {
+        "format": "󰍁 ",
+        "tooltip": true,
+        "tooltip-format": "Lock",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -l"
+    },
+    "custom/reboot": {
+        "format": "󰜉 ",
+        "tooltip": true,
+        "tooltip-format": "Restart",
+        "on-click": "/home/sammy/.config/waybar/scripts/power-control.sh -r"
+    }
+},
+// DP-2, top bar
+{
+    "layer": "bottom",
+    "output": "DP-2",
+    "position": "top",
+    "height": 25,
+    "spacing": 0,
+    "modules-right": [
+        "privacy",
+        "gamemode"
+    ],
+    "gamemode": {
+        "format": "{glyph}",
+        "use-icon": true,
+        "icon-size": 15,
+        "glyph": "󰊗 ",
+        "hide-not-running": true
+    },
+    "privacy": {
+        "icon-size": 15,
+        "ignore": [
+            {
+                "type": "audio-in",
+                "name": "Discord_capture"
+            }
+        ]
+    }
+},
+// DP-2, bottom bar
+{
+    "layer": "bottom",
+    "output": "DP-2",
+    "position": "bottom",
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+    "modules-right": [
+        "custom/weather"
+    ],
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "active-only": true,
+        "move-to-monitor": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": " ",
+            "5": " ",
+            "6": " ",
+            "7": " ",
+            "8": "󰹕 ",
+            "9": " ",
+            "10": "󰓓 ",
+            "urgent": " ",
+            "focused": " ",
+            "default": " "
+        }
+        // "persistent-workspaces": {
+        //     "*": 9
+        // }
+    },
+    "hyprland/submap": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "custom/weather": {
+        "format": "{}",
+        "tooltip": true,
+        "interval": 900,
+        "exec": "wttrbar --nerd --custom-indicator \"{ICON}  {temp_C}°C ({FeelsLikeC}°C) [{areaName}]\"",
+        "return-type": "json"
+    }
+}]
