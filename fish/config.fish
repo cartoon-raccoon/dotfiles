@@ -1,8 +1,6 @@
-#set -x EDITOR (which nvim)
-
-#set -x PATH "$HOME/.cargo/bin/:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.local/bin/cross/bin:$PATH"
-
-#set -x LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/lib/jvm/default/lib/server/"
+if status is-interactive
+	atuin init fish | source
+end
 
 set -x CHEAT_PATH "$HOME/.cheat"
 env | grep EDITOR > /dev/null || set -x EDITOR (which nvim)
@@ -107,6 +105,9 @@ alias ls="eza -l"
 #alias fucking="sudo"
 #alias pls="sudo"
 
+alias czm="chezmoi"
+alias neofetch="fastfetch"
+alias nfetch="/usr/bin/neofetch"
 alias fishreload="source ~/.config/fish/config.fish"
 
 alias tlmgr="/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode $argv"
