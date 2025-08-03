@@ -32,13 +32,33 @@
     },
     {
       "type": "disk",
+      "folders": "/",
+      "key": "    Disk ( )",
+      "percent": {
+        "type": 9,
+        "green": 60,
+        "yellow": 70
+      }
+    },
+    {
+      "type": "disk",
       "folders": "/home",
-      "key": "    Disk ( )"
+      "key": "    Disk ( )",
+      "percent": {
+        "type": 9,
+        "green": 70,
+        "yellow": 80
+      }
     },
     {
       "type": "disk",
       "folders": "/home/sammy/Games",
-      "key": "    Disk ( )"
+      "key": "    Disk ( )",
+      "percent": {
+        "type": 9,
+        "green": 60,
+        "yellow": 70
+      }
     },
     { 
       "type": "swap",

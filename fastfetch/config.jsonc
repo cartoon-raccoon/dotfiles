@@ -20,6 +20,7 @@
     "shell",
     "display",
     "de",
+    "wm",
     "wmtheme",
     "theme",
     "icons",
@@ -30,6 +31,7 @@
     "gpu",
     "vulkan",
     "opengl",
+    "opencl",
     // system info
     "separator",
     "memory",
