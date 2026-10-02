@@ -100,7 +100,7 @@
         "interval": 5
     },
     "memory": {
-        "format": " {percentage}% ({used}GiB)",
+        "format": "  {percentage}% ({used}GiB)",
         "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB",
         "interval": 10
     },

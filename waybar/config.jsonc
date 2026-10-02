@@ -1,0 +1,270 @@
+// -*- mode: jsonc -*-
+[{
+    "layer": "bottom", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 25, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 0, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        //"mpd",
+        "mpris"
+    ],
+    "modules-right": [
+        "disk#home",
+        "disk#games",
+        "network",
+        "cpu",
+        "memory",
+        "battery",
+        "temperature"
+    ],
+    // Modules configuration
+    "mpd": {
+        "format": "  {stateIcon} {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-paused": "  {stateIcon} [{consumeIcon} {randomIcon} {repeatIcon}]",
+        "format-disconnected": "  Disconnected",
+        "format-stopped": "  Stopped [ {consumeIcon} {randomIcon} {repeatIcon}]",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "random-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "repeat-icons": {
+            "off": "<span color=\"#555555\"> </span>",
+            "on": "<span color=\"#eeeeee\"> </span>"
+        },
+        "single-icons": {
+            "on": "1"
+        },
+        "state-icons": {
+            "paused": " ",
+            "playing": " "
+        },
+        "artist-len": 20,
+        "album-len": 20,
+        "title-len": 40,
+        "tooltip-format": "MPD: {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) {stateIcon}",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle"
+    },
+    "mpris": {
+        "format": " {player_icon} {status_icon} {dynamic} ",
+        "player-icons": {
+            "spotify": " ",
+            "spotifyd": " ",
+            "mpv": " ",
+            "vlc": "󰕼 ",
+            "firefox": " ",
+            "mpd": " "
+        },
+        "format-stopped": "{player_icon} Stopped",
+        "format-paused": " {player_icon} {status_icon} {title} ",
+        "status-icons": {
+            "playing": " ",
+            "paused": " ",
+            "stopped": "󰓛 "
+        },
+        "dynamic-order": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "dynamic-len": 80,
+        "dynamic-importance": [
+            "title",
+            "artist",
+            "album"
+        ],
+        "tooltip-format": "{player_icon} {status_icon}: {dynamic}"
+    },
+    "disk#home": {
+        "format": "/  {percentage_used}%",
+        "path": "/home",
+        "tooltip-format": "Home Partition: {used}/{total} Used"
+    },
+    "disk#games": {
+        "format": "/  {percentage_used}%",
+        "path": "/home/sammy/Games",
+        "tooltip-format": "Games Partition: {used}/{total} Used"
+    },
+    "cpu": {
+        "format": " {usage}% ({avg_frequency}GHz)",
+        "interval": 5,
+        "tooltip": true 
+    },
+    "memory": {
+        "format": " {percentage}% ({used}GiB)",
+        "tooltip-format": "Memory: {used}/{total}GiB Used\nSwap:   {swapUsed}/{swapTotal}GiB"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+        "critical-threshold": 80,
+        "format-critical": "<span color=\"#ff0000\">{temperatureC}°C {icon}</span>",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""]
+    },
+    "battery": {
+        "states": {
+            "full": 100,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}  {capacity}%: {power:0.1f}W  ({time})",
+        "format-charging": "󱐋 {capacity}%: {power:0.1f}W ({time})",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": "  {ipaddr}/{cidr} -> {gwaddr}",
+        "tooltip-format-wifi": "Interface: {ifname}\nIP Addr: {ipaddr}/{cidr} via {gwaddr}",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    }
+},
+{
+    "layer": "bottom",
+    "position": "bottom",
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "pulseaudio",
+        "backlight"
+    ],
+    "modules-center": [
+    ],
+    "modules-right": [
+        "power-profiles-daemon",
+        "clock",
+        "tray",
+        "idle_inhibitor",
+        "group/group-power"
+    ],
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon}  {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "󰛨 {percent}% [{icon}]",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "tooltip-format": "Backlight {percent}%"
+    },
+    "clock": {
+        //"format": "{:%H:%M}  ",
+        "format": "{:%A, %B %d, %Y (%R)}  ",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode"          : "year",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "timezones": ["America/Toronto", "Asia/Singapore"],
+        "actions":  {
+            "on-click": "mode",
+            "on-double-click": "tz_up",
+            "on-double-click-right": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        }
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+          "default": "",
+          "performance": "",
+          "balanced": "",
+          "power-saver": ""
+        }
+    },
+    "group/group-power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "children-class": "not-power"
+        },
+        "modules": [
+            "custom/power",
+            "custom/quit",
+            "custom/lock",
+            "custom/reboot"
+        ]
+    },
+    "custom/power": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "shutdown now"
+    },
+    "custom/quit": {
+        "format": "󰗼 ",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch exit"
+    },
+    "custom/lock": {
+        "format": "󰍁 ",
+        "tooltip": false,
+        "on-click": "hyprlock"
+    },
+    "custom/reboot": {
+        "format": "󰜉 ",
+        "tooltip": false,
+        "on-click": "reboot"
+    }
+}]

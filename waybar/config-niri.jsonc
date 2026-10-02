@@ -133,11 +133,10 @@
     "modules-left": [
         "pulseaudio",
         "backlight",
-        "hyprland/workspaces",
-        "hyprland/submap"
+        "niri/workspaces"
     ],
     "modules-center": [
-        "hyprland/window"
+        "niri/window"
     ],
     "modules-right": [
         "clock",
@@ -170,37 +169,20 @@
         "format-icons": ["", "", "", "", "", "", "", "", ""],
         "tooltip-format": "Backlight {percent}%"
     },
-    "hyprland/workspaces": {
-        "disable-scroll": true,
-        "all-outputs": true,
-        "warp-on-scroll": false,
-        "active-only": true,
-        "move-to-monitor": true,
+    "niri/workspaces": {
+        "all-outputs": false,
+        "enable-bar-scroll": false,
         "format": "{icon}",
         "format-icons": {
-            "1": " ",
-            "2": " ",
-            "3": " ",
-            "4": " ",
-            "5": " ",
-            "6": " ",
-            "7": " ",
-            "8": "󰹕 ",
-            "9": " ",
-            "10": "󰓓 ",
+            "main": " ",
+            "social": " ",
+            "music": " ",
             "urgent": " ",
             "focused": " ",
             "default": " "
         }
-        // "persistent-workspaces": {
-        //     "*": 9
-        // }
     },
-    "hyprland/submap": {
-        "format": "<span style=\"italic\">{}</span>"
-    },
-    "hyprland/window": {
-        "max-length": 60,
+    "niri/window": {
         "format": "{title}",
         "rewrite": {
             "(.*) — Mozilla Firefox": "  $1",
@@ -214,7 +196,8 @@
             "Spotify Premium": "  Spotify",
             "ncmpcpp [0-9]+\\.[0-9]+\\.[0-9]+": "  MPD",
             "^nwg-displays$": "󰍺  Display Settings"
-        }
+        },
+        "separate-outputs": true
     },
     "clock": {
         "format": "{:%A, %B %d, %Y (%R)}  ",

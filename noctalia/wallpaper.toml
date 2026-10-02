@@ -1,0 +1,13 @@
+[wallpaper]
+enabled = true
+fill_mode = "fit"
+transition = "fade"
+
+[wallpaper.default]
+path = "/home/sammy/Pictures/Wallpaper/astronaut.png"
+
+[wallpaper.automation]
+enabled = false
+interval_seconds = 1800
+order = "random"
+recursive = false
