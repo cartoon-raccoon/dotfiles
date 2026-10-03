@@ -1,0 +1,61 @@
+[bar]
+order = [ "Top", "Bottom" ]
+
+# Bottom Bar
+[bar.Bottom]
+center = [ "taskbar" ]
+enabled = true
+end = [
+    "tray",
+    "spacer_2",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session"
+]
+margin_ends = 10
+position = "bottom"
+show_on_workspace_switch = false
+start = [ "workspaces" ]
+
+# Top Bar
+[bar.Top]
+end = [
+    "tray",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session"
+]
+margin_ends = 10
+start = [ "media", "audio_visualizer" ]
+
+# Widgets
+
+[widget.audio_visualizer]
+mirrored = false
+width = 100
+
+[widget.media]
+art_size = 24
+artist_first = true
+show_progress = true
+
+[widget.spacer_2]
+type = "spacer"
+
+[widget.taskbar]
+group_by_workspace = true
+workspace_group_content = "icons"
+group_single_icon_per_app = true
+workspace_label_placement = "centered"
