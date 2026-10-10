@@ -58,7 +58,7 @@ input {
 
 // Outputs
 output "DP-1" {
-    mode "3840x2160@160.00"
+    mode "3840x2160@160.001"
     scale 1.5
     transform "normal"
     position x=0 y=0
@@ -69,30 +69,44 @@ output "DP-1" {
     }
 }
 
+// oooo                                                  .   
+// `888                                                .o8   
+//  888   .oooo.   oooo    ooo  .ooooo.  oooo  oooo  .o888oo 
+//  888  `P  )88b   `88.  .8'  d88' `88b `888  `888    888   
+//  888   .oP"888    `88..8'   888   888  888   888    888   
+//  888  d8(  888     `888'    888   888  888   888    888 . 
+// o888o `Y888""8o     .8'     `Y8bod8P'  `V88V"V8P'   "888" 
+//                 .o..P'                                    
+//                 `Y8P'                                      
+
 layout {
     // Set gaps around windows in logical pixels.
     gaps 5
 
-    center-focused-column "never"
+    center-focused-column "on-overflow"
 
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
+        proportion 0.75
+        proportion 1.0
     }
 
     preset-window-heights {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
+        proportion 0.75
+        proportion 1.0
     }
 
     // Set default width of all windows to full, and have window rules catch exceptions.
-    default-column-width { proportion 1.0; }
+    default-column-width { proportion 0.5; }
 
     // You can change how the focus ring looks.
     focus-ring {
-        // off
+        off
 
         // How many logical pixels the ring extends out from the windows.
         width 2
@@ -123,9 +137,7 @@ layout {
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
-    // You can enable drop shadows for windows.
     shadow {
-        // Uncomment the next line to enable shadows.
         // on
 
         // By default, the shadow draws only around its window, and not behind it.
@@ -144,9 +156,6 @@ layout {
         // 
         // draw-behind-window true
 
-        // You can change how shadows look. The values below are in logical
-        // pixels and match the CSS box-shadow properties.
-
         // Softness controls the shadow blur radius.
         softness 30
 
@@ -162,12 +171,11 @@ layout {
 
     tab-indicator {
         on
-        hide-when-single-tab
     }
 
     struts {
-        top 8
-        bottom 8
+        top 4
+        bottom 4
         left 8
         right 8
     }
@@ -193,35 +201,178 @@ animations {
     // slowdown 3.0
 }
 
-workspace "social" {
+//                  oooo                                      
+//                  `888                                      
+// oooo oooo    ooo  888  oooo   .oooo.o oo.ooooo.   .ooooo.  
+//  `88. `88.  .8'   888 .8P'   d88(  "8  888' `88b d88' `"Y8 
+//   `88..]88..8'    888888.    `"Y88b.   888   888 888       
+//    `888'`888'     888 `88b.  o.  )88b  888   888 888   .o8 
+//     `8'  `8'     o888o o888o 8""888P'  888bod8P' `Y8bod8P' 
+//                                        888                 
+//                                       o888o                 
+
+/*
+The workspace model is as follows.
+
+The static named workspaces are:
+
+- Main (idx 1): This usually contains the browser and any other windows currently being used.
+- Dev (idx 2): This contains the development environment and any other development tools.
+- Social (idx 3): This contains social apps such as Discord or Element.
+- Music (idx 4): This contains music apps such as Spotify and ncmpcpp will go.
+
+Anything below this (idx 5 onwards) is a dynamic unnamed workspace. These are where all other windows go.
+
+The keybinds that correspond to the workspace are:
+
+A: Main
+S: Dev
+D: Social
+F: Music
+Backspace: The first dynamic workspace.
+
+*/
+
+workspace "Main" {
     open-on-output "DP-1"
+
+    layout {
+        default-column-display "tabbed"
+
+        tab-indicator {
+            hide-when-single-tab
+        }
+    }
 }
 
-workspace "music" {
+workspace "Dev" {
     open-on-output "DP-1"
+
+    layout {
+        default-column-display "tabbed"
+
+        tab-indicator {
+            hide-when-single-tab
+        }
+    }
 }
 
-workspace "main" {
+workspace "Social" {
     open-on-output "DP-1"
+
+    layout {
+        default-column-display "tabbed"
+
+        tab-indicator {
+            hide-when-single-tab
+        }
+    }
 }
 
-spawn-at-startup "niri" "msg" "action" "focus-workspace" "Main"
+workspace "Music" {
+    open-on-output "DP-1"
 
-// Open the Firefox picture-in-picture player as floating by default.
+    layout {
+        default-column-display "tabbed"
+
+        tab-indicator {
+            hide-when-single-tab
+        }
+    }
+}
+
+//  .ooooo.  oooo    ooo  .ooooo.   .ooooo.   .oooo.o 
+// d88' `88b  `88b..8P'  d88' `88b d88' `"Y8 d88(  "8 
+// 888ooo888    Y888'    888ooo888 888       `"Y88b.  
+// 888    .o  .o8"'88b   888    .o 888   .o8 o.  )88b 
+// `Y8bod8P' o88'   888o `Y8bod8P' `Y8bod8P' 8""888P'  
+
+spawn-at-startup "udiskie"
+
+spawn-at-startup "easyeffects"
+
+spawn-at-startup "spotify-launcher"
+
+spawn-at-startup "discord"
+
+spawn-at-startup "code"
+
+spawn-at-startup "zen-browser"
+
+//                   o8o                                   oooo                     
+//                   `"'                                   `888                     
+// oooo oooo    ooo oooo  ooo. .oo.   oooo d8b oooo  oooo   888   .ooooo.   .oooo.o 
+//  `88. `88.  .8'  `888  `888P"Y88b  `888""8P `888  `888   888  d88' `88b d88(  "8 
+//   `88..]88..8'    888   888   888   888      888   888   888  888ooo888 `"Y88b.  
+//    `888'`888'     888   888   888   888      888   888   888  888    .o o.  )88b 
+//     `8'  `8'     o888o o888o o888o d888b     `V88V"V8P' o888o `Y8bod8P' 8""888P' 
+
+// Floating window rules
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"zen$"# title="^Picture-in-Picture$"
+    match app-id=r#"blender"# title=r#"^Blender Preferences$"#
+    
+    // all non-toplevel steam windows
+    match app-id=r#"^steam$"#
+    exclude app-id=r#"^steam$"# title=r#"^Steam$"#
+
     open-floating true
 }
 
-// Same thing for Zen.
+// rules for "system" windows
 window-rule {
-    match app-id=r#"zen$"# title="^Picture-in-Picture$"
+    match app-id=r#"^dev.noctalia.Noctalia$"#
+    match app-id=r#"^org.corectrl.CoreCtrl$"#
+    match app-id=r#"^com.github.wwmm.easyeffects$"# title=r#"Easy Effects"#
+    match app-id=r#"^io.github.ilya_zlobintsev.LACT$"#
+
+    default-column-width { fixed 1700; }
+    default-window-height { fixed 1200; }
+
+    open-floating true
+}
+
+// floating and size rule for wev
+window-rule {
+    match app-id=r#"wev"#
+
+    default-column-width { fixed 500; }
+    default-window-height { fixed 500; }
+
     open-floating true
 }
 
 window-rule {
     match app-id=r#"^Alacritty$"#
+
     default-column-width { proportion 0.5; }
+}
+
+// Rules for opening windows on workspaces 
+
+window-rule {
+    match app-id=r#"^zen$"# at-startup=true
+
+    open-on-workspace "Main"
+}
+
+window-rule {
+    match app-id=r#"^com.microsoft.VSCode$"#
+
+    open-on-workspace "Dev"
+}
+
+window-rule {
+    match app-id=r#"^discord$"#
+
+    open-on-workspace "Social"
+}
+
+window-rule {
+    match app-id=r#"^spotify$"#
+
+    open-on-workspace "Music"
 }
 
 /-window-rule {
@@ -234,13 +385,41 @@ window-rule {
     // block-out-from "screencast"
 }
 
+// catch-all rule: non-terminal or non-floating windows should open maximized
+window-rule {
+    exclude app-id=r#"^Alacritty$"#
+    exclude is-floating=true
+
+    open-maximized true
+}
+
 // Round all window corners.
 window-rule {
     geometry-corner-radius 8
     clip-to-geometry true
+    open-maximized-to-edges false
 }
 
+// oooo                               .o8        o8o                    .o8  
+// `888                              "888        `"'                   "888  
+//  888  oooo   .ooooo.  oooo    ooo  888oooo.  oooo  ooo. .oo.    .oooo888   .oooo.o 
+//  888 .8P'   d88' `88b  `88.  .8'   d88' `88b `888  `888P"Y88b  d88' `888  d88(  "8 
+//  888888.    888ooo888   `88..8'    888   888  888   888   888  888   888  `"Y88b.  
+//  888 `88b.  888    .o    `888'     888   888  888   888   888  888   888  o.  )88b 
+// o888o o888o `Y8bod8P'     .8'      `Y8bod8P' o888o o888o o888o `Y8bod88P" 8""888P' 
+//                       .o..P'                                                       
+//                       `Y8P'          
+
 binds {
+
+//                                               '||` 
+//                                                ||  
+//  .|''|, .|''|, `||''|,  .|''|, '||''|  '''|.   ||  
+//  ||  || ||..||  ||  ||  ||..||  ||    .|''||   ||  
+//  `|..|| `|...  .||  ||. `|...  .||.   `|..||. .||. 
+//      ||                                            
+//   `..|'     
+
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -248,13 +427,14 @@ binds {
     // Binds for running programs.
     Mod+grave hotkey-overlay-title="Open a terminal" \
         { spawn "alacritty"; }
-    Mod+D hotkey-overlay-title="Open the launcher" \
+    Mod+R hotkey-overlay-title="Open the launcher" \
         { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen" \
         { spawn "noctalia" "msg" "session" "lock"; }
     Ctrl+Alt+Delete hotkey-overlay-title="Open the session menu" \
         { spawn "noctalia" "msg" "panel-toggle" "session";}
 
+    // Media control binds.
     XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Volume up" \
         { spawn "noctalia" "msg" "volume-up" "5"; }
     XF86AudioLowerVolume allow-when-locked=true hotkey-overlay-title="Volume down" \
@@ -264,9 +444,9 @@ binds {
     XF86AudioMicMute     allow-when-locked=true hotkey-overlay-title="Mute microphone"\
         { spawn "noctalia" "msg" "mic-mute"; }
     
-    XF86AudioPlay        allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioNext        allow-when-locked=true { spawn "playerctl" "next"; }
-    XF86AudioPrev        allow-when-locked=true { spawn "playerctl" "prev"; }
+    XF86AudioPlay allow-when-locked=true { spawn "noctalia" "msg" "media" "play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn "noctalia" "msg" "media" "next"; }
+    XF86AudioPrev allow-when-locked=true { spawn "noctalia" "msg" "media" "previous"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
@@ -274,6 +454,47 @@ binds {
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Q repeat=false { close-window; }
+
+    // Actions to switch keyboard layouts.
+    // Note: if you uncomment these, make sure you do NOT have
+    // a matching layout switch hotkey configured in xkb options above.
+    // Having both at once on the same hotkey will break the switching,
+    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
+    // Mod+Space       { switch-layout "next"; }
+    // Mod+Shift+Space { switch-layout "prev"; }
+
+    // Binds to kill uncooperative windows, adding modifiers with increasing escalation.
+    
+    // SHIFT only sends SIGINT.
+    Mod+Shift+K      { spawn-sh "~/.config/niri/niri-kill.sh -i"; }
+    // CTRL only sends SIGTERM.
+    Mod+Ctrl+K       { spawn-sh "~/.config/niri/niri-kill.sh -t"; }
+    // SHIFT+CTRL sends SIGKILL.
+    Mod+Shift+Ctrl+K { spawn-sh "~/.config/niri/niri-kill.sh -k"; }
+
+    Print { screenshot; }
+    Mod+Print { screenshot-screen; }
+    Mod+Shift+Print { screenshot-window; }
+
+    // Applications such as remote-desktop clients and software KVM switches may
+    // request that niri stops processing the keyboard shortcuts defined here
+    // so they may, for example, forward the key presses as-is to a remote machine.
+    // It's a good idea to bind an escape hatch to toggle the inhibitor,
+    // so a buggy application can't hold your session hostage.
+    //
+    // The allow-inhibiting=false property can be applied to other binds as well,
+    // which ensures niri always processes them, even when an inhibitor is active.
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    Mod+Ctrl+Q hotkey-overlay-title="Exit to login screen" { quit; }
+
+//                          '||                                         
+//                           ||                                         
+// '\\    //` .|''|, '||''|  || //`  ('''' '||''|,  '''|.  .|'', .|''|, 
+//   \\/\//   ||  ||  ||     ||<<     `'')  ||  || .|''||  ||    ||..|| 
+//    \/\/    `|..|' .||.   .|| \\.  `...'  ||..|' `|..||. `|..' `|...  
+//                                          ||                          
+//                                         .||                          
 
     /*
     The general model for window management is: default granularity in the X axis
@@ -290,129 +511,180 @@ binds {
     Alt: Uses individual window granularity. up/down shuffles windows within a column
     */
 
+    // Switches focus between the current and the previous workspace.
+    Mod+Tab { focus-workspace-previous; }
+
+    Mod+Delete { spawn-sh "~/.config/niri/name-workspace.sh unset"; }
+    Mod+Slash  { spawn-sh "~/.config/niri/name-workspace.sh set"; }
+
     // Focus-changing keybinds, default granularity.
     Mod+WheelScrollUp         { focus-workspace-up; }
     Mod+WheelScrollDown       { focus-workspace-down; }
-    Mod+Shift+WheelScrollUp   { focus-column-left; }
-    Mod+Shift+WheelScrollDown { focus-column-right; }
+    Mod+Shift+WheelScrollUp   { focus-column-left-or-last; }
+    Mod+Shift+WheelScrollDown { focus-column-right-or-first; }
+
+    Mod+Up    { focus-workspace-up; }
+    Mod+Down  { focus-workspace-down; }
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
 
     Mod+WheelScrollLeft  { focus-column-left; }
     Mod+WheelScrollRight { focus-column-right; }
 
     Mod+MouseForward { focus-workspace-up; }
-    Mod+MouseBack    { focus-workspace-down; }
 
     // Adding Alt to the scroll gives us window-level granularity.
-    Mod+Alt+WheelScrollUp    { focus-window-up-or-column-left; }
-    Mod+Alt+WheelScrollDown  { focus-window-down-or-column-right; }
+    Super+Alt+WheelScrollUp    { focus-window-up-or-column-left; }
+    Super+Alt+WheelScrollDown  { focus-window-down-or-column-right; }
+    // These bindings are for DuckyPad support.
+    Super+Shift+Alt+Up         { focus-window-up-or-column-left; }
+    Super+Shift+Alt+Down       { focus-window-down-or-column-right; }
 
-    Mod+S      { focus-workspace "social"; }
-    Mod+M      { focus-workspace "music"; }
-    Mod+Return { focus-workspace "main"; }
+    Mod+Return { focus-workspace "Main"; }
+    Mod+A      { focus-workspace "Main"; }
+    Mod+S      { focus-workspace "Dev"; }
+    Mod+D      { focus-workspace "Social"; }
+    Mod+F      { focus-workspace "Music"; }
 
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
-    Mod+4 { focus-workspace 4; }
-    Mod+5 { focus-workspace 5; }
-    Mod+6 { focus-workspace 6; }
-    Mod+7 { focus-workspace 7; }
-    Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }
+    // Backspace corresponds to the first dynamic workspace.
+    Mod+Backspace { focus-workspace 5; }
+    Mod+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh focus"; }
+
+    Mod+1 { focus-workspace 5; }
+    Mod+2 { focus-workspace 6; }
+    Mod+3 { focus-workspace 7; }
+    Mod+4 { focus-workspace 8; }
+    Mod+5 { focus-workspace 9; }
 
     // No modifiers: focus control
-    Mod+Up    { focus-window-up-or-column-left; }
-    Mod+Down  { focus-window-down-or-column-right; }
-    Mod+Left  { focus-column-left; }
-    Mod+Right { focus-column-right; }
 
     Mod+Page_Up   { focus-workspace-up; }
     Mod+Page_Down { focus-workspace-down; }
 
+    Mod+BracketLeft  { focus-column-first; }
+    Mod+BracketRight { focus-column-last; }
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }
 
     // With ALT: move by window
-    Mod+Alt+Up    { move-window-up; }
-    Mod+Alt+Down  { move-window-down; }
-    Mod+Alt+Left  { consume-or-expel-window-left; }
-    Mod+Alt+Right { consume-or-expel-window-right; }
+    Super+Alt+Up    { move-window-up; }
+    Super+Alt+Down  { move-window-down; }
+    Super+Alt+Left  { consume-or-expel-window-left; }
+    Super+Alt+Right { consume-or-expel-window-right; }
 
-    // WheelScroll here is used to change focus by window granularity.
+    Super+Alt+Backspace      { move-window-to-workspace 5; }
+    Super+Alt+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh movewin"; }
 
-    // With SHIFT: move by column
+    Super+Alt+1 { move-window-to-workspace 5; }
+    Super+Alt+2 { move-window-to-workspace 6; }
+    Super+Alt+3 { move-window-to-workspace 7; }
+    Super+Alt+4 { move-window-to-workspace 8; }
+    Super+Alt+5 { move-window-to-workspace 9; }
+
+    // Keybinds to move the focused window to the first or last dynamic workspace.
+    Super+Alt+Ctrl+Backspace { move-window-to-workspace 5 focus=false; }
+    Super+Alt+Ctrl+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh movewin -nf"; }
+
+    // With SHIFT/CTRL: move by column, CTRL moves without changing focus
     Mod+Shift+Up    { move-column-to-workspace-up; }
     Mod+Shift+Down  { move-column-to-workspace-down; }
+    Mod+Ctrl+Up     { move-column-to-workspace-up focus=false; }
+    Mod+Ctrl+Down   { move-column-to-workspace-down focus=false; }
     Mod+Shift+Left  { move-column-left; }
     Mod+Shift+Right { move-column-right; }
+
+    // Shift+WheelScroll is used to change focus by column, so cannot be used for up/down here.
+    Mod+Shift+MouseForward { move-column-to-workspace-up; }
+    Mod+Shift+MouseBack    { move-column-to-workspace-down; }
+
+    Mod+Ctrl+MouseForward { move-column-to-workspace-up focus=false; }
+    Mod+Ctrl+MouseBack    { move-column-to-workspace-down focus=false; }
 
     Mod+Shift+WheelScrollLeft  { move-column-left; }
     Mod+Shift+WheelScrollRight { move-column-right; }
 
-    Mod+Shift+MouseForward { move-column-to-workspace-up; }
-    Mod+Shift+MouseBack    { move-column-to-workspace-down; }
+    Mod+Shift+Return { move-column-to-workspace "Main"; }
+    Mod+Shift+A      { move-column-to-workspace "Main"; }
+    Mod+Shift+S      { move-column-to-workspace "Dev"; }
+    Mod+Shift+D      { move-column-to-workspace "Social"; }
+    Mod+Shift+F      { move-column-to-workspace "Music"; }
 
-    Mod+Shift+S      { move-column-to-workspace "social"; }
-    Mod+Shift+M      { move-column-to-workspace "music"; }
-    Mod+Shift+Return { move-column-to-workspace "main"; }
+    Mod+Shift+Backspace { move-column-to-workspace 5; }
+    Mod+Shift+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh movecol"; }
 
-    Mod+Shift+1 { move-column-to-workspace 1; }
-    Mod+Shift+2 { move-column-to-workspace 2; }
-    Mod+Shift+3 { move-column-to-workspace 3; }
-    Mod+Shift+4 { move-column-to-workspace 4; }
-    Mod+Shift+5 { move-column-to-workspace 5; }
-    Mod+Shift+6 { move-column-to-workspace 6; }
-    Mod+Shift+7 { move-column-to-workspace 7; }
-    Mod+Shift+8 { move-column-to-workspace 8; }
-    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Ctrl+Return { move-column-to-workspace "Main" focus=false; }
+    Mod+Ctrl+A      { move-column-to-workspace "Main" focus=false; }
+    Mod+Ctrl+S      { move-column-to-workspace "Dev" focus=false; }
+    Mod+Ctrl+D      { move-column-to-workspace "Social" focus=false; }
+    Mod+Ctrl+F      { move-column-to-workspace "Music" focus=false; }
+
+    Mod+Ctrl+Backspace { move-column-to-workspace 5 focus=false; }
+    Mod+Ctrl+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh movecol -nf"; }
+
+    Mod+Shift+1 { move-column-to-workspace 5; }
+    Mod+Shift+2 { move-column-to-workspace 6; }
+    Mod+Shift+3 { move-column-to-workspace 7; }
+    Mod+Shift+4 { move-column-to-workspace 8; }
+    Mod+Shift+5 { move-column-to-workspace 9; }
+
+    Mod+Ctrl+1 { move-column-to-workspace 5 focus=false; }
+    Mod+Ctrl+2 { move-column-to-workspace 6 focus=false; }
+    Mod+Ctrl+3 { move-column-to-workspace 7 focus=false; }
+    Mod+Ctrl+4 { move-column-to-workspace 8 focus=false; }
+    Mod+Ctrl+5 { move-column-to-workspace 9 focus=false; }
 
     Mod+Shift+Page_Up   { move-column-to-workspace-up; }
     Mod+Shift+Page_Down { move-column-to-workspace-down; }
 
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up focus=false; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down focus=false; }
+
     Mod+Shift+Home { move-column-to-first; }
     Mod+Shift+End  { move-column-to-last; }
 
-    // With CTRL: move by workspace
+    // With SHIFT+CTRL: move by workspace
 
-    Mod+Ctrl+Up    { move-workspace-up; }
-    Mod+Ctrl+Down  { move-workspace-down; }
-    Mod+Ctrl+Left  { move-workspace-to-monitor-left; }
-    Mod+Ctrl+Right { move-workspace-to-monitor-right; }
+    Mod+Shift+Ctrl+Up    { move-workspace-up; }
+    Mod+Shift+Ctrl+Down  { move-workspace-down; }
+    Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
+    Mod+Shift+Ctrl+Right { move-workspace-to-monitor-right; }
 
-    Mod+Ctrl+WheelScrollUp    { move-workspace-up; }
-    Mod+Ctrl+WheelScrollDown  { move-workspace-down; }
-    Mod+Ctrl+WheelScrollLeft  { move-workspace-to-monitor-left; }
-    Mod+Ctrl+WheelScrollRight { move-workspace-to-monitor-right; }
+    Mod+Shift+Ctrl+WheelScrollUp    { move-workspace-up; }
+    Mod+Shift+Ctrl+WheelScrollDown  { move-workspace-down; }
+    Mod+Shift+Ctrl+WheelScrollLeft  { move-workspace-to-monitor-left; }
+    Mod+Shift+Ctrl+WheelScrollRight { move-workspace-to-monitor-right; }
 
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+1 { move-workspace-to-index 5; }
+    Mod+Shift+Ctrl+2 { move-workspace-to-index 6; }
+    Mod+Shift+Ctrl+3 { move-workspace-to-index 7; }
+    Mod+Shift+Ctrl+4 { move-workspace-to-index 8; }
+    Mod+Shift+Ctrl+5 { move-workspace-to-index 9; }
 
-    // Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
-    // Mod+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
+    Mod+Shift+Ctrl+Backspace { move-workspace-to-index 5; }
 
-    // Switches focus between the current and the previous workspace.
-    Mod+Tab { focus-workspace-previous; }
-
-    // Window comsumption/expulsion.
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
+//  '||`                                    ||    
+//   ||                                     ||    
+//   ||   '''|.  '||  ||` .|''|, '||  ||` ''||''  
+//   ||  .|''||   `|..||  ||  ||  ||  ||    ||    
+//  .||. `|..||.      ||  `|..|'  `|..'|.   `|..' 
+//                 ,  |'                          
+//                  ''                            
 
     // Consume one window from the right to the bottom of the focused column.
     Mod+Comma  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
     Mod+Period { expel-window-from-column; }
 
-    Mod+R { switch-preset-column-width; }
-    Mod+Shift+R { switch-preset-window-height; }
-    Mod+Ctrl+R { reset-window-height; }
-    Mod+F { maximize-column; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+E { switch-preset-column-width; }
+    Mod+Shift+E { switch-preset-window-height; }
+    Mod+Ctrl+E { reset-window-height; }
+
+    Mod+M { maximize-column; }
+    Mod+Shift+M { fullscreen-window; }
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
-    Mod+Ctrl+F { expand-column-to-available-width; }
+    Mod+Ctrl+M { expand-column-to-available-width; }
 
     Mod+C { center-column; }
 
@@ -427,38 +699,16 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
+    // Mod+H { move-floating-window x="-10"; }
+
     // Move the focused window between the floating and the tiling layout.
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+T       { toggle-window-floating; }
+    Mod+Shift+T { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
     Mod+W { toggle-column-tabbed-display; }
-
-    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
-
-    Print { screenshot; }
-    Mod+Print { screenshot-screen; }
-    Mod+Shift+Print { screenshot-window; }
-
-    // Applications such as remote-desktop clients and software KVM switches may
-    // request that niri stops processing the keyboard shortcuts defined here
-    // so they may, for example, forward the key presses as-is to a remote machine.
-    // It's a good idea to bind an escape hatch to toggle the inhibitor,
-    // so a buggy application can't hold your session hostage.
-    //
-    // The allow-inhibiting=false property can be applied to other binds as well,
-    // which ensures niri always processes them, even when an inhibitor is active.
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
-    Mod+Shift+E hotkey-overlay-title="Exit to login screen" { quit; }
 }
 
 recent-windows {
@@ -472,7 +722,7 @@ recent-windows {
         active-color "#999999ff"
         urgent-color "#ff9999ff"
         padding 30
-        corner-radius 0
+        corner-radius 8
     }
 
     previews {
@@ -485,10 +735,16 @@ recent-windows {
         Alt+Shift+Tab   { previous-window; }
         Alt+grave       { next-window     filter="app-id"; }
         Alt+Shift+grave { previous-window filter="app-id"; }
-
-        Mod+Tab         { next-window; }
-        Mod+Shift+Tab   { previous-window; }
-        Mod+grave       { next-window     filter="app-id"; }
-        Mod+Shift+grave { previous-window filter="app-id"; }
     }
+}
+
+environment {
+    // already in /etc/niri/env, but set here for completeness.
+    DUCKYPAD_UI_SCALE "1.5"
+}
+
+debug {
+    // bodge for electron apps like discord to have working notifications,
+    // also for noctalia notifications to work.
+    honor-xdg-activation-with-invalid-serial
 }

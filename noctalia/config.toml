@@ -1,0 +1,42 @@
+[notification]
+max_visible = 5
+
+[shell]
+telemetry_enabled = true
+
+[shell.panel]
+open_near_click_control_center = true
+
+[theme]
+community_palette = "Cyberpunk"
+source = "community"
+
+[dock]
+active_monitor_only = true
+auto_hide = true
+concave_edge_corners = false
+enabled = true
+icon_size = 40
+launcher_position = "end"
+margin_edge = 5
+pinned = [
+    "zen",
+    "com.microsoft.VSCode",
+    "dev.zed.Zed",
+    "zotero",
+    "Alacritty",
+    "org.kde.dolphin",
+    "obsidian",
+    "discord",
+    "io.element.Element",
+    "spotify-launcher",
+    "ario",
+    "steam",
+    "org.freecad.FreeCAD",
+    "blender",
+    "audacity"
+]
+position = "right"
+reserve_space = false
+show_dots = true
+show_instance_count = false
