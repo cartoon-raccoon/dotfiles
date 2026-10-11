@@ -86,7 +86,6 @@ layout {
     center-focused-column "on-overflow"
 
     preset-column-widths {
-        proportion 0.33333
         proportion 0.5
         proportion 0.66667
         proportion 0.75
@@ -94,7 +93,6 @@ layout {
     }
 
     preset-window-heights {
-        proportion 0.33333
         proportion 0.5
         proportion 0.66667
         proportion 0.75
@@ -117,7 +115,7 @@ layout {
         // Color of the ring on inactive monitors.
         inactive-color "#505050"
 
-        // active-gradient from="#80c8ff" to="#bbddff" angle=45
+        active-gradient from="#a9c8fd" to="#0a305d" angle=45
 
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
@@ -126,15 +124,15 @@ layout {
         // off
 
         width 2
-        active-color "#ffc87f"
+        active-color "#a9c8fd"
         inactive-color "#505050"
 
         // Color of the border around windows that request your attention.
         urgent-color "#9b0000"
 
-        // active-gradient from="#ffbb66" to="#ffc880" angle=45 relative-to="workspace-view"
+        active-gradient from="#a9c8fd" to="#0a305d" angle=135 relative-to="workspace-view"
 
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#505050" to="#808080" angle=135 relative-to="workspace-view"
     }
 
     shadow {
@@ -191,6 +189,14 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 hotkey-overlay {
     skip-at-startup
 }
+
+//                        o8o                             
+//                        `"'                             
+//  .oooo.   ooo. .oo.   oooo  ooo. .oo.  .oo.    .oooo.o 
+// `P  )88b  `888P"Y88b  `888  `888P"Y88bP"Y88b  d88(  "8 
+//  .oP"888   888   888   888   888   888   888  `"Y88b.  
+// d8(  888   888   888   888   888   888   888  o.  )88b 
+// `Y888""8o o888o o888o o888o o888o o888o o888o 8""888P' 
 
 // Animation settings.
 animations {
@@ -317,6 +323,12 @@ window-rule {
     match app-id=r#"^steam$"#
     exclude app-id=r#"^steam$"# title=r#"^Steam$"#
 
+    match app-id=r#"^blueman-manager$"#
+
+    match app-id=r#"^org.telegram.desktop$"# title=r#"^Media viewer$"#
+
+    match app-id=r#"^nemo$"# title=r#".* Properties"#
+
     open-floating true
 }
 
@@ -343,10 +355,55 @@ window-rule {
     open-floating true
 }
 
+// Alacritty-specific rules
 window-rule {
     match app-id=r#"^Alacritty$"#
 
     default-column-width { proportion 0.5; }
+}
+
+// rule for splash screens
+window-rule {
+    // match on ^FreeCAD$, since main window has version (e.g. FreeCAD 1.1.x)
+    match app-id=r#"org.freecad.FreeCAD"# title=r#"^FreeCAD$"#
+
+    open-floating true
+
+    border {
+        off
+    }
+
+    shadow {
+        off
+    }
+
+    background-effect {
+        xray true
+        blur false
+    }
+}
+
+// steam windows sometimes undraw their contents before they actually delete the window,
+// which means the border gets shown as a solid rectangle momentarily before the window
+// disappears. this rule forces the border to be drawn as a border.
+window-rule {
+    match app-id=r#"^steam$"#
+    exclude app-id=r#"^steam$"# title=r#"^Steam$"#
+
+    draw-border-with-background false
+}
+
+// window rule for blacking out certain things from screen capture.
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+    match app-id=r#"^app\.drey\.KeyRack$"#
+    match app-id=r#"^Bitwarden$"#
+
+    block-out-from "screen-capture"
+
+    // Use this instead if you want them visible on third-party screenshot tools.
+    // block-out-from "screencast"
 }
 
 // Rules for opening windows on workspaces 
@@ -365,7 +422,10 @@ window-rule {
 
 window-rule {
     match app-id=r#"^discord$"#
+    match app-id=r#"^Element$"#
 
+    // todo: uncomment once the next release of niri is out
+    //on-xdg-activate "focus"
     open-on-workspace "Social"
 }
 
@@ -375,19 +435,11 @@ window-rule {
     open-on-workspace "Music"
 }
 
-/-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-    block-out-from "screen-capture"
-
-    // Use this instead if you want them visible on third-party screenshot tools.
-    // block-out-from "screencast"
-}
-
 // catch-all rule: non-terminal or non-floating windows should open maximized
 window-rule {
     exclude app-id=r#"^Alacritty$"#
+    exclude app-id=r#"^Bitwarden$"#
+    exclude app-id=r#"^app.drey.KeyRack$"#
     exclude is-floating=true
 
     open-maximized true
@@ -429,7 +481,9 @@ binds {
         { spawn "alacritty"; }
     Mod+R hotkey-overlay-title="Open the launcher" \
         { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen" \
+    Mod+Shift+R hotkey-overlay-title="Run a command" \
+        { spawn "noctalia" "msg" "panel-toggle" "nocode-96/cmd-runner:panel"; }
+    Mod+Ctrl+L hotkey-overlay-title="Lock the Screen" \
         { spawn "noctalia" "msg" "session" "lock"; }
     Ctrl+Alt+Delete hotkey-overlay-title="Open the session menu" \
         { spawn "noctalia" "msg" "panel-toggle" "session";}
@@ -572,7 +626,7 @@ binds {
     Super+Alt+Left  { consume-or-expel-window-left; }
     Super+Alt+Right { consume-or-expel-window-right; }
 
-    Super+Alt+Backspace      { move-window-to-workspace 5; }
+    Super+Alt+Backspace { move-window-to-workspace 5; }
     Super+Alt+Backslash { spawn-sh "~/.config/niri/lastwkspc.sh movewin"; }
 
     Super+Alt+1 { move-window-to-workspace 5; }
