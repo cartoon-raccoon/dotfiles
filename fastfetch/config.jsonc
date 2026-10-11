@@ -29,9 +29,6 @@
     "separator",
     "cpu",
     "gpu",
-    "vulkan",
-    "opengl",
-    "opencl",
     // system info
     "separator",
     "memory",
