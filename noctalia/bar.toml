@@ -9,9 +9,18 @@ compositor_blur = false
 margin_ends = 10
 
 start = [ "weather", "mwspacer", "media", "audio_visualizer" ]
-center = [ "time", "date" ]
+center = [ "time", "datetimespacer", "date" ]
 end = [
-    "network",
+    "cpu-gauge",
+    "cpu-temp",
+    "cpu-freq",
+    "gpu-gauge",
+    "gpu-temp",
+    "gpu-vram",
+    "ram-pct",
+    "ram-usage",
+    "netup",
+    "netdn",
     "battery",
 ]
 
@@ -28,16 +37,16 @@ position = "bottom"
 show_on_workspace_switch = false
 
 start = [ "taskbar" ]
-center = [ ]
+center = [ "curr-window" ]
 end = [
     "tray",
     "notifications",
     "clipboard",
     "caffeine",
     "bluetooth",
+    "network",
     "volume",
     "brightness",
-    "battery",
     "control-center",
     "session"
 ]
@@ -51,7 +60,17 @@ width = 100
 [widget.control-center]
 glyph = "adjustments"
 
+[widget.cat]
+type = "noctalia/bongocat:cat"
+audio_spectrum = true
+enable_scroll = false
+tappy_mode = true
+
 [widget.mwspacer]
+type = "spacer"
+length = 10
+
+[widget.datetimespacer]
 type = "spacer"
 length = 10
 
@@ -63,11 +82,15 @@ format = "{:%A, %e %b %Y}"
 type = "clock"
 format = "{:%H:%M}"
 
+[widget.time.actions]
+left = "panel-toggle noctalia/world_clock:panel"
+
 [widget.media]
 art_size = 30
 artist_first = true
 show_progress = true
 rotate_album_art = true
+max_length = 300
 
 [widget.taskbar]
 group_by_workspace = true
@@ -75,3 +98,51 @@ workspace_group_content = "icons"
 group_single_icon_per_app = true
 workspace_label_placement = "centered"
 icon_scale = 1.1
+
+[widget.curr-window]
+type = "active_window"
+max_length = 400
+title_scroll = "on_hover"
+
+[widget.netdn]
+type = "sysmon"
+stat = "net_rx"
+
+[widget.netup]
+type = "sysmon"
+stat = "net_tx"
+
+[widget.cpu-gauge]
+type = "sysmon"
+stat = "cpu_usage"
+
+[widget.cpu-temp]
+#show_glyph = false
+type = "sysmon"
+stat = "cpu_temp"
+
+[widget.cpu-freq]
+type = "sysmon"
+stat = "cpu_freq"
+
+[widget.gpu-gauge]
+type = "sysmon"
+stat = "gpu_usage"
+
+[widget.gpu-temp]
+type = "sysmon"
+stat = "gpu_temp"
+
+[widget.gpu-vram]
+type = "sysmon"
+stat = "gpu_vram"
+
+[widget.ram-pct]
+glyph = "memory"
+type = "sysmon"
+stat = "ram_pct"
+
+[widget.ram-usage]
+#show_glyph = false
+type = "sysmon"
+stat = "ram_used"

@@ -1,15 +1,19 @@
-[notification]
-max_visible = 5
-
 [shell]
 telemetry_enabled = true
+polkit_agent = true
 
 [shell.panel]
 open_near_click_control_center = true
 
+[notification]
+max_visible = 5
+
 [theme]
 community_palette = "Cyberpunk"
-source = "community"
+custom_palette = "astronaut-mc"
+mode = "dark"
+source = "custom"
+wallpaper_scheme = "m3-content"
 
 [dock]
 active_monitor_only = true
@@ -30,7 +34,6 @@ pinned = [
     "discord",
     "io.element.Element",
     "spotify-launcher",
-    "ario",
     "steam",
     "org.freecad.FreeCAD",
     "blender",

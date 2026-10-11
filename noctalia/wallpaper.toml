@@ -2,6 +2,7 @@
 enabled = true
 fill_mode = "fit"
 transition = "fade"
+directory = "/home/sammy/Pictures/Wallpaper"
 
 [wallpaper.default]
 path = "/home/sammy/Pictures/Wallpaper/astronaut.png"
