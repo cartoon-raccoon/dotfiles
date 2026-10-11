@@ -174,13 +174,17 @@
         "enable-bar-scroll": false,
         "format": "{icon}",
         "format-icons": {
-            "main": " ",
-            "social": " ",
-            "music": " ",
+            "Main": " ",
+            "Dev": " ",
+            "Social": " ",
+            "Music": " ",
             "urgent": " ",
             "focused": " ",
             "default": " "
         }
+    },
+    "taskbar": {
+        "all-outputs": false
     },
     "niri/window": {
         "format": "{title}",

@@ -11,7 +11,7 @@ if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
     elif [ "$(hostname)" = "raccoonpc" ]; then
         CONFIG_FILE="$HOME/.config/waybar/config-hypr.jsonc"
     fi
-elif [ "$XDG_SESSION_DESKTOP" = "Niri" ]; then
+elif [ "$XDG_SESSION_DESKTOP" = "niri" ]; then
     CONFIG_FILE="$HOME/.config/waybar/config-niri.jsonc"
 fi
 
@@ -38,7 +38,7 @@ while true; do
         notify-send -t 5000 "Waybar Launcher" "Script file $SCRIPT_FILE was modified, re-executing" >&2
         exec bash "$SCRIPT_FILE"
     else
-        notify-send -t "Waybar config file $modded was modified, sending SIGUSR2" >&2
+        notify-send -t 5000 "Waybar Launcher" "Waybar config file $modded was modified, sending SIGUSR2" >&2
         killall -SIGUSR2 waybar || start_waybar
     fi
 done
