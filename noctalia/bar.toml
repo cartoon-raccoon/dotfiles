@@ -41,6 +41,7 @@ center = [ "curr-window" ]
 end = [
     "tray",
     "notifications",
+    "disks-manager",
     "clipboard",
     "caffeine",
     "bluetooth",
@@ -65,6 +66,11 @@ type = "noctalia/bongocat:cat"
 audio_spectrum = true
 enable_scroll = false
 tappy_mode = true
+
+[widget.disks-manager]
+type = "aristides/udiskie:status"
+enable_notifications = false
+hide_when_empty = true
 
 [widget.mwspacer]
 type = "spacer"
