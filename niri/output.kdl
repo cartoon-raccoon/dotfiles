@@ -1,0 +1,12 @@
+// Outputs
+output "DP-1" {
+    mode "3840x2160@160.001"
+    scale 1.5
+    transform "normal"
+    position x=0 y=0
+    variable-refresh-rate
+
+    hot-corners {
+        top-left
+    }
+}
