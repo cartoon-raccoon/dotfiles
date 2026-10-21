@@ -1,3 +1,11 @@
 # `hypr`
 
-These are the config files for every app that I use within the `hypr` ecosystem.
+These are the configuration files for the Hypr ecosystem built around the Hyprland Wayland compositor.
+
+## Dependencies
+
+TODO
+
+## Workspace Model
+
+See `workspaces.lua` for the model.
