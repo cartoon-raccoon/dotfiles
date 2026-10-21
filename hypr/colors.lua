@@ -306,6 +306,12 @@ function Color:as_hl_col()
     return self:tostring()
 end
 
+--- Alias for Color:as_hl_col.
+--- @return string str A string formatted for Hyprland.
+function Color:as_hl()
+    return self:as_hl_col()
+end
+
 --                                     .o8   o8o                            .   
 --                                    "888   `"'                          .o8   
 --  .oooooooo oooo d8b  .oooo.    .oooo888  oooo   .ooooo.  ooo. .oo.   .o888oo 
@@ -412,7 +418,7 @@ end
 
 --- Alias for Gradient:as_hl_grad.
 --- @return HL.Gradient
-function Gradient:as_hl_col()
+function Gradient:as_hl()
     return self:as_hl_grad()
 end
 

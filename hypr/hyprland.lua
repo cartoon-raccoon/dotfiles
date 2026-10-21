@@ -56,10 +56,10 @@ hl.config({
         gaps_out = 10,
         border_size = 2,
         col = {
-            active_border = col.borders.active:as_hl_col(),
-            inactive_border = col.borders.inactive:as_hl_col(),
-            nogroup_border_active = col.borders.nogroup.active:as_hl_col(),
-            nogroup_border = col.borders.nogroup.inactive:as_hl_col(),
+            active_border = col.borders.active:as_hl(),
+            inactive_border = col.borders.inactive:as_hl(),
+            nogroup_border_active = col.borders.nogroup.active:as_hl(),
+            nogroup_border = col.borders.nogroup.inactive:as_hl(),
         },
 
         layout = "scrolling",
@@ -117,16 +117,16 @@ hl.config({
         merge_groups_on_drag = false,
 
         col = {
-            border_active = col.group.active:as_hl_col(),
-            border_inactive = col.group.inactive:as_hl_col(),
+            border_active = col.group.active:as_hl(),
+            border_inactive = col.group.inactive:as_hl(),
         },
 
         groupbar = {
             font_size = 12,
             height = 14,
             col = {
-                active = col.group.groupbar.active:as_hl_col(),
-                inactive = col.group.groupbar.inactive:as_hl_col(),
+                active = col.group.groupbar.active:as_hl(),
+                inactive = col.group.groupbar.inactive:as_hl(),
             }
         }
     },
