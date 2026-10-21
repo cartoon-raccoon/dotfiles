@@ -39,6 +39,7 @@ dp.profilemap = {
 }
 
 dp.last_profile = "General"
+dp.fallback_profile = "General"
 
 --- Match `pat` with `source`.
 --- Returns true if `pat` or `source` are nil, or `source` matches `pat`.
@@ -51,7 +52,7 @@ end
 --- @param class string The class of the app to match.
 --- @param title string The title of the app to match.
 --- @return string|nil profile The matched profile, if any.
-local function match(class, title)
+function dp.match(class, title)
     for k, v in pairs(dp.profilemap) do
         if single_match(k.class, class) and single_match(k.title, title) then
             return v
@@ -61,10 +62,21 @@ local function match(class, title)
     return nil
 end
 
+--- Return the profile corresponding to the current active window.
+--- @return string profile The profile matching the current active window.
+function dp.active_window_profile()
+    local win = hl.get_active_window()
+    if win == nil then
+        return dp.fallback_profile
+    end
+
+    return dp.match(win.class, win.title) or dp.fallback_profile
+end
+
 --- Send a command to the DuckyPad.
 --- @param cmd DP.Command
 --- @param args? table<string>
-local function send_command(cmd, args)
+function dp.send_command(cmd, args)
     local command = prefix .. cmd
     if args then
         for i = 1,#args do
@@ -77,11 +89,11 @@ end
 dp.hook = hl.on("window.active", function(w)
     -- hl.notification.create({ text = "Class: " .. w.class .. " Title: " .. w.title, timeout = 2000 })
     if w.class == nil and w.title == nil then return end
-    
-    local profile = match(w.class, w.title)
+
+    local profile = dp.match(w.class, w.title)
     if profile == nil then
-        dp.last_profile = "General"
-        send_command("goto-profile-name", { "General" })
+        dp.last_profile = dp.fallback_profile
+        dp.send_command("goto-profile-name", { dp.fallback_profile })
     else
         -- If the last profile matches the new profile, don't spin up a new process, just leave it and return
         if dp.last_profile == profile then
@@ -89,11 +101,8 @@ dp.hook = hl.on("window.active", function(w)
         end
 
         dp.last_profile = profile
-        send_command("goto-profile-name", { profile })
+        dp.send_command("goto-profile-name", { profile })
     end
 end)
-
-dp.match = match
-dp.send_command = send_command
 
 return dp
