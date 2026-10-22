@@ -114,7 +114,7 @@ hl.config({
 
         groupbar = {
             font_size = 12,
-            height = 14,
+            height = 18,
             col = {
                 active = col.group.groupbar.active:as_hl(),
                 inactive = col.group.groupbar.inactive:as_hl(),

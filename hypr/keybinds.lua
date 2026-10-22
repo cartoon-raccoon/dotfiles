@@ -689,10 +689,10 @@ end
 --- Directional navigation keybinds.
 kb.dir = {
     mouse = {
-        up = hl.bind(mainmod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }),
+        up = hl.bind(mainmod .. " + mouse_up", hl.dsp.focus({ workspace = "m-1" }),
             { description = "Focus on the previous workspace" }
         ),
-        down = hl.bind(mainmod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }),
+        down = hl.bind(mainmod .. " + mouse_down", hl.dsp.focus({ workspace = "m+1" }),
             { description = "Focus on the next workspace" }
         ),
         left = {
@@ -705,8 +705,8 @@ kb.dir = {
         }
     },
     focus = {
-        up = hl.bind(mainmod .. " + Up", hl.dsp.focus({ workspace = "e-1" })),
-        down = hl.bind(mainmod .. " + Down", hl.dsp.focus({ workspace = "e+1" })),
+        up = hl.bind(mainmod .. " + Up", hl.dsp.focus({ workspace = "m-1" })),
+        down = hl.bind(mainmod .. " + Down", hl.dsp.focus({ workspace = "m+1" })),
         left = {
             --- Move by window.
             coarse = hl.bind(mainmod .. " + CTRL + Left", dirprev()),
@@ -721,8 +721,8 @@ kb.dir = {
         },
     },
     move = {
-        up = hl.bind(mainmod .. " + SHIFT + Up", hl.dsp.window.move({ workspace = "e-1" })),
-        down = hl.bind(mainmod .. " + SHIFT + Down", hl.dsp.window.move({ workspace = "e+1" })),
+        up = hl.bind(mainmod .. " + SHIFT + Up", hl.dsp.window.move({ workspace = "m-1" })),
+        down = hl.bind(mainmod .. " + SHIFT + Down", hl.dsp.window.move({ workspace = "m+1" })),
         left = {
             coarse = hl.bind(mainmod .. " + CTRL + SHIFT + Left", moveleft()),
             fine = hl.bind(mainmod .. " + SHIFT + Left", move_grp_left_or_prev),
@@ -950,10 +950,16 @@ kb.submaps = {
     overview = {
         bind = kb.session.overview.open,
         submap = hl.define_submap("scrolloverview", function()
+            -- arrow keys and WASD (for left hand use)
             hl.bind("Left", soview.navigate("left"))
             hl.bind("Right", soview.navigate("right"))
             hl.bind("Up", soview.navigate("up"))
             hl.bind("Down", soview.navigate("down"))
+
+            hl.bind("W", soview.navigate("up"))
+            hl.bind("A", soview.navigate("left"))
+            hl.bind("S", soview.navigate("down"))
+            hl.bind("D", soview.navigate("right"))
 
             hl.bind("SHIFT + mouse_up", soview.navigate("left"))
             hl.bind("SHIFT + mouse_down", soview.navigate("right"))
@@ -966,6 +972,8 @@ kb.submaps = {
                 soview.window("select")
                 soview.overview("off")
             end, { mouse = true })
+
+            hl.bind("Q", soview.window("close"))
             hl.bind("mouse:273", soview.window("close"))
 
             hl.bind("Escape", soview.overview("close all"))
