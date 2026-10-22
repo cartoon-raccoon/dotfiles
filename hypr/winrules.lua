@@ -8,7 +8,7 @@
 
 local ws = require("workspaces")
 
-wr = {}
+local wr = {}
 
 -- window rules pertaining to workspaces.
 wr.workspace = {

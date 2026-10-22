@@ -15,7 +15,10 @@ local dp = require("duckypad")
 local soview = hl.plugin.scrolloverview
 local hy3 = hl.plugin.hy3
 
-kb = {}
+local kb = {}
+
+--- Functions that return dispatchers.
+kb.dsp = {}
 
 local mainmod = "SUPER"
 
@@ -41,6 +44,8 @@ local function per_layout(bind_table)
         end
     end
 end
+
+kb.per_layout = per_layout
 
 --       .o8   o8o                                                       
 --      "888   `"'                                                       
@@ -68,7 +73,7 @@ local function runlauncher(cmd)
     end
 end
 
-kb.runlauncher = runlauncher
+kb.dsp.runlauncher = runlauncher
 
 --- Generate the dispatcher to increase volume.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
@@ -80,7 +85,7 @@ local function volup()
     end
 end
 
-kb.volup = volup
+kb.dsp.volup = volup
 
 --- Generate the dispatcher to decrease volume.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
@@ -92,6 +97,8 @@ local function voldn()
     end
 end
 
+kb.dsp.voldn = voldn
+
 --- Generate the dispatcher to toggle mute.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
 local function volmute()
@@ -102,6 +109,8 @@ local function volmute()
     end
 end
 
+kb.dsp.volmute = volmute
+
 local function mediaplaypause()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg media play-pause")
@@ -109,6 +118,8 @@ local function mediaplaypause()
         return hl.dsp.exec_cmd("playerctl play-pause")
     end
 end
+
+kb.dsp.mediaplaypause = mediaplaypause
 
 local function medianext()
     if env.using_noctalia then
@@ -118,6 +129,8 @@ local function medianext()
     end
 end
 
+kb.dsp.medianext = medianext
+
 local function mediaprev()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg media previous")
@@ -125,6 +138,8 @@ local function mediaprev()
         return hl.dsp.exec_cmd("playerctl previous")
     end
 end
+
+kb.dsp.mediaprev = mediaprev
 
 --- Generate the dispatcher to take a screenshot. The command generated depends on the mode.
 --- If running Noctalia, calls `noctalia msg screenshot-*`, otherwise uses a custom `grim` script.
@@ -157,6 +172,8 @@ local function screenshot(mode)
     return hl.dsp.no_op()
 end
 
+kb.dsp.screenshot = screenshot
+
 --- Generate the dispatcher to activate the window switcher. The command generated depends on the mode.
 local function winswitch(mode)
     if env.using_noctalia then
@@ -172,6 +189,8 @@ local function winswitch(mode)
     return hl.dsp.no_op()
 end
 
+kb.dsp.winswitch = winswitch
+
 local function locksession()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg session lock")
@@ -180,6 +199,8 @@ local function locksession()
     end
 end
 
+kb.dsp.locksession = locksession
+
 local function sessionmenu()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg panel-toggle session")
@@ -187,6 +208,8 @@ local function sessionmenu()
         return hl.dsp.no_op() -- todo: find a session panel provider
     end
 end
+
+kb.dsp.sessionmenu = sessionmenu
 
 --                                                               oooo  
 --                                                               `888  
@@ -420,6 +443,8 @@ local function minimize()
     hl.dispatch(hl.dsp.window.move({ workspace = ws.specials.minimized:sel_id(), follow = false }))
 end
 
+kb.minimize = minimize
+
 --- "Deminimizes" the last minimized window by moving it back to the current active workspace.
 local function deminimize()
     local minwksp = hl.get_workspace(ws.specials.minimized:sel_id())
@@ -434,6 +459,8 @@ local function deminimize()
     -- untag the window with that tag
     hl.dispatch(hl.dsp.window.clear_tags({ window = "tag:" .. tag }))
 end
+
+kb.deminimize = deminimize
 
 --- Window control keybinds.
 kb.window = {
@@ -592,6 +619,8 @@ local function dirprev()
     })
 end
 
+kb.dsp.dirprev = dirprev
+
 --- Returns a dispatcher that focuses on the layout-dependent "next" window.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
 local function dirnext()
@@ -602,6 +631,8 @@ local function dirnext()
     })
 end
 
+kb.dsp.dirnext = dirnext
+
 --- Returns a dispatcher that moves the active window "left", depending on the layout.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
 local function moveleft()
@@ -611,6 +642,8 @@ local function moveleft()
     })
 end
 
+kb.dsp.moveleft = moveleft
+
 --- Returns a dispatcher that moves the active window "right", depending on the layout.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
 local function moveright()
@@ -619,6 +652,8 @@ local function moveright()
         master = hl.dsp.no_op() -- todo
     })
 end
+
+kb.dsp.moveright = moveright
 
 --- Focuses on the previous group member or the previous window, depending on current focus position.
 --- 
@@ -637,6 +672,8 @@ local function focus_grp_left_or_prev()
     end
 end
 
+kb.focus_grp_left_or_prev = focus_grp_left_or_prev
+
 --- Focuses on the next group member or the next window, depending on current focus position.
 --- 
 --- Note: This *is* a dispatcher; it does not return one.
@@ -654,6 +691,8 @@ local function focus_grp_right_or_next()
     end
 end
 
+kb.focus_grp_right_or_next = focus_grp_right_or_next
+
 --- Moves the focused window left within the group, or moves the group left,
 --- depending on focused window position.
 --- 
@@ -670,6 +709,8 @@ local function move_grp_left_or_prev()
     end
 end
 
+kb.move_grp_left_or_prev = move_grp_left_or_prev
+
 --- Moves the focused window right within the group, or moves the group right,
 --- depending on focused window position.
 --- 
@@ -685,6 +726,8 @@ local function move_grp_right_or_next()
         hl.dispatch(moveright())
     end
 end
+
+kb.move_grp_right_or_next = move_grp_right_or_next
 
 --- Directional navigation keybinds.
 kb.dir = {
@@ -879,6 +922,8 @@ local function move_into_or_out_of_group(direction)
         end
     end
 end
+
+kb.dsp.move_into_or_out_of_group = move_into_or_out_of_group
 
 --- Group manipulation keybinds.
 kb.group = {
@@ -1079,7 +1124,5 @@ kb.reserved = {
 
     --todo: add more
 }
-
-kb.per_layout = per_layout
 
 return kb

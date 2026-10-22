@@ -7,8 +7,8 @@ require("os")
 require("io")
 require("string")
 
-local env = require("env")
-local col = require("colors")
+env = require("env")
+col = require("colors")
 
 --                           .                              .            
 --                         .o8                            .o8            
@@ -250,13 +250,13 @@ hl.animation({
 --                         o888o                                          
 
 -- import workspace functionality
-local ws = require("workspaces")
+ws = require("workspaces")
 -- import window rules
-local wr = require("winrules")
+wr = require("winrules")
 -- import key bindings
-local kb = require("keybinds")
+kb = require("keybinds")
 -- import duckypad hooks
-local dp = require("duckypad")
+dp = require("duckypad")
 
 --  .ooooo.  oooo    ooo  .ooooo.   .ooooo.   .oooo.o 
 -- d88' `88b  `88b..8P'  d88' `88b d88' `"Y8 d88(  "8 

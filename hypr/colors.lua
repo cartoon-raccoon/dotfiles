@@ -9,7 +9,7 @@
 require("string")
 require("table")
 
-col = {}
+local col = {}
 
 --- Clamp a number between a range.
 --- @param i number The number to clamp.

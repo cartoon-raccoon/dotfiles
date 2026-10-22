@@ -24,7 +24,7 @@ require("string")
 ---| "write-pgv"
 ---| "update-rtc"
 
-dp = {}
+local dp = {}
 
 local prefix = "duckyctl "
 

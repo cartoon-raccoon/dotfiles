@@ -6,7 +6,7 @@
 
 -- Variables that will be used everywhere.
 
-env = {}
+local env = {}
 
 env.home_dir = os.getenv("HOME")
 

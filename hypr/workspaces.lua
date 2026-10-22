@@ -88,7 +88,7 @@ Workspace.__index = Workspace
 ---@field on_created_empty? string
 ---@field persistent? boolean
 
-ws = {}
+local ws = {}
 
 --- Construct a new Workspace.
 --- @param type WorkspaceType The type of workspace.
