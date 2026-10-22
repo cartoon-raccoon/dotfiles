@@ -331,7 +331,11 @@ workspace "Music" {
 // 888    .o  .o8"'88b   888    .o 888   .o8 o.  )88b 
 // `Y8bod8P' o88'   888o `Y8bod8P' `Y8bod8P' 8""888P'  
 
+// Sync the duckyPad's realtime clock
 spawn-at-startup "duckyctl" "update-rtc"
+
+// Tell the duckyPad we will be using Niri today
+spawn-at-startup "duckyctl" "write-pgv" "-i" "2=1"
 
 spawn-at-startup "easyeffects"
 
@@ -376,6 +380,7 @@ window-rule {
     match app-id=r#"^org.corectrl.CoreCtrl$"#
     match app-id=r#"^com.github.wwmm.easyeffects$"# title=r#"Easy Effects"#
     match app-id=r#"^io.github.ilya_zlobintsev.LACT$"#
+    match app-id=r#"^org.kde.drkonqi.coredump.gui$"#
 
     default-column-width { fixed 1700; }
     default-window-height { fixed 1200; }
@@ -389,7 +394,6 @@ window-rule {
 
     default-column-width { fixed 500; }
     default-window-height { fixed 500; }
-
     open-floating true
 }
 
@@ -454,6 +458,7 @@ window-rule {
 
 window-rule {
     match app-id=r#"^com.microsoft.VSCode$"#
+    match app-id=r#"^dev.zed.Zed$"#
 
     open-on-workspace "Dev"
 }
@@ -547,6 +552,7 @@ binds {
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
     Mod+O repeat=false { toggle-overview; }
+    Mod+MouseMiddle repeat=false { toggle-overview; }
 
     Mod+Q repeat=false { close-window; }
 
