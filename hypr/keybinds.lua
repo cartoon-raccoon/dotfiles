@@ -12,6 +12,9 @@ local ws = require("workspaces")
 local env = require("env")
 local dp = require("duckypad")
 
+local soview = hl.plugin.scrolloverview
+local hy3 = hl.plugin.hy3
+
 kb = {}
 
 local mainmod = "SUPER"
@@ -215,21 +218,33 @@ kb.launcher = {
 --- Keybinds for media control (volume, media control, screenshot).
 kb.media = {
     volume = {
-        up = hl.bind("XF86AudioRaiseVolume", volup(), { description = "Volume up", locked = true }),
-        down = hl.bind("XF86AudioLowerVolume", voldn(), { description = "Volume down", locked = true }),
-        mute = hl.bind("XF86AudioMute", volmute(), { description = "Toggle mute", locked = true }),
+        up = hl.bind("XF86AudioRaiseVolume", 
+            volup(), { description = "Volume up", locked = true, submap_universal = true }
+        ),
+        down = hl.bind("XF86AudioLowerVolume",
+            voldn(), { description = "Volume down", locked = true, submap_universal = true }
+        ),
+        mute = hl.bind("XF86AudioMute",
+            volmute(), { description = "Toggle mute", locked = true, submap_universal = true }
+        ),
     },
-    playpause = hl.bind("XF86AudioPlay", mediaplaypause(), { description = "Media play/pause", locked = true }),
-    next = hl.bind("XF86AudioNext", medianext(), { description = "Media next", locked = true }),
-    prev = hl.bind("XF86AudioPrev", mediaprev(), { description = "Media previous", locked = true }),
+    playpause = hl.bind("XF86AudioPlay",
+        mediaplaypause(), { description = "Media play/pause", locked = true, submap_universal = true }
+    ),
+    next = hl.bind("XF86AudioNext",
+        medianext(), { description = "Media next", locked = true, submap_universal = true }
+    ),
+    prev = hl.bind("XF86AudioPrev",
+        mediaprev(), { description = "Media previous", locked = true, submap_universal = true }
+    ),
     screenshot = {
         region = hl.bind(
             "Print", screenshot("region"),
-            { repeating = false, description = "Take a screenshot of a region" }
+            { repeating = false, description = "Take a screenshot of a region", submap_universal = true }
         ),
         monitor = hl.bind(
             "SHIFT + Print", screenshot("monitor"),
-            { repeating = false, description = "Take a screenshot of a whole monitor" }
+            { repeating = false, description = "Take a screenshot of a whole monitor", submap_universal = true }
         )
     }
 }
@@ -240,14 +255,14 @@ kb.session = {
         modtab = hl.bind(mainmod .. " + Tab", winswitch("workspace"), { repeating = false })
     },
     overview = {
-        open = hl.bind(mainmod .. " + O", hl.plugin.scrolloverview.overview("toggle all")),
-        mouse = hl.bind(mainmod .. " + mouse:274", hl.plugin.scrolloverview.overview("toggle all")),
+        open = hl.bind(mainmod .. " + O", soview.overview("toggle all")),
+        mouse = hl.bind(mainmod .. " + mouse:274", soview.overview("toggle all")),
     },
     locksession = hl.bind(mainmod .. " + CTRL + L",
         locksession(), { repeating = false, description = "Lock the session" }
     ),
     sessionmenu = hl.bind("CTRL + ALT + Delete",
-        sessionmenu(), { repeating = false, description = "Open the session menu" }
+        sessionmenu(), { repeating = false, description = "Open the session menu", submap_universal = true }
     ),
     shutdown = hl.bind(mainmod .. " + CTRL + Q",
         hl.dsp.exec_cmd("hyprshutdown"), { repeating = false, description = "Exit Hyprland gracefully" }
@@ -935,28 +950,28 @@ kb.submaps = {
     overview = {
         bind = kb.session.overview.open,
         submap = hl.define_submap("scrolloverview", function()
-            hl.bind("Left", hl.plugin.scrolloverview.navigate("left"))
-            hl.bind("Right", hl.plugin.scrolloverview.navigate("right"))
-            hl.bind("Up", hl.plugin.scrolloverview.navigate("up"))
-            hl.bind("Down", hl.plugin.scrolloverview.navigate("down"))
+            hl.bind("Left", soview.navigate("left"))
+            hl.bind("Right", soview.navigate("right"))
+            hl.bind("Up", soview.navigate("up"))
+            hl.bind("Down", soview.navigate("down"))
 
-            hl.bind("SHIFT + mouse_up", hl.plugin.scrolloverview.navigate("left"))
-            hl.bind("SHIFT + mouse_down", hl.plugin.scrolloverview.navigate("right"))
-            hl.bind("mouse_up", hl.plugin.scrolloverview.navigate("up"))
-            hl.bind("mouse_down", hl.plugin.scrolloverview.navigate("down"))
+            hl.bind("SHIFT + mouse_up", soview.navigate("left"))
+            hl.bind("SHIFT + mouse_down", soview.navigate("right"))
+            hl.bind("mouse_up", soview.navigate("up"))
+            hl.bind("mouse_down", soview.navigate("down"))
 
             hl.bind("mouse:272", function()
                 -- Select the clicked window, or just the workspace if no window was clicked, then close
-                hl.plugin.scrolloverview.overview("select")
-                hl.plugin.scrolloverview.window("select")
-                hl.plugin.scrolloverview.overview("off")
+                soview.overview("select")
+                soview.window("select")
+                soview.overview("off")
             end, { mouse = true })
-            hl.bind("mouse:273", hl.plugin.scrolloverview.window("close"))
+            hl.bind("mouse:273", soview.window("close"))
 
-            hl.bind("Escape", hl.plugin.scrolloverview.overview("close all"))
-            hl.bind(mainmod .. " + O", hl.plugin.scrolloverview.overview("close all"))
+            hl.bind("Escape", soview.overview("close all"))
+            hl.bind(mainmod .. " + O", soview.overview("close all"))
             hl.bind(mainmod .. " + mouse:274", 
-                hl.plugin.scrolloverview.overview("close all"), { mouse = true }
+                soview.overview("close all"), { mouse = true }
             )
         end)
     },

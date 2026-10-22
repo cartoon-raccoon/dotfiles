@@ -93,32 +93,23 @@ hl.config({
     dwindle = {
         preserve_split = true
     },
-    decoration = {
-        rounding = 5,
-
-        blur = {
-            enabled = true,
-            size = 3,
-            passes = 1
-        }
-    },
-    binds = {
-        -- when moving to the currently focused workspace, go to the previous one instead
-        workspace_back_and_forth = true,
-        -- allow movefocus to work even when fullscreeened
-        movefocus_cycles_fullscreen = true,
-
-        window_direction_monitor_fallback = false,
-        allow_pin_fullscreen = true
-    },
+    -- .|''|, '||''| .|''|, '||  ||` '||''|, 
+    -- ||  ||  ||    ||  ||  ||  ||   ||  || 
+    -- `|..|| .||.   `|..|'  `|..'|.  ||..|' 
+    --     ||                         ||     
+    --  `..|'                        .||     
     group = {
         insert_after_current = true,
         auto_group = false,
-        merge_groups_on_drag = false,
+        drag_into_group = 1,
+        merge_groups_on_drag = true,
+        merge_floated_into_tiled_on_groupbar = true,
 
         col = {
             border_active = col.group.active:as_hl(),
             border_inactive = col.group.inactive:as_hl(),
+            border_locked_active = col.group.locked.active:as_hl(),
+            border_locked_inactive = col.group.locked.inactive:as_hl(),
         },
 
         groupbar = {
@@ -129,6 +120,44 @@ hl.config({
                 inactive = col.group.groupbar.inactive:as_hl(),
             }
         }
+    },
+    --     ||`                            
+    --     ||                             
+    -- .|''||  .|''|, .|'', .|''|, '||''| 
+    -- ||  ||  ||..|| ||    ||  ||  ||    
+    -- `|..||. `|...  `|..' `|..|' .||.   
+    decoration = {
+        rounding = 5,
+        dim_modal = true,
+        dim_inactive = true,
+        dim_strength = 0.1,
+
+        blur = {
+            enabled = true,
+            size = 3,
+            passes = 1
+        },
+
+        motion_blur = {
+            enabled = false,
+        }
+    },
+    input = {
+        follow_mouse = true,
+        mouse_refocus = true,
+
+        touchpad = {
+            natural_scroll = true,
+        }
+    },
+    binds = {
+        -- when moving to the currently focused workspace, go to the previous one instead
+        workspace_back_and_forth = true,
+        -- allow movefocus to work even when fullscreeened
+        movefocus_cycles_fullscreen = true,
+
+        window_direction_monitor_fallback = false,
+        allow_pin_fullscreen = true
     },
     ecosystem = {
         no_update_news = true,
@@ -259,6 +288,9 @@ hl.on("hyprland.start", function()
     dp.send_command("update-rtc")
     -- Set persistent global var #2 to 0, meaning window manager in use is currently Hyprland.
     dp.send_command("write-pgv", { "-i", "2=0" })
+
+    -- Reload Hyprland plugin state
+    hl.exec_cmd("hyprpm reload -n")
 
     hl.exec_cmd(env.uwsm("easyeffects", false))
     -- `code` forks, so this rule won't work. It is instead caught by winrules.workspace.code_on_dev.

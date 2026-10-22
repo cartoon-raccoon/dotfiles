@@ -74,9 +74,18 @@ local function on_laptop()
     return string.find(env.hostname, "cartoonraccoon")
 end
 
+local function plugin_is_loaded(name)
+    for _, p in pairs(hl.get_loaded_plugins()) do
+        if p.name == name then return true end
+    end
+
+    return false
+end
+
 env.uwsm = uwsm
 env.systemctl = systemctl
 env.on_desktop = on_desktop
 env.on_laptop = on_laptop
+env.plugin_is_loaded = plugin_is_loaded
 
 return env

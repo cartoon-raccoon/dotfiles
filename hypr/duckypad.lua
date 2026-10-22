@@ -74,8 +74,8 @@ function dp.active_window_profile()
 end
 
 --- Send a command to the DuckyPad.
---- @param cmd DP.Command
---- @param args? table<string>
+--- @param cmd DP.Command The command to send.
+--- @param args? table<string> Any arguments to the command.
 function dp.send_command(cmd, args)
     local command = prefix .. cmd
     if args then
@@ -84,6 +84,16 @@ function dp.send_command(cmd, args)
         end
     end
     hl.exec_cmd(command)
+end
+
+--- Send a command to the DuckyPad to be executed after `delay` milliseconds.
+--- @param delay integer The delay in milliseconds.
+--- @param cmd DP.Command The command to send.
+--- @param args? table<string> Any arguments to the command.
+function dp.defer_command(delay, cmd, args)
+    hl.timer(function()
+        dp.send_command(cmd, args)
+    end, { timeout = delay, type = "oneshot"})
 end
 
 dp.hook = hl.on("window.active", function(w)
