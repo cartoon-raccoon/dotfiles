@@ -183,7 +183,7 @@ hl.config({
         force_zero_scaling = true,
     },
     plugin = {
-        scrolloverview = {
+        scrolloverview = env.plugin_is_loaded("scrolloverview") and {
             gesture_distance = 300, -- how far is the "max" for the gesture
             scale = 0.5, -- preferred overview scale
             cross_monitor_drag = true, -- enable cross-monitor dragging and Hyprland adoption
@@ -196,7 +196,7 @@ hl.config({
                 enabled = true,
                 range = 50,
             },
-        },
+        } or nil,
     },
 })
 
@@ -265,7 +265,7 @@ dp = require("duckypad")
 -- `Y8bod8P' o88'   888o `Y8bod8P' `Y8bod8P' 8""888P' 
 
 --- Starts the shell program(s).
-function start_shell()
+local function start_shell()
     if not env.using_noctalia then
         hl.exec_cmd(env.systemctl("hyprpolkitagent"))
         hl.exec_cmd(env.systemctl("start-waybar"))
@@ -281,16 +281,20 @@ function start_shell()
     end
 end
 
+--- Initialize plugins.
+local function initialize_plugins()
+    -- Reload Hyprland plugin state
+    hl.exec_cmd("hyprpm reload -n")
+end
+
 hl.on("hyprland.start", function()
     start_shell()
+    initialize_plugins()
 
     -- Sync the duckyPad's real time clock.
     dp.send_command("update-rtc")
     -- Set persistent global var #2 to 0, meaning window manager in use is currently Hyprland.
     dp.send_command("write-pgv", { "-i", "2=0" })
-
-    -- Reload Hyprland plugin state
-    hl.exec_cmd("hyprpm reload -n")
 
     hl.exec_cmd(env.uwsm("easyeffects", false))
     -- `code` forks, so this rule won't work. It is instead caught by winrules.workspace.code_on_dev.

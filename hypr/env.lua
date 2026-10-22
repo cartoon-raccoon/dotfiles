@@ -74,6 +74,9 @@ local function on_laptop()
     return string.find(env.hostname, "cartoonraccoon")
 end
 
+--- Checks if a plugin with `name` is loaded.
+--- @param name string The name of the plugin.
+--- @return boolean loaded Whether the plugin is loaded.
 local function plugin_is_loaded(name)
     for _, p in pairs(hl.get_loaded_plugins()) do
         if p.name == name then return true end

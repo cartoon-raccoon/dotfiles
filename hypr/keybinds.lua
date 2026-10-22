@@ -8,25 +8,35 @@
 --                       .o..P'                                                       
 --                       `Y8P'                                                        
 
-local ws = require("workspaces")
-local env = require("env")
 local dp = require("duckypad")
+local env = require("env")
+local ws = require("workspaces")
 
-local soview = hl.plugin.scrolloverview
-local hy3 = hl.plugin.hy3
+local soview = env.plugin_is_loaded("scrolloverview") and hl.plugin.scrolloverview or nil
+local hy3 = env.plugin_is_loaded("hy3") and hl.plugin.hy3 or nil
 
 local kb = {}
 
---- Functions that return dispatchers.
+--- Functions that *return* dispatchers. Functions in the wider `kb` namespaces are themselves dispatchers.
 kb.dsp = {}
 
 local mainmod = "SUPER"
 
 kb.mainmod = mainmod
 
+--- @alias KB.Dispatchable
+--- | function
+--- | HL.Dispatcher
+
+--- @class KB.LayoutBindTable
+--- @field scrolling? KB.Dispatchable
+--- @field master? KB.Dispatchable
+--- @field monocle? KB.Dispatchable
+--- @field dwindle? KB.Dispatchable
+
 --- Set a bind table that maps a different bind for each layout. This lets the same keybind trigger
 --- a different dispatcher depending on the current layout of the workspace.
---- @param bind_table table
+--- @param bind_table KB.LayoutBindTable The table of bindings to use.
 --- @return function
 local function per_layout(bind_table)
     return function ()
@@ -45,7 +55,7 @@ local function per_layout(bind_table)
     end
 end
 
-kb.per_layout = per_layout
+kb.dsp.per_layout = per_layout
 
 --       .o8   o8o                                                       
 --      "888   `"'                                                       
@@ -61,6 +71,7 @@ kb.per_layout = per_layout
 --- If running Noctalia, calls `noctalia msg panel-toggle`.
 --- Otherwise, calls Vicinae.
 --- @param cmd boolean Whether to open the launcher or the command runner.
+--- @return KB.Dispatchable
 local function runlauncher(cmd)
     if env.using_noctalia then
         if cmd then
@@ -77,6 +88,7 @@ kb.dsp.runlauncher = runlauncher
 
 --- Generate the dispatcher to increase volume.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
+--- @return KB.Dispatchable
 local function volup()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg volume-up 5")
@@ -89,6 +101,7 @@ kb.dsp.volup = volup
 
 --- Generate the dispatcher to decrease volume.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
+--- @return KB.Dispatchable
 local function voldn()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg volume-down 5")
@@ -101,6 +114,7 @@ kb.dsp.voldn = voldn
 
 --- Generate the dispatcher to toggle mute.
 --- If running Noctalia, calls `noctalia msg`, otherwise calls `wpctl`.
+--- @return KB.Dispatchable
 local function volmute()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg volume-mute")
@@ -111,6 +125,9 @@ end
 
 kb.dsp.volmute = volmute
 
+--- Generate the dispatcher to skip to toggle the media player.
+--- If running Noctalia, calls `noctalia msg`, otherwise calls `playerctl`.
+--- @return KB.Dispatchable
 local function mediaplaypause()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg media play-pause")
@@ -121,6 +138,9 @@ end
 
 kb.dsp.mediaplaypause = mediaplaypause
 
+--- Generate the dispatcher to skip to the next media item.
+--- If running Noctalia, calls `noctalia msg`, otherwise calls `playerctl`.
+--- @return KB.Dispatchable
 local function medianext()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg media next")
@@ -131,6 +151,9 @@ end
 
 kb.dsp.medianext = medianext
 
+--- Generate the dispatcher to skip to the previous media item.
+--- If running Noctalia, calls `noctalia msg`, otherwise calls `playerctl`.
+--- @return KB.Dispatchable
 local function mediaprev()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg media previous")
@@ -175,6 +198,9 @@ end
 kb.dsp.screenshot = screenshot
 
 --- Generate the dispatcher to activate the window switcher. The command generated depends on the mode.
+--- If running Noctalia, calls `noctalia msg`, otherwise returns a no_op (to be fixed).
+--- @param mode "monitor"|"workspace" The mode to use for the keybind.
+--- @return KB.Dispatchable
 local function winswitch(mode)
     if env.using_noctalia then
         if mode == "monitor" then
@@ -191,6 +217,9 @@ end
 
 kb.dsp.winswitch = winswitch
 
+--- Generate the dispatcher to lock the session.
+--- If running Noctalia, calls `noctalia msg`, otherwise calls loginctl.
+--- @return KB.Dispatchable
 local function locksession()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg session lock")
@@ -201,6 +230,9 @@ end
 
 kb.dsp.locksession = locksession
 
+--- Generate the dispatcher to open the session menu.
+--- --- If running Noctalia, calls `noctalia msg`, otherwise returns a no_op (to be fixed).
+--- @return KB.Dispatchable
 local function sessionmenu()
     if env.using_noctalia then
         return hl.dsp.exec_cmd("noctalia msg panel-toggle session")
@@ -277,10 +309,21 @@ kb.session = {
         alttab = hl.bind("ALT + Tab", winswitch("monitor"), { repeating = false }),
         modtab = hl.bind(mainmod .. " + Tab", winswitch("workspace"), { repeating = false })
     },
-    overview = {
-        open = hl.bind(mainmod .. " + O", soview.overview("toggle all")),
-        mouse = hl.bind(mainmod .. " + mouse:274", soview.overview("toggle all")),
-    },
+    overview = env.plugin_is_loaded("scrolloverview") and {
+        open = hl.bind(mainmod .. " + O",
+            soview.overview("toggle all"), { description = "Toggle overview" }
+        ),
+        mouse = {
+            --- Win key + middle button: toggle the overview
+            toggle = hl.bind(mainmod .. " + mouse:274",
+                soview.overview("toggle all"), { mouse = true, description = "Toggle overview" }
+            ),
+            --- SUPER + CTRL + scroll down: open the overview, similar to zooming out
+            open = hl.bind(mainmod .. " + CTRL + mouse_down",
+                soview.overview("open all"), { mouse = true, description = "Open overview" }
+            ),
+        },
+    } or nil,
     locksession = hl.bind(mainmod .. " + CTRL + L",
         locksession(), { repeating = false, description = "Lock the session" }
     ),
@@ -611,6 +654,7 @@ kb.window = {
 
 --- Returns a dispatcher that focuses on the layout-dependent "previous" window.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
+--- @return KB.Dispatchable
 local function dirprev()
     return per_layout({
         scrolling = hl.dsp.layout("focus l"),
@@ -623,6 +667,7 @@ kb.dsp.dirprev = dirprev
 
 --- Returns a dispatcher that focuses on the layout-dependent "next" window.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
+--- @return KB.Dispatchable
 local function dirnext()
     return per_layout({
         scrolling = hl.dsp.layout("focus r"),
@@ -635,6 +680,7 @@ kb.dsp.dirnext = dirnext
 
 --- Returns a dispatcher that moves the active window "left", depending on the layout.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
+--- @return KB.Dispatchable
 local function moveleft()
     return per_layout({
         scrolling = hl.dsp.layout("swapcol l"),
@@ -646,6 +692,7 @@ kb.dsp.moveleft = moveleft
 
 --- Returns a dispatcher that moves the active window "right", depending on the layout.
 --- Note: This returns a dispatcher; it does not run the commmand itself.
+--- @return KB.Dispatchable
 local function moveright()
     return per_layout({
         scrolling = hl.dsp.layout("swapcol r"),
@@ -904,6 +951,7 @@ kb.layout = {
 --- - Otherwise, it moves the current window into or creates a new group in the specified direction.
 ---   - If the remaining group has one member remaining, it removes that member as well to delete
 ---     the group.
+--- @return KB.Dispatchable
 local function move_into_or_out_of_group(direction)
     --- If the current window is already in a group, move it out in the given direction.
     --- Otherwise, move into or create a new group in the given direction.
@@ -992,9 +1040,11 @@ kb.submaps = {
             hl.bind("escape", hl.dsp.submap("reset"))
         end)
     },
-    overview = {
+    overview = env.plugin_is_loaded("scrolloverview") and {
         bind = kb.session.overview.open,
         submap = hl.define_submap("scrolloverview", function()
+            -- NAVIGATION
+
             -- arrow keys and WASD (for left hand use)
             hl.bind("Left", soview.navigate("left"))
             hl.bind("Right", soview.navigate("right"))
@@ -1006,28 +1056,34 @@ kb.submaps = {
             hl.bind("S", soview.navigate("down"))
             hl.bind("D", soview.navigate("right"))
 
+            -- mouse binds for navigation: SHIFT to scroll sideways
             hl.bind("SHIFT + mouse_up", soview.navigate("left"))
             hl.bind("SHIFT + mouse_down", soview.navigate("right"))
             hl.bind("mouse_up", soview.navigate("up"))
             hl.bind("mouse_down", soview.navigate("down"))
 
+            -- SELECT AND CLOSE
             hl.bind("mouse:272", function()
                 -- Select the clicked window, or just the workspace if no window was clicked, then close
                 soview.overview("select")
                 soview.window("select")
                 soview.overview("off")
-            end, { mouse = true })
+            end, { mouse = true, description = "Select and focus an overview window" })
 
             hl.bind("Q", soview.window("close"))
             hl.bind("mouse:273", soview.window("close"))
 
-            hl.bind("Escape", soview.overview("close all"))
+            -- EXIT OVERVIEW
+            hl.bind(mainmod .. " + CTRL + mouse_up",
+                soview.overview("close all"), { mouse = true, description = "Close the overview" }
+            )
+            hl.bind("Escape", soview.overview("close all"), { description = "Close the overview" })
             hl.bind(mainmod .. " + O", soview.overview("close all"))
             hl.bind(mainmod .. " + mouse:274", 
-                soview.overview("close all"), { mouse = true }
+                soview.overview("close all"), { mouse = true, description = "Close the overview" }
             )
         end)
-    },
+    } or nil,
     layout = {
         --- The bind to open the layout control submap.
         --- 
