@@ -77,7 +77,7 @@ hl.config({
         fullscreen_on_one_column = false,
         column_width = 1.0,
         explicit_column_widths = "0.5, 0.666667, 0.75, 1.0",
-        focus_fit_method = 0,
+        focus_fit_method = 1, -- fit windows instead of centering them
         follow_focus = true,
         follow_min_visible = 0.5,
         wrap_focus = false,
@@ -172,12 +172,16 @@ hl.config({
         disable_hyprland_logo = true,
         font_family = "FontAwesome",
         force_default_wallpaper = false,
+        focus_on_activate = true,
         mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,
         enable_swallow = true,
         swallow_regex = "^(Alacritty)$",
         swallow_exception_regex = "(wev.*)|(zenity.*)|(hyprsysteminfo.*)",
-        disable_autoreload = true,
+        -- the files in my dotfile repo are symlinked to the chezmoi local directory,
+        -- so we don't risk reloading onto a file that gets saved halfway through an edit,
+        -- since the actual config file gets update on `chezmoi apply`.
+        disable_autoreload = false,
     },
     xwayland = {
         force_zero_scaling = true,
@@ -199,6 +203,14 @@ hl.config({
         } or nil,
     },
 })
+
+cfg_reload_hook = hl.on("config.reloaded", function()
+    hl.notification.create({
+        text = "Configuration successfully reloaded",
+        timeout = 2500,
+        icon = "ok",
+    })
+end)
 
 --                        o8o                             
 --                        `"'                             
@@ -284,6 +296,7 @@ end
 --- Initialize plugins.
 local function initialize_plugins()
     -- Reload Hyprland plugin state
+    -- we can point this to scripts/plugin-update.sh instead, but keep this for now
     hl.exec_cmd("hyprpm reload -n")
 end
 

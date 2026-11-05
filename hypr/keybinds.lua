@@ -256,7 +256,7 @@ kb.dsp.sessionmenu = sessionmenu
 --- Keybinds for controlling the terminal.
 kb.term = {
     floating = hl.bind(mainmod .. " + grave",
-        hl.dsp.exec_cmd(env.uwsm(env.term, true), { float = true, size = { 1100, 850 } }),
+        hl.dsp.exec_cmd(env.uwsm(env.term, true), { float = true, size = "1200 900" }),
         { description = "Launch floating terminal" }
     ),
     tiled = hl.bind(mainmod .. " + SHIFT + grave",
@@ -337,7 +337,8 @@ kb.session = {
 
 --- Keybind to reload the configuration.
 kb.reload_cfg = hl.bind(mainmod .. " + CTRL + R",
-    hl.dsp.exec_cmd("hyprctl reload"), { repeating = false, description = "Reload Hyprland config" }
+    hl.dsp.exec_cmd("chezmoi apply ~/.config/hypr"),
+    { repeating = false, description = "Reload Hyprland config through `chezmoi apply`" }
 )
 
 kb.hyprkill = hl.bind(mainmod .. " + SHIFT + K",
@@ -523,6 +524,10 @@ kb.window = {
     fullscreen = hl.bind(mainmod .. " + SHIFT + M",
         hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }),
         { repeating = false, description = "Toggle fullscreen on active window" }
+    ),
+    center = hl.bind(mainmod .. " + C",
+        hl.dsp.window.center(),
+        { repeating = false, description = "Center the active window if floating"}
     ),
     float = hl.bind(mainmod .. " + T",
         hl.dsp.window.float({ action = "toggle" }),
@@ -786,12 +791,12 @@ kb.dir = {
             { description = "Focus on the next workspace" }
         ),
         left = {
-            coarse = hl.bind(mainmod .. " + CTRL + SHIFT + mouse_up", dirprev()),
-            fine = hl.bind(mainmod .. " + SHIFT + mouse_up", focus_grp_left_or_prev)
+            coarse = hl.bind(mainmod .. " + SHIFT + mouse_up", dirprev()),
+            fine = hl.bind(mainmod .. " + CTRL + SHIFT + mouse_up", focus_grp_left_or_prev)
         },
         right = {
-            coarse = hl.bind(mainmod .. " + CTRL + SHIFT + mouse_down", dirnext()),
-            fine = hl.bind(mainmod .. " + SHIFT + mouse_down", focus_grp_right_or_next),
+            coarse = hl.bind(mainmod .. " + SHIFT + mouse_down", dirnext()),
+            fine = hl.bind(mainmod .. " + CTRL + SHIFT + mouse_down", focus_grp_right_or_next),
         }
     },
     focus = {
@@ -814,12 +819,12 @@ kb.dir = {
         up = hl.bind(mainmod .. " + SHIFT + Up", hl.dsp.window.move({ workspace = "m-1" })),
         down = hl.bind(mainmod .. " + SHIFT + Down", hl.dsp.window.move({ workspace = "m+1" })),
         left = {
-            coarse = hl.bind(mainmod .. " + CTRL + SHIFT + Left", moveleft()),
-            fine = hl.bind(mainmod .. " + SHIFT + Left", move_grp_left_or_prev),
+            coarse = hl.bind(mainmod .. " + SHIFT + Left", moveleft()),
+            fine = hl.bind(mainmod .. " + CTRL + SHIFT + Left", move_grp_left_or_prev),
         },
         right = {
-            coarse = hl.bind(mainmod .. " + CTRL + SHIFT + Right", moveright()),
-            fine = hl.bind(mainmod .. " + SHIFT + Right", move_grp_right_or_next),
+            coarse = hl.bind(mainmod .. " + SHIFT + Right", moveright()),
+            fine = hl.bind(mainmod .. " + CTRL + SHIFT + Right", move_grp_right_or_next),
         },
         mouse = {
             left = hl.bind(mainmod .. " + mouse_left", moveleft()),
@@ -858,7 +863,7 @@ kb.layout = {
         --- Increase the width of the central window.
         up = hl.bind(mainmod .. " + equal",
             per_layout({
-                scrolling = hl.dsp.layout("colresize +0.2"),
+                scrolling = hl.dsp.layout("colresize +0.1"),
                 master = hl.dsp.layout("mfact +0.02"),
                 monocle = hl.dsp.no_op(),
             }),
@@ -867,7 +872,7 @@ kb.layout = {
         --- Decrease the width of the central window.
         down = hl.bind(mainmod .. " + minus",
             per_layout({
-                scrolling = hl.dsp.layout("colresize -0.2"),
+                scrolling = hl.dsp.layout("colresize -0.1"),
                 master = hl.dsp.layout("mfact -0.02"),
                 monocle = hl.dsp.no_op(),
             }),
@@ -881,6 +886,20 @@ kb.layout = {
                 monocle = hl.dsp.no_op(),
             }),
             { description = "Cycle through the sizes of the layout's central window" }
+        ),
+        --- Reset to the default width.
+        reset = hl.bind(mainmod .. " + SHIFT + E",
+            per_layout({
+                scrolling = function()
+                    local width = hl.get_config("scrolling.column_width") or 1.0
+                    hl.dispatch(hl.dsp.layout("colresize " .. width))
+                end,
+                master = function()
+                    local width = hl.get_config("master.mfact") or 0.5
+                    hl.dispatch(hl.dsp.layout("mfact exact " .. width))
+                end
+            }),
+            { description = "Reset the central window's width to the default" }
         ),
     },
     --- Controls for cycling windows within a layout.

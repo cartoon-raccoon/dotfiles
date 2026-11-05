@@ -70,7 +70,8 @@ wr.bodge = {
     }),
     telegram_media_viewer_flt = hl.window_rule({name = "telegram_media_viewer_flt",
         match = { class = "^(org.telegram.desktop)$", title = "^(Media viewer)$" },
-        float = true
+        float = true,
+        size = { "monitor_w*0.6", "monitor_h*0.75" }
     }),
     qbittorrent_dialog_float = hl.window_rule({name = "qbittorrent_dialog_float",
         match = {
@@ -79,10 +80,6 @@ wr.bodge = {
         },
         float = true,
     }),
-    -- suppress_code_activate = hl.window_rule({name = "suppress_code_activate",
-    --     match = { class = "^(com.microsoft.VSCode)$" },
-    --     suppress_event = "activate"
-    -- }),
 }
 
 local system_window_size = { 1700, 1200 }
@@ -128,6 +125,28 @@ wr.systemwins = {
         match = { class = "^(zenity)$" },
         float = true,
         group = "deny",
+        rounding = 17
+    }),
+    kde_desktop_portal = hl.window_rule({name = "kde_desktop_portal",
+        match = {
+            class = "^(org.freedesktop.impl.portal.desktop.kde)$",
+        },
+        float = true,
+        group = "deny",
+    }),
+    hyprland_share_picker = hl.window_rule({name = "hyprland_share_picker",
+        match = {
+            class = "^(hyprland-share-picker)$",
+        },
+        float = true,
+        group = "deny",
+    }),
+    desktop_portal = hl.window_rule({name = "desktop_portal",
+        match = {
+            class = "^(xdg-desktop-portal-gtk)$",
+        },
+        float = true,
+        group = "deny",
     }),
 }
 
@@ -143,7 +162,12 @@ wr.wanted = {
     image_viewer_float = hl.window_rule({name = "image_viewer_float",
         match = { class = "^(imv|org.kde.gwenview)$" },
         float = true
-    })
+    }),
+    fileroller_rules = hl.window_rule({name = "fileroller_rules",
+        match = { class = "^(org.gnome.FileRoller)$" },
+        float = true,
+        rounding = 17, -- fix file roller's wonky corner rounding
+    }),
 }
 
 wr.scrollwidth = {
@@ -196,6 +220,21 @@ wr.idleinhibit = {
         idle_inhibit = "always"
     }),
     -- todo: cyberpunk (maybe)
+}
+
+wr.content = {
+    game = hl.window_rule({name = "gamescope_content_game",
+        match = { class = "^(gamescope)$" },
+        content = "game"
+    }),
+    cp2077 = hl.window_rule({name = "cyberpunk_content_game",
+        match = { class = "^(Cyberpunk 2077)" },
+        content = "game"
+    }),
+    video = hl.window_rule({name = "vlc_mpv_content_game",
+        match = { class = "^(vlc|mpv)" },
+        content = "video"
+    }),
 }
 
 -- mod.catchall_windows_on_main = hl.window_rule({name = "catchall_windows_on_main",
