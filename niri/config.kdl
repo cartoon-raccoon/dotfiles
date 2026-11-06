@@ -568,13 +568,13 @@ binds {
     
     // SHIFT only sends SIGINT.
     Mod+Shift+K hotkey-overlay-title="Select a window to kill with SIGINT" \
-        { spawn-sh "~/.config/niri/niri-kill.sh -i"; }
+        { spawn-sh "~/.config/niri/scripts/niri-kill.sh -i"; }
     // CTRL only sends SIGTERM.
     Mod+Ctrl+K hotkey-overlay-title="Select a window to kill with SIGTERM" \
-        { spawn-sh "~/.config/niri/niri-kill.sh -t"; }
+        { spawn-sh "~/.config/niri/scripts/niri-kill.sh -t"; }
     // SHIFT+CTRL sends SIGKILL.
     Mod+Shift+Ctrl+K hotkey-overlay-title="Select a window to kill with SIGKILL" \
-        { spawn-sh "~/.config/niri/niri-kill.sh -k"; }
+        { spawn-sh "~/.config/niri/scripts/niri-kill.sh -k"; }
 
     Print { screenshot; }
     Mod+Print { screenshot-screen; }
@@ -619,9 +619,9 @@ binds {
     Mod+Tab { focus-workspace-previous; }
 
     Mod+Delete hotkey-overlay-title="Unset workspace name" \
-        { spawn-sh "~/.config/niri/name-workspace.sh unset"; }
+        { spawn-sh "~/.config/niri/scripts/name-workspace.sh unset"; }
     Mod+Slash  hotkey-overlay-title="Set workspace name" \
-        { spawn-sh "~/.config/niri/name-workspace.sh set"; }
+        { spawn-sh "~/.config/niri/scripts/name-workspace.sh set"; }
 
     // Focus-changing keybinds, default granularity.
     Mod+WheelScrollUp         { focus-workspace-up; }
@@ -655,7 +655,7 @@ binds {
     // Backspace corresponds to the first dynamic workspace.
     Mod+Backspace { focus-workspace 5; }
     Mod+Backslash hotkey-overlay-title="Focus the last workspace" \
-        { spawn-sh "~/.config/niri/lastwkspc.sh focus"; }
+        { spawn-sh "~/.config/niri/scripts/lastwkspc.sh focus"; }
 
     Mod+1 { focus-workspace 5; }
     Mod+2 { focus-workspace 6; }
@@ -681,7 +681,7 @@ binds {
 
     Super+Alt+Backspace { move-window-to-workspace 5; }
     Super+Alt+Backslash hotkey-overlay-title="Move window to last workspace and focus" \
-        { spawn-sh "~/.config/niri/lastwkspc.sh movewin"; }
+        { spawn-sh "~/.config/niri/scripts/lastwkspc.sh movewin"; }
 
     Super+Alt+1 { move-window-to-workspace 5; }
     Super+Alt+2 { move-window-to-workspace 6; }
@@ -692,7 +692,7 @@ binds {
     // Keybinds to move the focused window to the first or last dynamic workspace.
     Super+Alt+Ctrl+Backspace { move-window-to-workspace 5 focus=false; }
     Super+Alt+Ctrl+Backslash hotkey-overlay-title="Move window to last workspace without focusing" \
-        { spawn-sh "~/.config/niri/lastwkspc.sh movewin -nf"; }
+        { spawn-sh "~/.config/niri/scripts/lastwkspc.sh movewin -nf"; }
 
     // With SHIFT/CTRL: move by column, CTRL moves without changing focus
     Mod+Shift+Up    { move-column-to-workspace-up; }
@@ -720,7 +720,7 @@ binds {
 
     Mod+Shift+Backspace { move-column-to-workspace 5; }
     Mod+Shift+Backslash hotkey-overlay-title="Move column to last workspace and focus" \
-        { spawn-sh "~/.config/niri/lastwkspc.sh movecol"; }
+        { spawn-sh "~/.config/niri/scripts/lastwkspc.sh movecol"; }
 
     Mod+Ctrl+Return { move-column-to-workspace "Main" focus=false; }
     Mod+Ctrl+A      { move-column-to-workspace "Main" focus=false; }
@@ -730,7 +730,7 @@ binds {
 
     Mod+Ctrl+Backspace { move-column-to-workspace 5 focus=false; }
     Mod+Ctrl+Backslash hotkey-overlay-title="Move column to last workspace without focusing" \
-        { spawn-sh "~/.config/niri/lastwkspc.sh movecol -nf"; }
+        { spawn-sh "~/.config/niri/scripts/lastwkspc.sh movecol -nf"; }
 
     Mod+Shift+1 { move-column-to-workspace 5; }
     Mod+Shift+2 { move-column-to-workspace 6; }
