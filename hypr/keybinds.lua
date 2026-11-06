@@ -1061,7 +1061,7 @@ kb.submaps = {
     },
     overview = env.plugin_is_loaded("scrolloverview") and {
         bind = kb.session.overview.open,
-        submap = hl.define_submap("scrolloverview", function()
+        submap = hl.define_submap("OVERVIEW", function()
             -- NAVIGATION
 
             -- arrow keys and WASD (for left hand use)

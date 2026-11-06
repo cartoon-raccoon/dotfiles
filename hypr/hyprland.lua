@@ -159,6 +159,9 @@ hl.config({
         window_direction_monitor_fallback = false,
         allow_pin_fullscreen = true
     },
+    cursor = {
+        no_warps = true,
+    },
     ecosystem = {
         no_update_news = true,
         no_donation_nag = true,
@@ -195,6 +198,7 @@ hl.config({
             layout = "vertical", -- vertical, horizontal, or auto (per-monitor orientation)
             wallpaper = 2, -- 0: global only, 1: per-workspace only, 2: both
             blur = true, -- blur only the main overview wallpaper
+            submap_name = "OVERVIEW",
 
             shadow = {
                 enabled = true,
